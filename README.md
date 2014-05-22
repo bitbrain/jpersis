@@ -1,4 +1,4 @@
 jpersis
 =======
 
-Light weighted persistance framework for Java
+Light weighted persistence framework for Java
