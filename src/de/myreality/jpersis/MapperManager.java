@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.myreality.jpersis.annotations.DataMapper;
 import de.myreality.jpersis.db.DatabaseConnector;
+import de.myreality.jpersis.db.PostgresDatabaseConnector;
 
 /**
  * Manager of all current mapper to provide them. Can store new mapper and loads
@@ -12,7 +13,7 @@ import de.myreality.jpersis.db.DatabaseConnector;
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
- * @version 1.0
+ * @version 1.0DATE_FORMAT
  */
 public class MapperManager implements Mapperable {
 
@@ -20,15 +21,18 @@ public class MapperManager implements Mapperable {
     private final Map<Class<?>, MapperProxyFactory<?>> mapperFactories = new HashMap<Class<?>, MapperProxyFactory<?>>();
     
     // Singleton instance
-    private static final MapperManager instance = null;
+    private static MapperManager instance = null;
     
     // Connector to the database
     private DatabaseConnector connector;
 
     static {
-    	// TODO
-        //DatabaseConnector connector = new PostgresDatabaseConnector();
-        //instance = new MapperManager(connector);
+        DatabaseConnector connector = new PostgresDatabaseConnector();
+        instance = new MapperManager(connector);
+    }
+    
+    public static void setDefaultConnector(DatabaseConnector connector) {
+    	instance.setConnector(connector);
     }
 
     private MapperManager(DatabaseConnector connector) {
@@ -50,7 +54,8 @@ public class MapperManager implements Mapperable {
             addMapper(type);
         }
         
-        final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) mapperFactories.get(type);
+        @SuppressWarnings("unchecked")
+		final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) mapperFactories.get(type);
 
         if (mapperProxyFactory == null) {
             throw new MapperException("Mapper " + type.getSimpleName() + " does not exists.");
