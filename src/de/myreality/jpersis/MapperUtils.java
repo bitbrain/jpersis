@@ -33,8 +33,6 @@ import de.myreality.jpersis.annotations.DataMapper;
  * @version 1.0
  */
 public class MapperUtils {
-    
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     // ============================================================================
     // Converting methods
@@ -65,7 +63,8 @@ public class MapperUtils {
     public static <T> T convertToJavaObject(Class<T> clazz, ResultSet set, String[] foreignKeys) {
 
         if (set != null) {
-            T result = (T) generateObject(clazz);
+            @SuppressWarnings("unchecked")
+			T result = (T) generateObject(clazz);
             invokeFromResultSet(result, set, foreignKeys);
             return result;
         } else {
@@ -168,7 +167,8 @@ public class MapperUtils {
      * @param clazz target class
      * @return new instance of an object
      */
-    private static Object generateObject(Class clazz) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Object generateObject(Class clazz) {
         try {
             Constructor<?> ctor = clazz.getConstructor();
             return ctor.newInstance(new Object[]{});
@@ -294,7 +294,8 @@ public class MapperUtils {
      * @param argument class of the argument
      * @param value value to set
      */
-    private static void invokeSetter(Object object, Method method, Class argument, String value, String[] foreignKeys) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void invokeSetter(Object object, Method method, Class argument, String value, String[] foreignKeys) {
         
         try {
             // ENUM
@@ -388,7 +389,8 @@ public class MapperUtils {
                 + s.substring(1).toLowerCase();
     }
 
-    private static void computeField(Method method, Object object, String[] foreignKeys, Map<String, String> map) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    @SuppressWarnings("rawtypes")
+	private static void computeField(Method method, Object object, String[] foreignKeys, Map<String, String> map) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         boolean isInCustomClass = !method.getDeclaringClass().equals(Object.class);
         boolean isNotIgnored = !AnnotationUtils.isIgnored(method);

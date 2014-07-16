@@ -17,8 +17,10 @@ import de.myreality.jpersis.db.DatabaseException;
  * @version 1.0
  */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
-    
-    // Cache of all defined methods
+
+	private static final long serialVersionUID = 1L;
+
+	// Cache of all defined methods
     private final Map<Method, MapperMethod> methodCache;
     
     private DatabaseConnector connector;

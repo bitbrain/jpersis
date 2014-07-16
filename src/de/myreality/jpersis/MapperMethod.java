@@ -97,7 +97,8 @@ public class MapperMethod {
      * @param args arguments of the method
      * @return A collection or a single object
      */
-    private Object select(Select select, Object[] args) throws DatabaseException {
+    @SuppressWarnings("unchecked")
+	private Object select(Select select, Object[] args) throws DatabaseException {
 
         try {
             Statement s = connector.getStatement();
@@ -148,7 +149,8 @@ public class MapperMethod {
     }
 
     // Updates a given annotation query
-    private void update(Annotation annotation, Object[] args) throws DatabaseException {
+    @SuppressWarnings("unchecked")
+	private void update(Annotation annotation, Object[] args) throws DatabaseException {
         if (method.getParameterTypes().length == 1) {
 
             Class<?> parameter = method.getParameterTypes()[0];
@@ -167,7 +169,8 @@ public class MapperMethod {
     }
 
     // Updates a given annotation query. (Can contain Update and Insert and Delete)
-    private void update(Annotation annotation, Object object, Object[] args) throws DatabaseException {
+    @SuppressWarnings("unused")
+	private void update(Annotation annotation, Object object, Object[] args) throws DatabaseException {
         Statement s = connector.getStatement();
         String[] fields = new String[0];
         String sql = "";
@@ -200,7 +203,8 @@ public class MapperMethod {
     }
 
     // Gets the model of the parent mapper
-    private Class getModelClass() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private Class getModelClass() {
         Class parent = method.getDeclaringClass();
         DataMapper mapper = (DataMapper) parent.getAnnotation(DataMapper.class);
         try {
@@ -210,7 +214,8 @@ public class MapperMethod {
         }
     }
 
-    private DataMapper getDataMapper() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private DataMapper getDataMapper() {
         Class parent = method.getDeclaringClass();
         return (DataMapper) parent.getAnnotation(DataMapper.class);
     }
