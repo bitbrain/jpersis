@@ -17,7 +17,7 @@ package de.myreality.jpersis.converter;
 /**
  * Lower case implementation of {@see Converter}. 
  * <p>
- * This converter converts Java standard CamelCase to lowe case like:
+ * This converter converts Java standard CamelCase to lower case like:
  * <code>MySpecialValue -> my_special_value</code> and vise versa:
  * <code my_special_value -> MySpecialValue</code>
  * 
