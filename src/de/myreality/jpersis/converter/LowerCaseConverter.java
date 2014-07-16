@@ -37,11 +37,16 @@ public class LowerCaseConverter implements Converter {
 	@Override
 	public String toJavaFormat(String databaseFormat) {
 		String[] parts = databaseFormat.split("_");
-        String camelCaseString = "";
-        for (String part : parts) {
-            camelCaseString = camelCaseString + toProperCase(part);
-        }
-        return camelCaseString;
+		
+		if (parts.length > 1) {
+	        String camelCaseString = "";
+	        for (String part : parts) {
+	            camelCaseString += toProperCase(part);
+	        }
+	        return camelCaseString;
+		} else {
+			return databaseFormat.substring(0, 1).toUpperCase() + databaseFormat.substring(1);
+		}
 	}
 
     /**

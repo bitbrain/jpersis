@@ -15,25 +15,25 @@
 
 package de.myreality.jpersis.converter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test case for {@see LowerCaseConverter}
+ * Test case for {@see CamelCaseConverter}
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public class LowerCaseConverterTest {
+public class CamelCaseConverterTest {
 	
-	LowerCaseConverter converter;
+	CamelCaseConverter converter;
 	
 	@Before
 	public void before() {
-		converter = new LowerCaseConverter();
+		converter = new CamelCaseConverter();
 	}
 
 	@Test
@@ -45,8 +45,8 @@ public class LowerCaseConverterTest {
 	
 	@Test
 	public void testToDatabaseFormat() {
-		assertTrue("The database format is wrong", converter.toDatabaseFormat("MyAttributeStringAaAa").equals("my_attribute_string_aa_aa"));
-		assertTrue("The database format is wrong", converter.toDatabaseFormat("MyAttributeString").equals("my_attribute_string"));
+		assertTrue("The database format is wrong", converter.toDatabaseFormat("MyAttributeStringAaAa").equals("MyAttributeStringAaAa"));
+		assertTrue("The database format is wrong", converter.toDatabaseFormat("MyAttributeString").equals("MyAttributeString"));
 	}
 
 }
