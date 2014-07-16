@@ -12,8 +12,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.myreality.jpersis;
+package de.myreality.jpersis.converter;
 
+/**
+ * Converter between Database and Java 
+ * 
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @since 1.0
+ * @version 1.0
+ */
 public interface FormatConverter {
 
+	/**
+	 * Converts a Java format string to a well-formed database format
+	 * 
+	 * @param javaFormat java format to convert
+	 * @return the converted result
+	 */
+	String toDatabaseFormat(String javaFormat);
+	
+	/**
+	 * Converts a database string to a well-formed Java format
+	 * 
+	 * @param databaseFormat database format to convert
+	 * @return the converted result
+	 */
+	String toJavaFormat(String databaseFormat);
 }
