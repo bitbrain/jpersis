@@ -263,7 +263,7 @@ public class MapperUtils {
 
         field = field.trim();
 
-        String expected = "set" + toCamelCase(field);
+        String expected = "set" + MapperManager.getInstance().getConverter().toJavaFormat(field);
 
         for (Method method : object.getClass().getMethods()) {
 
@@ -295,9 +295,7 @@ public class MapperUtils {
         // Filter set signature
         methodName = filterSignature(methodName, "set");
 
-        String regex = "([a-z])([A-Z])";
-        String replacement = "$1_$2";
-        return methodName.replaceAll(regex, replacement).toLowerCase();
+        return MapperManager.getInstance().getConverter().toDatabaseFormat(methodName);
     }
 
     /**
@@ -375,32 +373,6 @@ public class MapperUtils {
         } catch (InvocationTargetException ex) {
             throw new MapperException("Setter " + method + " does not exists.");
         }
-    }
-
-    /**
-     * Converts a string to camel case
-     *
-     * @param s target string
-     * @return camel cased result
-     */
-    private static String toCamelCase(String s) {
-        String[] parts = s.split("_");
-        String camelCaseString = "";
-        for (String part : parts) {
-            camelCaseString = camelCaseString + toProperCase(part);
-        }
-        return camelCaseString;
-    }
-
-    /**
-     * Converts a target string to proper case
-     *
-     * @param s target string
-     * @return proper cased string
-     */
-    private static String toProperCase(String s) {
-        return s.substring(0, 1).toUpperCase()
-                + s.substring(1).toLowerCase();
     }
 
     @SuppressWarnings("rawtypes")

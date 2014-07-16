@@ -21,7 +21,7 @@ package de.myreality.jpersis.converter;
  * @since 1.0
  * @version 1.0
  */
-public interface FormatConverter {
+public interface Converter {
 
 	/**
 	 * Converts a Java format string to a well-formed database format

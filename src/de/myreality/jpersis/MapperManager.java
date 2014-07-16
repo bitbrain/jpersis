@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.myreality.jpersis.annotations.DataMapper;
+import de.myreality.jpersis.converter.Converter;
+import de.myreality.jpersis.converter.LowerCaseConverter;
 import de.myreality.jpersis.db.DatabaseConnector;
 import de.myreality.jpersis.db.PostgresDatabaseConnector;
 
@@ -39,6 +41,8 @@ public class MapperManager implements Mapperable {
     
     // Connector to the database
     private DatabaseConnector connector;
+    
+    private Converter converter = new LowerCaseConverter();
 
     static {
         DatabaseConnector connector = new PostgresDatabaseConnector();
@@ -49,6 +53,14 @@ public class MapperManager implements Mapperable {
     	instance.setConnector(connector);
     }
 
+    public static void setDefaultConverter(Converter converter) {
+    	instance.converter = converter;
+    }
+    
+    public Converter getConverter() {
+    	return converter;
+    }
+    
     private MapperManager(DatabaseConnector connector) {
         this.connector = connector;
     }
