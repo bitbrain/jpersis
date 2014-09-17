@@ -163,7 +163,15 @@ public class MapperUtils {
      * @return filtered string
      */
     private static String filterSignature(String string, String signature) {
+    	
+    	if (string.isEmpty()) {
+    		throw new MapperException("Try to filter empty method name");
+    	}
 
+    	if (signature.length() > string.length()) {
+    		throw new MapperException("The method " + string + " is not valid.");
+    	}
+    	
         String signaturePart = string.substring(0, signature.length());
         String otherPart = string.substring(signature.length(), string.length());
 
