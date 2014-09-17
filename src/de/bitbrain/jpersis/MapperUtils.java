@@ -162,24 +162,17 @@ public class MapperUtils {
      * @param signature target signature to remove
      * @return filtered string
      */
-    private static String filterSignature(String string, String signature) {
-    	
-    	if (string.isEmpty()) {
-    		throw new MapperException("Try to filter empty method name");
+    private static String filterSignature(String string, String signature) {    	
+    	if (string.length() > signature.length() && string.startsWith(signature)) {    	
+	        String signaturePart = string.substring(0, signature.length());
+	        String otherPart = string.substring(signature.length(), string.length());	
+	        if (signaturePart.equals(signature)) {
+	            signaturePart = "";
+	        }	
+	        return signaturePart + otherPart;
+    	} else {
+    		return string;
     	}
-
-    	if (signature.length() > string.length()) {
-    		throw new MapperException("The method " + string + " is not valid.");
-    	}
-    	
-        String signaturePart = string.substring(0, signature.length());
-        String otherPart = string.substring(signature.length(), string.length());
-
-        if (signaturePart.equals(signature)) {
-            signaturePart = "";
-        }
-
-        return signaturePart + otherPart;
     }
 
     /**
