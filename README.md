@@ -12,7 +12,7 @@ Getting started
 This framework provides easy-to-write data mapping. You can simply create a new jpersis:
 
 ```java
-JPersis persis = new JPersis(new PostgresConnector("localhost", "1234", "root", "mypassword"));
+JPersis persis = new JPersis(new PostgresDriver("localhost", "1234", "root", "mypassword"));
 ```
 
 Afterwards you can use the framework properly:
@@ -20,7 +20,11 @@ Afterwards you can use the framework properly:
 ```java
 Customer customer = persis.get(CustomerMapper.class).findByID(123);
 ```
-
+You can also use a cached version of your mapper:
+```java
+Customer customer = persis.cached(CustomerMapper.class).findByID(123);
+```
+JPersis caches models internally.
 Case study: An own customer mapper
 ===
 
@@ -29,61 +33,37 @@ A sample customer mapper could look like this:
 ```java
 @DataMapper("de.myreality.test.models.Customer")
 public interface CustomerMapper {
-
-    // ==============================================================
-    // Select Statements
-    // ==============================================================
-    
     
     @Select
-    Collection<Customer> findAll() throws DatabaseException;
+    Collection<Customer> findAll();
 
     @Select(condition = "customer_id = $1")
-    Customer findById(int id) throws DatabaseException;
+    Customer findById(int id);
     
     @Select(condition = "first_name = $1")
-    Customer findByFirstName(String firstName) throws DatabaseException;
-    
-    
-    // ==============================================================
-    // Insert Statements
-    // ==============================================================
+    Customer findByFirstName(String firstName);
     
     @Insert
-    void insert(Customer customer) throws DatabaseException;
+    void insert(Customer customer);
     
     @Insert
-    void insert(Collection<Customer> customer) throws DatabaseException;
-    
-    //==============================================
-    // Count Statement
-    //==============================================
+    void insert(Collection<Customer> customer);
     
     @Count
-    int CountAll() throws DatabaseException;
-    
-    
-    //==============================================
-    // Update Statements
-    //==============================================
+    int CountAll();
     
     @Update
-    void update(Customer customer) throws DatabaseException;
+    void update(Customer customer);
     
     
     @Update
-    void update(Collection<Customer> customer) throws DatabaseException;
-    
-    
-    //==============================================
-    // Delete Statements
-    //==============================================
+    void update(Collection<Customer> customer);
     
     @Delete
-    void delete(Customer customer) throws DatabaseException;
+    void delete(Customer customer);
        
     @Delete
-    void delete(Collection<Customer> customer) throws DatabaseException;
+    void delete(Collection<Customer> customer);
     
 }
 ```
