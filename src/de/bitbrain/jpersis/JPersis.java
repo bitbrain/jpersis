@@ -14,14 +14,45 @@
  */
 package de.bitbrain.jpersis;
 
+import de.bitbrain.jpersis.drivers.Driver;
 
 /**
- * Manager of all current mapper to provide them. Can store new mapper and loads all existing mapper at the beginning.
+ * JPersis main class which provides mapper creation and database interaction
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
- * @version 1.0DATE_FORMAT
+ * @version 1.0
  */
 public final class JPersis {
+  
+  /**
+   * Constructor for a new JPersis object
+   * 
+   * @param driver database driver
+   */
+  public JPersis(Driver driver) {
+    setDriver(driver);
+  }
 
+  /**
+   * Provides data mappers for further usage. If the given class is not annotated
+   * with {@see Mapper} or the model of the mapper can not be found, an {@see JPersisException}
+   * is thrown.
+   * 
+   * @param mapper given class or interface of a mapper
+   * @return mapper instance of the given class or interface
+   */
+  public <T> T map(Class<T> mapper) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+  
+  /**
+   * Sets a new database driver. This method clears the current context and all
+   * associated models.
+   * 
+   * @param driver database driver
+   */
+  public void setDriver(Driver driver) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 }

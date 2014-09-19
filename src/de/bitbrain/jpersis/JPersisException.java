@@ -22,7 +22,7 @@ package de.bitbrain.jpersis;
  * @since 1.0
  * @version 1.0
  */
-public class MapperException extends RuntimeException {
+public class JPersisException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class MapperException extends RuntimeException {
      * 
      * @param message Message to set
      */
-    public MapperException(String message) {
+    public JPersisException(String message) {
         super(message);
     }
 }

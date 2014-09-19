@@ -35,7 +35,7 @@ public class AnnotationsTest {
 
   static final String DB = "temp.sql";
 
-  JPersis manager = new JPersis();
+  JPersis manager = new JPersis(null);
 
   MapperMock mapper;
 

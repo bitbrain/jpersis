@@ -14,10 +14,10 @@
  */
 
 /**
- * Contains files to provide JPersis functionality
+ * Provides drivers for database communication
  * 
  * @author Miguel Gonzalez
  * @version 1.0
  * @since 1.0
  */
-package de.bitbrain.jpersis;
+package de.bitbrain.jpersis.drivers;
