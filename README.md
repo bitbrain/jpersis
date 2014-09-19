@@ -3,6 +3,9 @@ jpersis
 
 Light weighted persistence framework for Java.
 
+
+[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis)
+
 Getting started
 ===
 
