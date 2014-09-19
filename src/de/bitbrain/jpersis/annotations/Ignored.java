@@ -12,31 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.converter;
+package de.bitbrain.jpersis.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Camel case implementation of {@see Converter}. 
- * <p>
- * This converter converts Java standard CamelCase to camel case like:
- * <code>MySpecialValue -> MySpecialValue</code> and vise versa:
- * <code MySpecialValue -> MySpecialValue</code>
+ * Marks a field, a method or a class as ignored
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public class CamelCaseConverter implements Converter {
-	
-	private LowerCaseConverter conv = new LowerCaseConverter();
-
-	@Override
-	public String toDatabaseFormat(String javaFormat) {
-		return conv.toJavaFormat(javaFormat);
-	}
-
-	@Override
-	public String toJavaFormat(String databaseFormat) {
-		return conv.toJavaFormat(databaseFormat);
-	}
-
-}
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Ignored { }

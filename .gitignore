@@ -12,6 +12,9 @@
 hs_err_pid*
 /bin
 /target/
-
 *~
 ~*
+
+# Test files
+
+temp.sql

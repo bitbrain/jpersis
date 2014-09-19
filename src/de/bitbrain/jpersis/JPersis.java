@@ -12,30 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.converter;
+package de.bitbrain.jpersis;
+
 
 /**
- * Converter between Database and Java 
- * 
+ * Manager of all current mapper to provide them. Can store new mapper and loads all existing mapper at the beginning.
+ *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
- * @version 1.0
+ * @version 1.0DATE_FORMAT
  */
-public interface Converter {
+public final class JPersis {
 
-	/**
-	 * Converts a Java format string to a well-formed database format
-	 * 
-	 * @param javaFormat java format to convert
-	 * @return the converted result
-	 */
-	String toDatabaseFormat(String javaFormat);
-	
-	/**
-	 * Converts a database string to a well-formed Java format
-	 * 
-	 * @param databaseFormat database format to convert
-	 * @return the converted result
-	 */
-	String toJavaFormat(String databaseFormat);
 }

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * a count method needs to be always
  * <code>Type</code> or
  * <code>Collection<Type></code>, where
- * <code>Type</code> is the predefined model class in the {@link DataMapper}.
+ * <code>Type</code> is the predefined model class in the {@link Mapper}.
  * <p>To select all rows in a table, write:<p>
  * <code><pre>
  * @Select
