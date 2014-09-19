@@ -1,4 +1,4 @@
-jpersis
+![jpersis](logo.png)
 =======
 
 Light weighted persistence framework for Java.
