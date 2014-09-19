@@ -9,17 +9,16 @@ Light weighted persistence framework for Java.
 Getting started
 ===
 
-This framework provides easy-to-write data mapping. You can simply set a database connector:
+This framework provides easy-to-write data mapping. You can simply create a new jpersis:
 
 ```java
-MapperManager.setDefaultConnector(new PostgresDatabaseConnector("localhost", "1234", "root", "mypassword"));
+JPersis persis = new JPersis(new PostgresConnector("localhost", "1234", "root", "mypassword"));
 ```
 
 Afterwards you can use the framework properly:
 
 ```java
-CustomerMapper mapper = MapperManager.getMapper(CustomerMapper.class);
-Customer customer = mapper.findByID(123);
+Customer customer = persis.get(CustomerMapper.class).findByID(123);
 ```
 
 Case study: An own customer mapper
@@ -28,7 +27,7 @@ Case study: An own customer mapper
 A sample customer mapper could look like this:
 
 ```java
-@DataMapper(model = "de.myreality.test.models.Customer", table = "customer", primaryKey = "customer_id", foreignKeys = {"location_id"})
+@DataMapper("de.myreality.test.models.Customer")
 public interface CustomerMapper {
 
     // ==============================================================
@@ -93,4 +92,26 @@ You only need to provide the model ```Customer``` for that.
 
 ### How to design a proper model
 
-TODO
+Jpersis needs to know how to build the model. Therefore we need to define it in Java first:
+
+```java
+public class Customer {
+
+	@PrimaryKey
+	private int id;
+
+	private String name;
+
+	private String adress;
+
+	/* A default constructor is needed */
+	public Customer() { 
+
+	}
+
+	public String getName() {
+		return name;
+	}
+}
+```
+Jpersis will create a table for you and maps the given values properly.
