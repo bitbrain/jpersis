@@ -16,7 +16,7 @@ package de.bitbrain.jpersis;
 
 /**
  * Is thrown when a specific mapper can not be found or an annotation is not
- * well used.
+ * well used
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
