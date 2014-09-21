@@ -14,6 +14,9 @@
  */
 package de.bitbrain.jpersis;
 
+import de.bitbrain.jpersis.annotations.Mapper;
+import de.bitbrain.jpersis.core.MapperManager;
+import de.bitbrain.jpersis.core.SimpleMapperManager;
 import de.bitbrain.jpersis.drivers.Driver;
 
 /**
@@ -24,35 +27,51 @@ import de.bitbrain.jpersis.drivers.Driver;
  * @version 1.0
  */
 public final class JPersis {
-  
-  /**
-   * Constructor for a new JPersis object
-   * 
-   * @param driver database driver
-   */
-  public JPersis(Driver driver) {
-    setDriver(driver);
-  }
+	
+	private MapperManager manager;
 
-  /**
-   * Provides data mappers for further usage. If the given class is not annotated
-   * with {@see Mapper} or the model of the mapper can not be found, an {@see JPersisException}
-   * is thrown.
-   * 
-   * @param mapper given class or interface of a mapper
-   * @return mapper instance of the given class or interface
-   */
-  public <T> T map(Class<T> mapper) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-  
-  /**
-   * Sets a new database driver. This method clears the current context and all
-   * associated models.
-   * 
-   * @param driver database driver
-   */
-  public void setDriver(Driver driver) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+	/**
+	 * Constructor for a new JPersis object
+	 * 
+	 * @param driver database driver
+	 */
+	public JPersis(Driver driver) {
+		manager = new SimpleMapperManager(driver);
+	}
+
+	/**
+	 * Provides data mappers for further usage. If the given class is not
+	 * annotated with {@see Mapper} or the model of the mapper can not be found,
+	 * an {@see JPersisException} is thrown.
+	 * 
+	 * @param mapper
+	 *            given class or interface of a mapper
+	 * @return mapper instance of the given class or interface
+	 */
+	public <T> T map(Class<T> mapper) {
+		validate(mapper);
+		if (!manager.contains(mapper)) {
+			manager.add(mapper);
+		}
+		return manager.get(mapper);
+	}
+
+	/**
+	 * Sets a new database driver. This method clears the current context and
+	 * all associated models.
+	 * 
+	 * @param driver
+	 *            database driver
+	 */
+	public void setDriver(Driver driver) {
+		manager.setDriver(driver);
+	}
+
+	private void validate(Class<?> mapper) {
+		if (!mapper.isInterface()) {
+			throw new JPersisException("Only interfaces can be a Mapper");
+		} else if (mapper.getAnnotation(Mapper.class) == null) {
+			throw new JPersisException(mapper + " must be annotated with Mapper annotation.");
+		}
+	}
 }
