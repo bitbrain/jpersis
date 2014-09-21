@@ -20,7 +20,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
+ * Counts number of elements which fit to the condition. If condition
+ * is not set, all elements are taken into account.
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
