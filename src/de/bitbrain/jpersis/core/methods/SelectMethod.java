@@ -34,7 +34,6 @@ public class SelectMethod extends AbstractMapperMethod<Select> {
 
 	@Override
 	public Object execute(Method method, Driver driver) {
-		System.out.println("Execute " + method + " with annotation " + getAnnotation());
 		return null;
 	}
 }

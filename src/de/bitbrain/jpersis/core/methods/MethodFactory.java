@@ -40,9 +40,9 @@ public class MethodFactory {
 		Annotation a = pool.getSupported(method);
 
 		if (a != null) {
-			Class<?> methodClass = pool.get(a.getClass());
-			try {				
-				Constructor<?> c = methodClass.getConstructor(Annotation.class);
+			Class<?> methodClass = pool.get(a.annotationType());
+			try {
+				Constructor<?> c = methodClass.getConstructor(a.annotationType());
 				return (MapperMethod<?>) c.newInstance(a);
 			} catch (NoSuchMethodException e) {
 				throw new JPersisException(methodClass + " does not provide a valid constructor");

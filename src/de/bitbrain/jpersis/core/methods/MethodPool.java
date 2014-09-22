@@ -42,8 +42,9 @@ public class MethodPool {
 	}
 	
 	public Annotation getSupported(Method method) {
+		
 		for (Annotation annotation : method.getAnnotations()) {
-			if (map.containsKey(annotation.getClass())) {
+			if (map.containsKey(annotation.annotationType())) {
 				return annotation;
 			}
 		}
