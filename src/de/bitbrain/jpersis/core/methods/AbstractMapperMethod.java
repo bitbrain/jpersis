@@ -2,15 +2,15 @@ package de.bitbrain.jpersis.core.methods;
 
 import java.lang.annotation.Annotation;
 
-public abstract class AbstractMapperMethod implements MapperMethod {
+public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 	
-	private Annotation annotation;
+	private T annotation;
 
-	public AbstractMapperMethod(Annotation annotation) {
+	public AbstractMapperMethod(T annotation) {
 		this.annotation = annotation;
 	}
 	
-	public Annotation getAnnotation() {
+	public T getAnnotation() {
 		return annotation;
 	}
 }

@@ -17,6 +17,7 @@ package de.bitbrain.jpersis.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.Driver;
 
 /**
@@ -31,10 +32,13 @@ public class SimpleMapperManager implements MapperManager {
 	private Driver driver;
 	
     private final Map<Class<?>, ProxyFactory<?> > factories;
+    
+    private MethodFactory factory;
 	
-	public SimpleMapperManager(Driver driver) {
+	public SimpleMapperManager(Driver driver, MethodFactory factory) {
 		factories = new HashMap<Class<?>, ProxyFactory<?>>();
 		this.driver = driver;
+		this.factory = factory;
 	}
 
 	@Override
@@ -56,7 +60,7 @@ public class SimpleMapperManager implements MapperManager {
 
 	@Override
 	public <T> void add(Class<T> mapper) {
-		factories.put(mapper, new ProxyFactory<T>(mapper, this));
+		factories.put(mapper, new ProxyFactory<T>(mapper, this, factory));
 	}
 
 	@Override

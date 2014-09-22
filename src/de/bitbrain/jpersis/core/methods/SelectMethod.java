@@ -14,10 +14,10 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import de.bitbrain.jpersis.drivers.DriverProvider;
+import de.bitbrain.jpersis.annotations.Select;
+import de.bitbrain.jpersis.drivers.Driver;
 
 /**
  * Select implementation of {@see MapperMethod}
@@ -26,15 +26,15 @@ import de.bitbrain.jpersis.drivers.DriverProvider;
  * @since 1.0
  * @version 1.0
  */
-class SelectMethod extends AbstractMapperMethod {
+public class SelectMethod extends AbstractMapperMethod<Select> {
 
-	public SelectMethod(Annotation annotation) {
-		super(annotation);
+	public SelectMethod(Select select) {
+		super(select);
 	}
 
 	@Override
-	public Object execute(Method method, DriverProvider driverProvider) {
-
+	public Object execute(Method method, Driver driver) {
+		System.out.println("Execute " + method + " with annotation " + getAnnotation());
 		return null;
 	}
 }

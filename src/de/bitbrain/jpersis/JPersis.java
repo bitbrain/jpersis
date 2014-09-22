@@ -14,9 +14,16 @@
  */
 package de.bitbrain.jpersis;
 
+import java.lang.annotation.Annotation;
+
 import de.bitbrain.jpersis.annotations.Mapper;
+import de.bitbrain.jpersis.annotations.Select;
 import de.bitbrain.jpersis.core.MapperManager;
 import de.bitbrain.jpersis.core.SimpleMapperManager;
+import de.bitbrain.jpersis.core.methods.MapperMethod;
+import de.bitbrain.jpersis.core.methods.MethodFactory;
+import de.bitbrain.jpersis.core.methods.MethodPool;
+import de.bitbrain.jpersis.core.methods.SelectMethod;
 import de.bitbrain.jpersis.drivers.Driver;
 
 /**
@@ -29,6 +36,8 @@ import de.bitbrain.jpersis.drivers.Driver;
 public final class JPersis {
 	
 	private MapperManager manager;
+	
+	private MethodPool pool;
 
 	/**
 	 * Constructor for a new JPersis object
@@ -36,7 +45,9 @@ public final class JPersis {
 	 * @param driver database driver
 	 */
 	public JPersis(Driver driver) {
-		manager = new SimpleMapperManager(driver);
+		pool = new MethodPool();
+		manager = new SimpleMapperManager(driver, new MethodFactory(pool));
+		initDefaults();
 	}
 
 	/**
@@ -65,6 +76,20 @@ public final class JPersis {
 	 */
 	public void setDriver(Driver driver) {
 		manager.setDriver(driver);
+	}
+	
+	/**
+	 * Register a custom method and annotation
+	 * 
+	 * @param annotation target expected annotation
+	 * @param method 
+	 */
+	public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?> > method) {
+		pool.register(annotation, method);
+	}
+	
+	private void initDefaults() {
+		register(Select.class, SelectMethod.class);
 	}
 
 	private void validate(Class<?> mapper) {

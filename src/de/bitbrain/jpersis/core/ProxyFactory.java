@@ -14,6 +14,7 @@
  */
 package de.bitbrain.jpersis.core;
 
+import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.DriverProvider;
 
 /**
@@ -25,12 +26,26 @@ import de.bitbrain.jpersis.drivers.DriverProvider;
  */
 public class ProxyFactory<T> {
 	
-	public ProxyFactory(Class<T> mapper, DriverProvider driverProvider) {
-		
+	private MethodFactory factory;
+	
+	private Class<T> mapper;
+	
+	private DriverProvider provider;
+	
+	public ProxyFactory(Class<T> mapper, DriverProvider driverProvider, MethodFactory factory) {
+		this.factory = factory;
+		this.mapper = mapper;
+		this.provider = driverProvider;
 	}
 	
 	public T create() {
-		return null;
-	}
+		final Proxy<T> mapperProxy = new Proxy<T>(provider, factory);
+        return newInstance(mapperProxy);
+    }
+
+    @SuppressWarnings("unchecked")
+	protected T newInstance(Proxy<T> mapperProxy) {
+        return (T) java.lang.reflect.Proxy.newProxyInstance(mapper.getClassLoader(), new Class[]{mapper}, mapperProxy);
+    }
 
 }

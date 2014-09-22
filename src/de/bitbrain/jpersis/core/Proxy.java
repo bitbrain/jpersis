@@ -35,15 +35,15 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 886746435635193772L;
 	
-	private final Map<Method, MapperMethod> cache;
+	private final Map<Method, MapperMethod<?> > cache;
 	
 	private DriverProvider driverProvider;
 	
 	private MethodFactory factory;
 	
-	public Proxy(DriverProvider driverProvider) {
+	public Proxy(DriverProvider driverProvider, MethodFactory factory) {
 		cache = new HashMap<>();
-		factory = new MethodFactory();
+		this.factory = factory;
 		this.driverProvider = driverProvider;
 	}
 
@@ -51,14 +51,14 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		if (valid(method)) {
-			return getCached(method).execute(method, driverProvider);
+			return getCached(method).execute(method, driverProvider.getDriver());
 		} else {
 			return method.invoke(this, args);
 		}
 	}
 	
-	private MapperMethod getCached(Method method) {
-		 MapperMethod mapped = cache.get(method);
+	private MapperMethod<?> getCached(Method method) {
+		 MapperMethod<?> mapped = cache.get(method);
 		 
 		 if (mapped == null) {
 			 mapped = factory.create(method);

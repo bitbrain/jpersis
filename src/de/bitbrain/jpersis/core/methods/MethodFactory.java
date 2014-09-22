@@ -15,15 +15,11 @@
 package de.bitbrain.jpersis.core.methods;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import de.bitbrain.jpersis.JPersisException;
-import de.bitbrain.jpersis.annotations.AnnotationUtils;
-import de.bitbrain.jpersis.annotations.Count;
-import de.bitbrain.jpersis.annotations.Delete;
-import de.bitbrain.jpersis.annotations.Insert;
-import de.bitbrain.jpersis.annotations.Select;
-import de.bitbrain.jpersis.annotations.Update;
 
 /**
  * Creates methods for queries
@@ -34,25 +30,36 @@ import de.bitbrain.jpersis.annotations.Update;
  */
 public class MethodFactory {
 
-	public MapperMethod create(Method method) {
-		Annotation a = AnnotationUtils.getSupported(method);
-		
+	private MethodPool pool;
+
+	public MethodFactory(MethodPool pool) {
+		this.pool = pool;
+	}
+
+	public MapperMethod<?> create(Method method) {
+		Annotation a = pool.getSupported(method);
+
 		if (a != null) {
-			Class<?> c = a.getClass();
-			if (c.equals(Select.class))
-				return new SelectMethod(a);
-			if (c.equals(Count.class))
-				throw new UnsupportedOperationException("Not supported!");
-			if (c.equals(Update.class))
-				throw new UnsupportedOperationException("Not supported!");
-			if (c.equals(Delete.class))
-				throw new UnsupportedOperationException("Not supported!");
-			if (c.equals(Insert.class))
-				throw new UnsupportedOperationException("Not supported!");			
-			
-			throw new JPersisException(method + " does not provide any supported annotation");
+			Class<?> methodClass = pool.get(a.getClass());
+			try {				
+				Constructor<?> c = methodClass.getConstructor(Annotation.class);
+				return (MapperMethod<?>) c.newInstance(a);
+			} catch (NoSuchMethodException e) {
+				throw new JPersisException(methodClass + " does not provide a valid constructor");
+			} catch (SecurityException e) {
+				throw new JPersisException(methodClass + " needs public methods and constructors");
+			} catch (InstantiationException e) {
+				throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				throw new JPersisException(methodClass + " needs public methods and constructors");
+			} catch (IllegalArgumentException e) {
+				throw new JPersisException(methodClass + " does not provide a valid constructor");
+			} catch (InvocationTargetException e) {
+				throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
+			}
 		} else {
-			throw new JPersisException(method + " does not provide any supported annotation");
+			throw new JPersisException(method
+					+ " does not provide any supported annotation");
 		}
 	}
 }
