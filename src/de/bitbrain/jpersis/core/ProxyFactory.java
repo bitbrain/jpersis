@@ -14,6 +14,10 @@
  */
 package de.bitbrain.jpersis.core;
 
+import java.lang.annotation.Annotation;
+
+import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.Mapper;
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.DriverProvider;
 
@@ -38,8 +42,22 @@ public class ProxyFactory<T> {
 		this.provider = driverProvider;
 	}
 	
+	private Class<?> getModelClass(Class<?> mapperClass) {
+		for (Annotation a : mapperClass.getAnnotations()) {
+			if (a.annotationType().equals(Mapper.class)) {
+				Mapper m = (Mapper)a;
+				try {					
+					return Class.forName(m.value());
+				} catch (ClassNotFoundException e) {
+					throw new JPersisException(" Could not find model: " + m.value());
+				}
+			}
+		}
+		throw new JPersisException("Could not retrieve model for " + mapperClass);
+	}
+	
 	public T create() {
-		final Proxy<T> mapperProxy = new Proxy<T>(provider, factory);
+		final Proxy<T> mapperProxy = new Proxy<T>(getModelClass(mapper), provider, factory);
         return newInstance(mapperProxy);
     }
 
@@ -47,5 +65,4 @@ public class ProxyFactory<T> {
 	protected T newInstance(Proxy<T> mapperProxy) {
         return (T) java.lang.reflect.Proxy.newProxyInstance(mapper.getClassLoader(), new Class[]{mapper}, mapperProxy);
     }
-
 }

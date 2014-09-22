@@ -42,5 +42,5 @@ public interface MapperMethod<T extends Annotation> {
 	 * @param driverProvider 
 	 * @return
 	 */
-	Object execute(Method method, Driver driver);
+	Object execute(Method method, Class<?> model, Driver driver);
 }

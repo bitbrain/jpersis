@@ -41,17 +41,20 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 	
 	private MethodFactory factory;
 	
-	public Proxy(DriverProvider driverProvider, MethodFactory factory) {
+	private Class<?> model;
+	
+	public Proxy(Class<?> model, DriverProvider driverProvider, MethodFactory factory) {
 		cache = new HashMap<>();
 		this.factory = factory;
 		this.driverProvider = driverProvider;
+		this.model = model;
 	}
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		if (valid(method)) {
-			return getCached(method).execute(method, driverProvider.getDriver());
+			return getCached(method).execute(method, model, driverProvider.getDriver());
 		} else {
 			return method.invoke(this, args);
 		}

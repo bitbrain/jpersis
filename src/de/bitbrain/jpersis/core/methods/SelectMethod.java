@@ -31,9 +31,4 @@ public class SelectMethod extends AbstractMapperMethod<Select> {
 	public SelectMethod(Select select) {
 		super(select);
 	}
-
-	@Override
-	public Object execute(Method method, Driver driver) {
-		return null;
-	}
 }
