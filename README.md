@@ -95,3 +95,7 @@ public class Customer {
 }
 ```
 Jpersis will create a table for you and maps the given values properly.
+
+Credits
+===
+Documentation, API and development by [Miguel Gonzalez](http://my-reality.de). Feel free to send pull requests. <3
