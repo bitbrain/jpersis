@@ -14,10 +14,8 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import java.lang.reflect.Method;
-
 import de.bitbrain.jpersis.annotations.Select;
-import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.Driver.Query;
 
 /**
  * Select implementation of {@see MapperMethod}
@@ -30,5 +28,11 @@ public class SelectMethod extends AbstractMapperMethod<Select> {
 
 	public SelectMethod(Select select) {
 		super(select);
+	}
+
+	@Override
+	public void on(Class<?> model, Object[] params, Query query) {		
+		Select a = getAnnotation();
+		query.condition(a.condition(), params).select();
 	}
 }

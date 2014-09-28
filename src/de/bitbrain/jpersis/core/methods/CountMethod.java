@@ -12,42 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.drivers;
+package de.bitbrain.jpersis.core.methods;
+
+import de.bitbrain.jpersis.annotations.Count;
+import de.bitbrain.jpersis.drivers.Driver.Query;
 
 /**
- * Driver for database communication
- * 
- * @author Miguel Gonzalez
+ * Select implementation of {@see MapperMethod}
+ *
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public interface Driver {
-	
-	Query query(Class<?> model);
-	
-	public interface Query {
-		
-		Query condition(String condition, Object[] params);
-		
-		Query select();
-		
-		Query update(Object object);
-		
-		Query delete(Object object);
-		
-		Query insert(Object object);
-		
-		Query count();
-		
-		Query limit(int limit);
-		
-		Query order(Order order);
-		
-		Object commit();	
+public class CountMethod extends AbstractMapperMethod<Count> {
+
+	public CountMethod(Count count) {
+		super(count);
 	}
-	
-	public enum Order {
-		ASC,
-		DESC;
+
+	@Override
+	public void on(Class<?> model, Object[] params, Query query) {
+		Count a = getAnnotation();
+		query.condition(a.condition(), params).count();
 	}
 }

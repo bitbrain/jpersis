@@ -39,8 +39,10 @@ public interface MapperMethod<T extends Annotation> {
 	 * Executes the method internally
 	 * 
 	 * @param method original method
+	 * @param model class of the model
+	 * @param params given parameters
 	 * @param driverProvider 
-	 * @return
+	 * @return resulting object
 	 */
-	Object execute(Method method, Class<?> model, Driver driver);
+	Object execute(Method method, Class<?> model, Object[] params, Driver driver);
 }

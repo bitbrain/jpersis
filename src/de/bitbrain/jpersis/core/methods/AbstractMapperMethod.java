@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.Driver.Query;
 
 public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 	
@@ -18,7 +19,11 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 	}
 	
 	@Override
-	public Object execute(Method method, Class<?> model, Driver driver) {
-		return null;
+	public Object execute(Method method, Class<?> model, Object[] params, Driver driver) {
+		Query query = driver.query(model);
+		on(model, params, query);
+		return query.commit();
 	}
+	
+	protected abstract void on(Class<?> model, Object[] params, Query query);
 }

@@ -1,0 +1,59 @@
+/*
+ * Copyright 2014 Miguel Gonzalez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.bitbrain.jpersis.core.methods;
+
+import java.util.Collection;
+
+import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.Delete;
+import de.bitbrain.jpersis.drivers.Driver.Query;
+
+/**
+ * Select implementation of {@see MapperMethod}
+ *
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @since 1.0
+ * @version 1.0
+ */
+public class DeleteMethod extends AbstractMapperMethod<Delete> {
+
+	public DeleteMethod(Delete delete) {
+		super(delete);
+	}
+
+	@Override
+	public void on(Class<?> model, Object[] params, Query query) {
+		if (params.length == 1) {
+			Object arg = params[0];
+			
+			if (arg instanceof Collection) {
+				Collection<?> c = (Collection<?>)arg;
+				for (Object o : c) {
+					if (o.getClass().equals(model)) {
+						query.delete(o);
+					} else {
+						throw new JPersisException(o + " is an invalid model for this method");
+					}
+				}
+			} else if (arg.getClass().equals(model)) {
+				query.delete(arg);
+			} else {
+				throw new JPersisException(arg + " is an invalid model for this method");
+			}
+		} else {
+			throw new JPersisException("Delete method only supports 1 argument");
+		}
+	}
+}
