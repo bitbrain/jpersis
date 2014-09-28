@@ -35,4 +35,9 @@ public class CountMethod extends AbstractMapperMethod<Count> {
 		Count a = getAnnotation();
 		query.condition(a.condition(), params).count();
 	}
+	
+	@Override
+	protected Class<?>[] supportedReturnTypes(Class<?> model) {
+		return new Class<?>[]{Integer.class};
+	}
 }

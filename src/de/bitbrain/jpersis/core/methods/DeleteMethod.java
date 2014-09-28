@@ -14,9 +14,6 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import java.util.Collection;
-
-import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Delete;
 import de.bitbrain.jpersis.drivers.Driver.Query;
 
@@ -35,25 +32,11 @@ public class DeleteMethod extends AbstractMapperMethod<Delete> {
 
 	@Override
 	public void on(Class<?> model, Object[] params, Query query) {
-		if (params.length == 1) {
-			Object arg = params[0];
-			
-			if (arg instanceof Collection) {
-				Collection<?> c = (Collection<?>)arg;
-				for (Object o : c) {
-					if (o.getClass().equals(model)) {
-						query.delete(o);
-					} else {
-						throw new JPersisException(o + " is an invalid model for this method");
-					}
-				}
-			} else if (arg.getClass().equals(model)) {
-				query.delete(arg);
-			} else {
-				throw new JPersisException(arg + " is an invalid model for this method");
-			}
-		} else {
-			throw new JPersisException("Delete method only supports 1 argument");
-		}
+		
+	}
+	
+	@Override
+	protected Class<?>[] supportedReturnTypes(Class<?> model) {
+		return new Class<?>[]{Boolean.class};
 	}
 }
