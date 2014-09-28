@@ -14,30 +14,48 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import de.bitbrain.jpersis.annotations.Count;
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+
 import de.bitbrain.jpersis.drivers.Driver.Query;
 
 /**
- * Count implementation of {@see MapperMethod}
+ * Basic implementation of {@see MapperMethod}
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public class CountMethod extends AbstractMapperMethod<Count> {
+public abstract class BasicMapperMethod<T extends Annotation> extends AbstractMapperMethod<T> {
 
-	public CountMethod(Count count) {
-		super(count);
+	public BasicMapperMethod(T annotation) {
+		super(annotation);
 	}
 
 	@Override
-	public void on(Class<?> model, Object[] params, Query query) {
-		Count a = getAnnotation();
-		query.condition(a.condition(), params).count();
+	public void on(Class<?> model, Object[] args, Query query) {
+		Object arg = args[0];		
+		if (arg.getClass().equals(model)) {
+			action(arg, query);
+		} else {
+			Collection<?> collection = (Collection<?>)arg;
+			for (Object o : collection) {
+				action(o, query);
+			}
+		}
+	}
+	
+	@Override
+	protected boolean validateArgs(Object[] args, Class<?> model) {
+		return args.length == 1 && 
+				(args[0].getClass().equals(Collection.class) 
+			 ||  args[0].getClass().equals(model));
 	}
 	
 	@Override
 	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{Integer.class};
+		return new Class<?>[]{Boolean.class};
 	}
+	
+	protected abstract void action(Object object, Query query);
 }

@@ -14,24 +14,24 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import de.bitbrain.jpersis.annotations.Delete;
+import de.bitbrain.jpersis.annotations.Insert;
 import de.bitbrain.jpersis.drivers.Driver.Query;
 
 /**
- * Delete implementation of {@see MapperMethod}
+ * Insert implementation of {@see MapperMethod}
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public class DeleteMethod extends BasicMapperMethod<Delete> {
+public class InsertMethod extends BasicMapperMethod<Insert> {
 
-	public DeleteMethod(Delete delete) {
-		super(delete);
+	public InsertMethod(Insert insert) {
+		super(insert);
 	}
 
 	@Override
 	protected void action(Object object, Query query) {
-		query.delete(object);
+		query.insert(object);
 	}
 }
