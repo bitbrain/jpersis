@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.Driver;
-import de.bitbrain.jpersis.drivers.Driver.Query;
+import de.bitbrain.jpersis.drivers.Query;
 
 public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 	

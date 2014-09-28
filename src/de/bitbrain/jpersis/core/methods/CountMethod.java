@@ -15,7 +15,7 @@
 package de.bitbrain.jpersis.core.methods;
 
 import de.bitbrain.jpersis.annotations.Count;
-import de.bitbrain.jpersis.drivers.Driver.Query;
+import de.bitbrain.jpersis.drivers.Query;
 
 /**
  * Count implementation of {@see MapperMethod}

@@ -14,14 +14,40 @@
  */
 package de.bitbrain.jpersis.drivers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Driver for database communication
+ * Abstract implementation of {@link Driver}
  * 
  * @author Miguel Gonzalez
  * @since 1.0
  * @version 1.0
  */
-public interface Driver {
+public abstract class AbstractDriver implements Driver {
 	
-	Query query(Class<?> model);
+	private Map<Class<?>, Query> queries;
+	
+	public AbstractDriver() {
+		queries = new HashMap<Class<?>, Query>();
+
+	}
+
+	@Override
+	public final Query query(Class<?> model) {
+		Query query = queries.get(model);
+		if (query  == null) {
+			query = createQuery(model);
+			queries.put(model, query);
+		}		
+		return query;
+	}
+	
+	/**
+	 * Let the child decide which query to create
+	 * 
+	 * @param model model of the query
+	 * @return newly created query
+	 */
+	protected abstract Query createQuery(Class<?> model);
 }

@@ -17,7 +17,7 @@ package de.bitbrain.jpersis.core.methods;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-import de.bitbrain.jpersis.drivers.Driver.Query;
+import de.bitbrain.jpersis.drivers.Query;
 
 /**
  * Basic implementation of {@see MapperMethod}

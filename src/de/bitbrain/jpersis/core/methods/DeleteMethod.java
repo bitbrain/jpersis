@@ -15,7 +15,7 @@
 package de.bitbrain.jpersis.core.methods;
 
 import de.bitbrain.jpersis.annotations.Delete;
-import de.bitbrain.jpersis.drivers.Driver.Query;
+import de.bitbrain.jpersis.drivers.Query;
 
 /**
  * Delete implementation of {@see MapperMethod}

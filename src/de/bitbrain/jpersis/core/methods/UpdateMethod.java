@@ -15,7 +15,7 @@
 package de.bitbrain.jpersis.core.methods;
 
 import de.bitbrain.jpersis.annotations.Update;
-import de.bitbrain.jpersis.drivers.Driver.Query;
+import de.bitbrain.jpersis.drivers.Query;
 
 /**
  * Update implementation of {@see MapperMethod}
