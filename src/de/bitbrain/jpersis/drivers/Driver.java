@@ -14,6 +14,8 @@
  */
 package de.bitbrain.jpersis.drivers;
 
+import de.bitbrain.jpersis.util.Naming;
+
 /**
  * Driver for database communication
  * 
@@ -23,5 +25,21 @@ package de.bitbrain.jpersis.drivers;
  */
 public interface Driver {
 	
-	Query query(Class<?> model);
+  /**
+   * Creates a new query compatible with this driver
+   * 
+   * @param model model to create a query for
+   * @return
+   */
+	Query query(Class<?> model, Naming naming);
+	
+	/**
+	 * Connects this driver with the data source
+	 */
+	void connect();
+	
+	/**
+	 * Closes this driver from the data source 
+	 */
+	void close();
 }

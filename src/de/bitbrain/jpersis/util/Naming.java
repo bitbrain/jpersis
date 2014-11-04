@@ -12,30 +12,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis;
+package de.bitbrain.jpersis.util;
+
+import java.lang.reflect.Field;
 
 /**
- * Is thrown when a specific mapper can not be found or an annotation is not well used
- * 
+ * JPersis main class which provides mapper creation and database interaction
+ *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
  * @version 1.0
  */
-public class JPersisException extends RuntimeException {
+public interface Naming {
 
-  private static final long serialVersionUID = 1L;
+  /** Default naming is CamelCase */
+  static Naming DEFAULT = new CamelCaseNaming();
 
   /**
-   * Constructor for the exception
    * 
-   * @param message
-   *          Message to set
+   * 
+   * @param name
+   * @return
    */
-  public JPersisException(String message) {
-    super(message);
-  }
+  public String collectionToJava(String name);
+
+  /**
+   * 
+   * 
+   * @param name
+   * @return
+   */
+  public String javaToCollection(Class<?> model);
   
-  public JPersisException(Throwable t) {
-    super(t);
-  }
+  /**
+   * 
+   * 
+   * @param name
+   * @return
+   */
+  public String fieldToJava(String name);
+
+  /**
+   * 
+   * 
+   * @param name
+   * @return
+   */
+  public String javaToField(Field field);
 }

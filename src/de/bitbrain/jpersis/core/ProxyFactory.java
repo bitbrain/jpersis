@@ -20,6 +20,7 @@ import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Mapper;
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.DriverProvider;
+import de.bitbrain.jpersis.util.NamingProvider;
 
 /**
  * Factory which creates mapper proxies
@@ -34,12 +35,15 @@ public class ProxyFactory<T> {
 	
 	private Class<T> mapper;
 	
-	private DriverProvider provider;
+	private DriverProvider driverProvider;
 	
-	public ProxyFactory(Class<T> mapper, DriverProvider driverProvider, MethodFactory factory) {
+	private NamingProvider namingProvider;
+	
+	public ProxyFactory(Class<T> mapper, DriverProvider driverProvider, MethodFactory factory, NamingProvider namingProvider) {
 		this.factory = factory;
 		this.mapper = mapper;
-		this.provider = driverProvider;
+		this.driverProvider = driverProvider;
+		this.namingProvider = namingProvider;
 	}
 	
 	private Class<?> getModelClass(Class<?> mapperClass) {
@@ -57,7 +61,7 @@ public class ProxyFactory<T> {
 	}
 	
 	public T create() {
-		final Proxy<T> mapperProxy = new Proxy<T>(getModelClass(mapper), provider, factory);
+		final Proxy<T> mapperProxy = new Proxy<T>(getModelClass(mapper), driverProvider, factory, namingProvider.getNaming());
         return newInstance(mapperProxy);
     }
 

@@ -23,6 +23,7 @@ import java.util.Map;
 import de.bitbrain.jpersis.core.methods.MapperMethod;
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.DriverProvider;
+import de.bitbrain.jpersis.util.Naming;
 
 /**
  * Proxy for mapper interfaces
@@ -43,7 +44,9 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 	
 	private Class<?> model;
 	
-	public Proxy(Class<?> model, DriverProvider driverProvider, MethodFactory factory) {
+	private Naming naming;
+	
+	public Proxy(Class<?> model, DriverProvider driverProvider, MethodFactory factory, Naming naming) {
 		cache = new HashMap<>();
 		this.factory = factory;
 		this.driverProvider = driverProvider;
@@ -54,7 +57,7 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		if (valid(method)) {
-			return getCached(method).execute(method, model, args, driverProvider.getDriver());
+			return getCached(method).execute(method, model, args, driverProvider.getDriver(), naming);
 		} else {
 			return method.invoke(this, args);
 		}

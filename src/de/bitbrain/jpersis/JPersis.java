@@ -25,6 +25,8 @@ import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.core.methods.MethodPool;
 import de.bitbrain.jpersis.core.methods.SelectMethod;
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.util.Naming;
+import de.bitbrain.jpersis.util.NamingProvider;
 
 /**
  * JPersis main class which provides mapper creation and database interaction
@@ -38,6 +40,8 @@ public final class JPersis {
 	private MapperManager manager;
 	
 	private MethodPool pool;
+	
+	private Naming naming = Naming.DEFAULT;
 
 	/**
 	 * Constructor for a new JPersis object
@@ -46,7 +50,12 @@ public final class JPersis {
 	 */
 	public JPersis(Driver driver) {
 		pool = new MethodPool();
-		manager = new SimpleMapperManager(driver, new MethodFactory(pool));
+		manager = new SimpleMapperManager(driver, new MethodFactory(pool), new NamingProvider() {
+      @Override
+      public Naming getNaming() {
+        return naming;
+      }		  
+		});
 		initDefaults();
 	}
 
@@ -65,6 +74,10 @@ public final class JPersis {
 			manager.add(mapper);
 		}
 		return manager.get(mapper);
+	}
+	
+	public void setNaming(Naming naming) {
+	  this.naming = naming;
 	}
 
 	/**

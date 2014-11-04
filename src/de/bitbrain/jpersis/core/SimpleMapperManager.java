@@ -19,6 +19,7 @@ import java.util.Map;
 
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.util.NamingProvider;
 
 /**
  * Simple implementation of {@see MapperManager}
@@ -28,43 +29,46 @@ import de.bitbrain.jpersis.drivers.Driver;
  * @version 1.0
  */
 public class SimpleMapperManager implements MapperManager {
-	
-	private Driver driver;
-	
-    private final Map<Class<?>, ProxyFactory<?> > factories;
-    
-    private MethodFactory factory;
-	
-	public SimpleMapperManager(Driver driver, MethodFactory factory) {
-		factories = new HashMap<Class<?>, ProxyFactory<?>>();
-		this.driver = driver;
-		this.factory = factory;
-	}
 
-	@Override
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
+  private Driver driver;
 
-	@Override
-	public Driver getDriver() {
-		return driver;
-	}
+  private final Map<Class<?>, ProxyFactory<?>> factories;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T get(Class<T> mapper) {
-		final ProxyFactory<T> factory = (ProxyFactory<T>) factories.get(mapper);
-		return factory.create();
-	}
+  private MethodFactory factory;
+  
+  private NamingProvider naming;
 
-	@Override
-	public <T> void add(Class<T> mapper) {
-		factories.put(mapper, new ProxyFactory<T>(mapper, this, factory));
-	}
+  public SimpleMapperManager(Driver driver, MethodFactory factory, NamingProvider namingProvider) {
+    factories = new HashMap<Class<?>, ProxyFactory<?>>();
+    this.driver = driver;
+    this.naming = namingProvider;
+    this.factory = factory;
+  }
 
-	@Override
-	public boolean contains(Class<?> mapper) {
-		return mapper != null && factories.containsKey(mapper);
-	}
+  @Override
+  public void setDriver(Driver driver) {
+    this.driver = driver;
+  }
+
+  @Override
+  public Driver getDriver() {
+    return driver;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T get(Class<T> mapper) {
+    final ProxyFactory<T> factory = (ProxyFactory<T>) factories.get(mapper);
+    return factory.create();
+  }
+
+  @Override
+  public <T> void add(Class<T> mapper) {
+    factories.put(mapper, new ProxyFactory<T>(mapper, this, factory, naming));
+  }
+
+  @Override
+  public boolean contains(Class<?> mapper) {
+    return mapper != null && factories.containsKey(mapper);
+  }
 }

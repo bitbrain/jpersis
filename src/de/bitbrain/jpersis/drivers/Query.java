@@ -92,6 +92,14 @@ public interface Query {
 	 * @return resulting object of the query
 	 */
 	Object commit();
+	
+	/**
+	 * Creates a new table of the given model
+	 * 
+	 * @param model model to create the table from
+	 * @return true if successful
+	 */
+	Object createTable(Object model);
 
 	/**
 	 * Query orders of a query

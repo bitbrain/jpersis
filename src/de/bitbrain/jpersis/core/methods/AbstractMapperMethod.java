@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.Query;
+import de.bitbrain.jpersis.util.Naming;
 
 public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 	
@@ -34,7 +35,7 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 	}
 	
 	@Override
-	public Object execute(Method method, Class<?> model, Object[] args, Driver driver) {
+	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {
 		
 		if (!validateArgs(args, model)) {
 			throw new JPersisException("Arguments are not supported.");
@@ -43,9 +44,12 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 			throw new JPersisException("Return type " + method.getReturnType() + " is not allowed.");
 		}
 		
-		Query query = driver.query(model);
+		Query query = driver.query(model, naming);
 		on(model, args, query);
-		return query.commit();
+		driver.connect();
+		Object result = query.commit();
+		driver.close();
+		return result;
 	}
 	
 	protected abstract void on(Class<?> model, Object[] params, Query query);
