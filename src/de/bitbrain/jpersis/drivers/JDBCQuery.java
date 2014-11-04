@@ -89,11 +89,16 @@ public class JDBCQuery implements Query {
 
   @Override
   public Object commit() {
-    return create + clause + condition + order + limit;
+    
+    return null;
   }
 
   @Override
-  public Object createTable(Object model) {
-    return null;
+  public Object createTable() {
+    return "CREATE TABLE `" + table + "` IF NOT EXISTS; ";
+  }
+  
+  private String buildString() {
+    return create + clause + condition + order + limit;
   }
 }

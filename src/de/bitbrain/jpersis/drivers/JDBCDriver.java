@@ -41,9 +41,9 @@ public abstract class JDBCDriver extends AbstractDriver {
 
   private String password;
 
-  protected Connection connection;
-
   protected Statement statement;
+  
+  protected Connection connection;
 
   public JDBCDriver(String host, String port, String database, String user, String password) {
     this.database = database;
@@ -64,7 +64,6 @@ public abstract class JDBCDriver extends AbstractDriver {
   public void connect() {
     try {
       this.connection = DriverManager.getConnection(getURL(host, port, database), user, password);
-      this.statement = connection.createStatement();
     } catch (SQLException ex) {
       throw new JPersisException(ex);
     }
@@ -74,7 +73,6 @@ public abstract class JDBCDriver extends AbstractDriver {
   public void close() {
     if (connection != null) {
       try {
-        statement.close();
         connection.close();
       } catch (SQLException ex) {
         throw new JPersisException(ex);

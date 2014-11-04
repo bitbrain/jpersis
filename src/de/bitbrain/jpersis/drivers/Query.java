@@ -99,7 +99,7 @@ public interface Query {
 	 * @param model model to create the table from
 	 * @return true if successful
 	 */
-	Object createTable(Object model);
+	Object createTable();
 
 	/**
 	 * Query orders of a query
