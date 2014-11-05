@@ -46,9 +46,7 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 		
 		Query query = driver.query(model, naming);
 		on(model, args, query);
-		driver.connect();
-		Object result = query.commit();
-		driver.close();
+		Object result = driver.commit(query);
 		return result;
 	}
 	

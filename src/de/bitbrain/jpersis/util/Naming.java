@@ -42,7 +42,7 @@ public interface Naming {
    * @param name
    * @return
    */
-  public String javaToCollection(Class<?> model);
+  public String javaToCollection(String name);
   
   /**
    * 
@@ -58,5 +58,5 @@ public interface Naming {
    * @param name
    * @return
    */
-  public String javaToField(Field field);
+  public String javaToField(String name);
 }

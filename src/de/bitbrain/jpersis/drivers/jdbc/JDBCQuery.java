@@ -51,13 +51,13 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query condition(String condition, Object[] args) {
-    condition = "WHERE " + generateConditionString(condition, args, naming);
+    condition = SQL.WHERE + " " + generateConditionString(condition, args, naming);
     return this;
   }
 
   @Override
   public Query select() {
-    clause = "SELECT * FROM `" + tableName() + "` ";
+    clause = SQL.SELECT + " * " + SQL.FROM + " `" + tableName() + "` ";
     return this;
   }
 
@@ -65,43 +65,43 @@ public class JDBCQuery implements Query {
   public Query update(Object object) {    
     String cond = generatePreparedConditionString(object, naming);
     Object[] args = FieldExtractor.extractFields(object);
-    clause = "UPDATE `" + tableName() + " SET " + generateConditionString(cond, args, naming);
+    clause = SQL.UPDATE + " `" + tableName() + " " + SQL.SET + " " + generateConditionString(cond, args, naming);
     return this;
   }
 
   @Override
   public Query delete(Object object) {
-    clause = "DELETE FROM " + tableName();
+    clause = SQL.DELETE + " " + tableName();
     return this;
   }
 
   @Override
   public Query insert(Object object) {
-    clause = "INSERT INTO " + tableName();
+    clause = SQL.INSERT + " " + tableName();
     return this;
   }
 
   @Override
   public Query count() {
-    clause = "COUNT * ";
+    clause = SQL.COUNT + " * ";
     return this;
   }
 
   @Override
   public Query limit(int limit) {
-    this.limit = "LIMIT " + limit;
+    this.limit = SQL.LIMIT + " " + limit;
     return this;
   }
 
   @Override
   public Query order(Order order) {
-    this.order = "ORDER BY " + order.name();
+    this.order = SQL.ORDER + " " + order.name();
     return this;
   }
 
   @Override
   public Object createTable() {
-    String q = "CREATE TABLE IF NOT EXISTS " + tableName();
+    String q = SQL.CREATE_TABLE + " " + tableName();
     q = generateTableString(model, naming);
     try {
       return statement.executeUpdate(q) == 0;
@@ -116,6 +116,6 @@ public class JDBCQuery implements Query {
   }
   
   private String tableName() {
-    return "`" + naming.javaToCollection(model) + "`";
+    return "`" + naming.javaToCollection(model.getName()) + "`";
   }
 }

@@ -16,6 +16,7 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -68,6 +69,22 @@ public abstract class JDBCDriver extends AbstractDriver {
       this.connection = DriverManager.getConnection(getURL(host, port, database), user, password);
     } catch (SQLException ex) {
       throw new JPersisException(ex);
+    }
+  }
+  
+  @Override
+  public Object commit(Query query) {
+    String sql = query.toString();
+    try {
+      query.createTable();
+      if (statement.execute(sql)) {
+        ResultSet resultSet = statement.getResultSet();
+        return null; // TODO
+      } else {
+        throw new JPersisException("Could not execute SQL: " + sql);
+      }
+    } catch (SQLException e) {
+      throw new JPersisException(e);
     }
   }
 

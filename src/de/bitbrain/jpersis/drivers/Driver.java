@@ -42,4 +42,9 @@ public interface Driver {
 	 * Closes this driver from the data source 
 	 */
 	void close();
+	
+	/**
+	 * Commits the given query
+	 */
+	Object commit(Query query);
 }

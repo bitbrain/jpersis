@@ -32,5 +32,4 @@ public class SQLiteDriver extends JDBCDriver {
       throw new JPersisException(e);
     }
   }
-
 }
