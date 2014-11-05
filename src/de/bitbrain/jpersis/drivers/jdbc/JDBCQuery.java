@@ -14,10 +14,15 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
+import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateConditionString;
+import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generatePreparedConditionString;
+import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.bitbrain.jpersis.drivers.Query;
+import de.bitbrain.jpersis.util.FieldExtractor;
 import de.bitbrain.jpersis.util.Naming;
 
 /**
@@ -46,7 +51,7 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query condition(String condition, Object[] args) {
-    condition = "WHERE " + SQLUtils.generateConditionString(condition, args, naming);
+    condition = "WHERE " + generateConditionString(condition, args, naming);
     return this;
   }
 
@@ -57,8 +62,10 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public Query update(Object object) {
-    clause = "UPDATE `" + tableName() + " SET ";
+  public Query update(Object object) {    
+    String cond = generatePreparedConditionString(object, naming);
+    Object[] args = FieldExtractor.extractFields(object);
+    clause = "UPDATE `" + tableName() + " SET " + generateConditionString(cond, args, naming);
     return this;
   }
 
@@ -93,14 +100,9 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public Object commit() {    
-    return null;
-  }
-
-  @Override
   public Object createTable() {
     String q = "CREATE TABLE IF NOT EXISTS " + tableName();
-    q = SQLUtils.generateTableString(model, naming);
+    q = generateTableString(model, naming);
     try {
       return statement.executeUpdate(q) == 0;
     } catch (SQLException e) {

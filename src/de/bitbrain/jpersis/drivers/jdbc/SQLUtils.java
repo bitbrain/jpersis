@@ -14,6 +14,8 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
+import java.lang.reflect.Field;
+
 import de.bitbrain.jpersis.util.Naming;
 
 /**
@@ -25,10 +27,42 @@ import de.bitbrain.jpersis.util.Naming;
  */
 public final class SQLUtils {
 
+  /**
+   * Generates an SQL string including braces.
+   * 
+   * @param model
+   * @param naming
+   * @return
+   */
   public static String generateTableString(Class<?> model, Naming naming) {
-    return "";
+    String r = "(";
+    
+    
+    
+    return r + ")";
+  }
+  
+  public static String generatePreparedConditionString(Object object, Naming naming) {
+    Field[] fields = object.getClass().getFields();
+    String condition = "";
+    for (int i = 0; i < fields.length; ++i) {
+      Field f = fields[i];
+      condition += naming.javaToField(f) + "=$" + i;
+      if (i < fields.length - 1) {
+        condition += " AND ";
+      }
+    }
+    return condition;
   }
 
+  /**
+   * 
+   * 
+   * @param condition
+   * @param args
+   * @param naming
+   * @return
+   */
   public static String generateConditionString(String condition, Object[] args, Naming naming) {
     return "";
   }

@@ -6,26 +6,22 @@ public class CamelCaseNaming implements Naming {
 
   @Override
   public String collectionToJava(String name) {
-    // TODO Auto-generated method stub
-    return null;
+    return name;
   }
 
   @Override
   public String javaToCollection(Class<?> model) {
-    // TODO Auto-generated method stub
-    return null;
+    return "";
   }
 
   @Override
   public String fieldToJava(String name) {
-    // TODO Auto-generated method stub
-    return null;
+    return name;
   }
 
   @Override
   public String javaToField(Field field) {
-    // TODO Auto-generated method stub
-    return null;
+    return "";
   }
 
 }

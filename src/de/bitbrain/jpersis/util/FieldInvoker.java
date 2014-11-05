@@ -28,7 +28,7 @@ import java.util.Date;
  * @version 1.0
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class FieldInvoker {
+public final class FieldInvoker {
 
 	/**
 	 * This method invokes a field of the object and inserts data
@@ -37,7 +37,7 @@ public class FieldInvoker {
 	 * @param field field to set
 	 * @param value data for the field
 	 */
-	public void invoke(Object object, Field field, String value)
+	public static void invoke(Object object, Field field, String value)
 			throws InvokeException {
 		
 		if (value == null || value.isEmpty()) {
@@ -51,7 +51,7 @@ public class FieldInvoker {
 		}
 	}
 	
-	private Object convertToObject(Class type, String value) throws InvokeException {
+	private static Object convertToObject(Class type, String value) throws InvokeException {
 		Object obj = null;
 		// Enum
 		if (type.isEnum()) {
@@ -87,11 +87,11 @@ public class FieldInvoker {
 		return obj;
 	}
 
-	private Object invokeEnum(Class type, String value) {
+	private static Object invokeEnum(Class type, String value) {
 		return Enum.valueOf(type, value);
 	}
 	
-	private Object invokeChar(String value) throws InvokeException {
+	private static Object invokeChar(String value) throws InvokeException {
 		if (value.length() == 1) {
             return Character.valueOf(value.toCharArray()[0]);
         } else {
@@ -99,7 +99,7 @@ public class FieldInvoker {
         }
 	}
 	
-	private Object invokeDate(String value)
+	private static Object invokeDate(String value)
 			throws InvokeException {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
@@ -109,7 +109,7 @@ public class FieldInvoker {
 		}
 	}
 
-	public class InvokeException extends Exception {
+	public static class InvokeException extends Exception {
 
 		private static final long serialVersionUID = 7413162412732936818L;
 		

@@ -85,13 +85,6 @@ public interface Query {
 	 * @return this query
 	 */
 	Query order(Order order);
-
-	/**
-	 * Commits this query to execute it
-	 * 
-	 * @return resulting object of the query
-	 */
-	Object commit();
 	
 	/**
 	 * Creates a new table of the given model
