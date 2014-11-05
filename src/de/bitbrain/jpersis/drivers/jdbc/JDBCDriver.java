@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.drivers;
+package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.drivers.AbstractDriver;
+import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.util.Naming;
 
 /**
@@ -57,7 +59,7 @@ public abstract class JDBCDriver extends AbstractDriver {
 
   @Override
   protected Query createQuery(Class<?> model, Naming naming) {
-    return new JDBCQuery(naming.javaToCollection(model), statement);
+    return new JDBCQuery(model, naming, statement);
   }
 
   @Override

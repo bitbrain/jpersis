@@ -12,9 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.drivers;
+package de.bitbrain.jpersis.drivers.jdbc;
 
+import java.sql.SQLException;
 import java.sql.Statement;
+
+import de.bitbrain.jpersis.drivers.Query;
+import de.bitbrain.jpersis.util.Naming;
 
 /**
  * SQL language implementation for a query
@@ -25,47 +29,48 @@ import java.sql.Statement;
  */
 public class JDBCQuery implements Query {
   
-  private String table = "";
   private String clause = "";
   private String order = "";
   private String limit = "";
   private String condition = "";
-  private String create = "";
   
   private Statement statement;
+  private Naming naming;
+  private Class<?> model;
   
-  public JDBCQuery(String table, Statement statement) {
-    this.table = table;
+  public JDBCQuery(Class<?> model, Naming naming, Statement statement) {
+    this.naming = naming;
+    this.model = model;
     this.statement = statement;
   }
 
   @Override
   public Query condition(String condition, Object[] args) {
-    // TODO Auto-generated method stub
-    return null;
+    condition = "WHERE " + SQLUtils.generateConditionString(condition, args, naming);
+    return this;
   }
 
   @Override
   public Query select() {
-    clause = "SELECT * FROM `" + table + "` ";
+    clause = "SELECT * FROM `" + tableName() + "` ";
     return this;
   }
 
   @Override
   public Query update(Object object) {
-    clause = "UPDATE ";
+    clause = "UPDATE `" + tableName() + " SET ";
     return this;
   }
 
   @Override
   public Query delete(Object object) {
-    clause = "DELETE ";
+    clause = "DELETE FROM " + tableName();
     return this;
   }
 
   @Override
   public Query insert(Object object) {
-    clause = "INSERT INTO ";
+    clause = "INSERT INTO " + tableName();
     return this;
   }
 
@@ -88,17 +93,27 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public Object commit() {
-    
+  public Object commit() {    
     return null;
   }
 
   @Override
   public Object createTable() {
-    return "CREATE TABLE `" + table + "` IF NOT EXISTS; ";
+    String q = "CREATE TABLE IF NOT EXISTS " + tableName();
+    q = SQLUtils.generateTableString(model, naming);
+    try {
+      return statement.executeUpdate(q) == 0;
+    } catch (SQLException e) {
+      return Boolean.FALSE;
+    }
   }
   
-  private String buildString() {
-    return create + clause + condition + order + limit;
+  @Override
+  public String toString() {
+    return clause + condition + order + limit;
+  }
+  
+  private String tableName() {
+    return "`" + naming.javaToCollection(model) + "`";
   }
 }

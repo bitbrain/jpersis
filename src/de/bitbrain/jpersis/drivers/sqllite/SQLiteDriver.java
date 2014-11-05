@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import de.bitbrain.jpersis.JPersisException;
-import de.bitbrain.jpersis.drivers.JDBCDriver;
+import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
 
 public class SQLiteDriver extends JDBCDriver {
   
