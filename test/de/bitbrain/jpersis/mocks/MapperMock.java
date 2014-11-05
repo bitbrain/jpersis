@@ -9,7 +9,7 @@ import de.bitbrain.jpersis.annotations.Insert;
 import de.bitbrain.jpersis.annotations.Select;
 import de.bitbrain.jpersis.annotations.Update;
 
-@Mapper("de.bitbrain.jpersis.mocks.MapperMock")
+@Mapper("de.bitbrain.jpersis.mocks.ModelMock")
 public interface MapperMock {
 
 	@Insert

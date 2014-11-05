@@ -27,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import de.bitbrain.jpersis.JPersis;
+import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.ModelMock;
 
@@ -35,15 +36,14 @@ public class AnnotationsTest {
 
   static final String DB = "temp.sql";
 
-  JPersis manager = new JPersis(null);
+  JPersis manager = new JPersis(new SQLiteDriver(DB));
 
   MapperMock mapper;
 
   @Before
   public void beforeTest() {
-
     createDatabase();
-    //mapper = manager.map(MapperMock.class);
+    mapper = manager.map(MapperMock.class);
   }
 
   @After

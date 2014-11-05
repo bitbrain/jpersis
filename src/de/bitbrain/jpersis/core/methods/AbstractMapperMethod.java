@@ -35,15 +35,22 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 	}
 	
 	@Override
-	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {
-		
+	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {	
 		if (!validateArgs(args, model)) {
 			throw new JPersisException("Arguments are not supported.");
 		}
 		if (!validateReturnType(method.getReturnType(), model)) {
-			throw new JPersisException("Return type " + method.getReturnType() + " is not allowed.");
+		  Class<?>[] supported = supportedReturnTypes(model);
+		  String message = "Return type " + method.getReturnType() + " is not allowed. Supported are: ";
+		  for (int i = 0; i < supported.length; ++i) {
+		    Class<?> c = supported[i];
+		    message += i < supported.length - 1 ? c.getName() + ", " : c.getName();		    
+		  }		  
+			throw new JPersisException(message);
 		}
-		
+		if (driver == null) {
+		  throw new JPersisException("No driver has been set.");
+		}
 		Query query = driver.query(model, naming);
 		on(model, args, query);
 		Object result = driver.commit(query);

@@ -16,14 +16,22 @@ package de.bitbrain.jpersis;
 
 import java.lang.annotation.Annotation;
 
+import de.bitbrain.jpersis.annotations.Count;
+import de.bitbrain.jpersis.annotations.Delete;
+import de.bitbrain.jpersis.annotations.Insert;
 import de.bitbrain.jpersis.annotations.Mapper;
 import de.bitbrain.jpersis.annotations.Select;
+import de.bitbrain.jpersis.annotations.Update;
 import de.bitbrain.jpersis.core.MapperManager;
 import de.bitbrain.jpersis.core.SimpleMapperManager;
+import de.bitbrain.jpersis.core.methods.CountMethod;
+import de.bitbrain.jpersis.core.methods.DeleteMethod;
+import de.bitbrain.jpersis.core.methods.InsertMethod;
 import de.bitbrain.jpersis.core.methods.MapperMethod;
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.core.methods.MethodPool;
 import de.bitbrain.jpersis.core.methods.SelectMethod;
+import de.bitbrain.jpersis.core.methods.UpdateMethod;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.Naming;
 import de.bitbrain.jpersis.util.NamingProvider;
@@ -103,6 +111,10 @@ public final class JPersis {
 	
 	private void initDefaults() {
 		register(Select.class, SelectMethod.class);
+		register(Count.class, CountMethod.class);
+		register(Insert.class, InsertMethod.class);
+		register(Update.class, UpdateMethod.class);
+		register(Delete.class, DeleteMethod.class);
 	}
 
 	private void validate(Class<?> mapper) {
