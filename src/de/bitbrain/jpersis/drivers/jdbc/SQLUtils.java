@@ -65,7 +65,7 @@ public final class SQLUtils {
   }
 
   public static String generatePreparedConditionString(Object object, Naming naming) {
-    Field[] fields = object.getClass().getFields();
+    Field[] fields = object.getClass().getDeclaredFields();
     String condition = "";
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
@@ -117,8 +117,8 @@ public final class SQLUtils {
    * @param naming
    * @return
    */
-  public static String generateConditionString(String condition, Object[] values) {
-	for (int i = 0; i < values.length; ++i) {
+  public static String generateConditionString(String condition, Object[] values) {	  
+	for (int i = 0; values != null &&  i < values.length; ++i) {
 		Object value = values[i];
 		condition = condition.replace("$" + i, typeToString(value));
 	}

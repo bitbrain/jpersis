@@ -18,31 +18,31 @@ package de.bitbrain.jpersis.annotations;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import de.bitbrain.jpersis.JPersis;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.ModelMock;
 
-@RunWith(MockitoJUnitRunner.class)
 public class AnnotationsTest {
 
   static final String DB = "temp.sql";
 
-  JPersis manager = new JPersis(new SQLiteDriver(DB));
+  JPersis manager;
 
   MapperMock mapper;
 
   @Before
-  public void beforeTest() {
+  public void beforeTest() throws IOException {
     createDatabase();
+    manager = new JPersis(new SQLiteDriver(DB));
     mapper = manager.map(MapperMock.class);
   }
 
@@ -54,7 +54,7 @@ public class AnnotationsTest {
   @Test
   public void testInsert() {
 
-    final int RUNS = 1000;
+    final int RUNS = 5;
 
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
@@ -78,14 +78,14 @@ public class AnnotationsTest {
     mapper.update(m1);
 
     ModelMock updated = mapper.findById(m1.getId());
-    assertTrue("It should have the same ID", updated.getId() == m1.getId());
+    assertTrue("It should have the same ID", updated != null && updated.getId() == m1.getId());
     assertFalse("Old and new object should not be the same", m1.equals(updated));
     assertTrue("It should an updated name", "Wilfred".equals("Wilfred"));
   }
 
   @Test
   public void testDelete() {
-    final int RUNS = 1000;
+    final int RUNS = 5;
 
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
@@ -101,7 +101,7 @@ public class AnnotationsTest {
 
   @Test
   public void testFindById() {
-    final int RUNS = 1000;
+    final int RUNS = 5;
 
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
@@ -120,39 +120,41 @@ public class AnnotationsTest {
 
   @Test
   public void testFindAll() {
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 20; i++) {
       ModelMock m = new ModelMock();
       m.setName("Maximilian");
       m.setLastName("Wutang");
       mapper.insert(m);
     }
-    for (int i = 0; i < 300; i++) {
+    for (int i = 0; i < 30; i++) {
       ModelMock m = new ModelMock();
       m.setName("Johannes");
       m.setLastName("Wutang");
       mapper.insert(m);
     }
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 40; i++) {
       ModelMock m = new ModelMock();
       m.setName("Sebastian");
       m.setLastName("Walter");
       mapper.insert(m);
     }
     Collection<ModelMock> mocks1 = mapper.findAllByName("Maximilian");
-    assertTrue("There are not enough models1", mocks1.size() == 200);
+    assertTrue("There are not enough models1 -> " + mocks1.size(), mocks1.size() == 20);
     
     Collection<ModelMock> mocks2 = mapper.findAllByName("Johannes");
-    assertTrue("There are not enough models2", mocks2.size() == 300);
+    assertTrue("There are not enough models2 -> " + mocks2.size(), mocks2.size() == 30);
     
     Collection<ModelMock> mocks3 = mapper.findAllByName("Sebastian");
-    assertTrue("There are not enough models3", mocks3.size() == 50);
+    assertTrue("There are not enough models3 -> " + mocks3.size(), mocks3.size() == 40);
   }
 
-  private void createDatabase() {
-
+  private void createDatabase() throws IOException {
+	  File file = new File(DB);
+	  file.createNewFile();
   }
 
   private void deleteDatabase() {
-
+	  File file = new File(DB);
+	  file.delete();
   }
 }

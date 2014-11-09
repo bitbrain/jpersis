@@ -34,4 +34,9 @@ public class UpdateMethod extends BasicMapperMethod<Update> {
 	protected void action(Object object, Query query) {
 		query.update(object);
 	}
+	
+	@Override
+	protected Class<?>[] supportedReturnTypes(Class<?> model) {
+	  return new Class[]{Boolean.class, boolean.class};
+	}
 }

@@ -58,7 +58,7 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query select() {
-    clause = SQL.SELECT + " * " + SQL.FROM + " `" + tableName() + "` ";
+    clause = SQL.SELECT + " " + tableName();
     return this;
   }
 
@@ -66,7 +66,7 @@ public class JDBCQuery implements Query {
   public Query update(Object object) {    
     String cond = generatePreparedConditionString(object, naming);
     Object[] values = FieldExtractor.extractFieldValues(object);
-    clause = SQL.UPDATE + " `" + tableName() + " " + SQL.SET + " " + generateConditionString(cond, values);
+    clause = SQL.UPDATE + " " + tableName() + " " + SQL.SET + " " + generateConditionString(cond, values);
     return this;
   }
 
@@ -106,7 +106,6 @@ public class JDBCQuery implements Query {
     String q = SQL.CREATE_TABLE + " " + tableName();
     q += generateTableString(model, naming);
     try {
-    	System.out.println(q);
       statement.executeUpdate(q);
     } catch (SQLException e) {
       throw new DriverException(e);

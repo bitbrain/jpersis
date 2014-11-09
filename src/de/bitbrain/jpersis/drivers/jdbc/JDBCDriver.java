@@ -80,14 +80,13 @@ public abstract class JDBCDriver extends AbstractDriver {
     String sql = query.toString();
     try {
       query.createTable();
-      int code = statement.executeUpdate(sql);
-      if (code > 0 && code < 3) {
-        return resultSetReader.read(statement.getResultSet(), returnType);
+      if (statement.execute(sql)) {
+    	  return resultSetReader.read(statement.getResultSet(), returnType);
       } else {
-        return Boolean.FALSE;
+    	  return statement.getUpdateCount() < 0;
       }
     } catch (SQLException e) {
-      throw new DriverException(e);
+      throw new DriverException(e + " " + sql);
     }
   }
 
