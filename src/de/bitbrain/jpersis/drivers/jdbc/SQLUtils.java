@@ -15,9 +15,7 @@
 package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Ignored;

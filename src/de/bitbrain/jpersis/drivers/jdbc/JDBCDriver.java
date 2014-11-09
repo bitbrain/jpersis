@@ -16,11 +16,9 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.AbstractDriver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
@@ -48,6 +46,8 @@ public abstract class JDBCDriver extends AbstractDriver {
   protected Statement statement;
   
   protected Connection connection;
+  
+  private ResultSetReader resultSetReader;
 
   public JDBCDriver(String host, String port, String database, String user, String password) {
     this.database = database;
@@ -55,6 +55,7 @@ public abstract class JDBCDriver extends AbstractDriver {
     this.user = user;
     this.password = password;
     this.port = port;
+    resultSetReader = new ResultSetReader();
   }
 
   protected abstract String getURL(String host, String port, String database);
@@ -75,18 +76,18 @@ public abstract class JDBCDriver extends AbstractDriver {
   }
   
   @Override
-  public Object commit(Query query) throws DriverException {
+  public Object commit(Query query, Class<?> returnType) throws DriverException {
     String sql = query.toString();
     try {
       query.createTable();
-      if (statement.executeUpdate(sql) == 0) {
-        ResultSet resultSet = statement.getResultSet();
-        return null; // TODO
+      int code = statement.executeUpdate(sql);
+      if (code > 0 && code < 3) {
+        return resultSetReader.read(statement.getResultSet(), returnType);
       } else {
-        throw new JPersisException("Could not execute SQL: " + sql);
+        return Boolean.FALSE;
       }
     } catch (SQLException e) {
-      throw new DriverException(e.getMessage() + ": " + sql);
+      throw new DriverException(e);
     }
   }
 
