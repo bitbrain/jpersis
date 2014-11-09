@@ -46,5 +46,5 @@ public interface Driver {
 	/**
 	 * Commits the given query
 	 */
-	Object commit(Query query, Class<?> returnType) throws DriverException;
+	Object commit(Query query, Class<?> returnType, Class<?> model, Naming naming) throws DriverException;
 }

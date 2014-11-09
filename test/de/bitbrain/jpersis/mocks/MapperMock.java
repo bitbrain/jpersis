@@ -30,6 +30,6 @@ public interface MapperMock {
 	@Select
 	Collection<ModelMock> findAll();
 	
-	@Select(condition = "name = $1")
-  Collection<ModelMock> findAllByName(String name);
+	@Select(condition = "name=$1")
+    Collection<ModelMock> findAllByName(String name);
 }

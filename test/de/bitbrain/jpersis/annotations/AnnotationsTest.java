@@ -78,9 +78,9 @@ public class AnnotationsTest {
     mapper.update(m1);
 
     ModelMock updated = mapper.findById(m1.getId());
-    assertTrue("It should have the same ID", updated != null && updated.getId() == m1.getId());
+    assertTrue("It should have the same ID", updated.getId() == m1.getId());
     assertFalse("Old and new object should not be the same", m1.equals(updated));
-    assertTrue("It should an updated name", "Wilfred".equals("Wilfred"));
+    assertTrue("It should an updated name", "Wilfred".equals(updated.getName()));
   }
 
   @Test

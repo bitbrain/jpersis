@@ -76,12 +76,12 @@ public abstract class JDBCDriver extends AbstractDriver {
   }
   
   @Override
-  public Object commit(Query query, Class<?> returnType) throws DriverException {
+  public Object commit(Query query, Class<?> returnType, Class<?> model, Naming naming) throws DriverException {
     String sql = query.toString();
     try {
       query.createTable();
       if (statement.execute(sql)) {
-    	  return resultSetReader.read(statement.getResultSet(), returnType);
+    	  return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
       } else {
     	  return statement.getUpdateCount() < 0;
       }

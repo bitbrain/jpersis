@@ -39,7 +39,8 @@ public final class FieldInvoker {
 	 */
 	public static void invoke(Object object, Field field, String value)
 			throws InvokeException {
-		
+		boolean accessable = field.isAccessible();
+		field.setAccessible(true);
 		if (value == null || value.isEmpty()) {
 			throw new InvokeException(field.getName() + " is null");
 		}
@@ -48,6 +49,8 @@ public final class FieldInvoker {
 			field.set(object, convertToObject(field.getType(), value));
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new InvokeException(e);
+		} finally {
+			field.setAccessible(accessable);
 		}
 	}
 	
