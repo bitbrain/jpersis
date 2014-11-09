@@ -21,6 +21,7 @@ import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.util.FieldExtractor;
 import de.bitbrain.jpersis.util.Naming;
@@ -101,13 +102,14 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public Object createTable() {
+  public void createTable() throws DriverException {
     String q = SQL.CREATE_TABLE + " " + tableName();
-    q = generateTableString(model, naming);
+    q += generateTableString(model, naming);
     try {
-      return statement.executeUpdate(q) == 0;
+    	System.out.println(q);
+      statement.executeUpdate(q);
     } catch (SQLException e) {
-      return Boolean.FALSE;
+      throw new DriverException(e);
     }
   }
   

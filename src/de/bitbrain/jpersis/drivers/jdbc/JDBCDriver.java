@@ -22,6 +22,7 @@ import java.sql.Statement;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.AbstractDriver;
+import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.util.Naming;
 
@@ -64,38 +65,38 @@ public abstract class JDBCDriver extends AbstractDriver {
   }
 
   @Override
-  public void connect() {
+  public void connect() throws DriverException {
     try {
       this.connection = DriverManager.getConnection(getURL(host, port, database), user, password);
       this.statement = this.connection.createStatement();
     } catch (SQLException ex) {
-      throw new JPersisException(ex);
+      throw new DriverException(ex);
     }
   }
   
   @Override
-  public Object commit(Query query) {
+  public Object commit(Query query) throws DriverException {
     String sql = query.toString();
     try {
       query.createTable();
-      if (statement.execute(sql)) {
+      if (statement.executeUpdate(sql) == 0) {
         ResultSet resultSet = statement.getResultSet();
         return null; // TODO
       } else {
         throw new JPersisException("Could not execute SQL: " + sql);
       }
     } catch (SQLException e) {
-      throw new JPersisException(e + ": " + sql);
+      throw new DriverException(e.getMessage() + ": " + sql);
     }
   }
 
   @Override
-  public void close() {
+  public void close() throws DriverException {
     if (connection != null) {
       try {
         connection.close();
       } catch (SQLException ex) {
-        throw new JPersisException(ex);
+        throw new DriverException(ex);
       }
     }
   }

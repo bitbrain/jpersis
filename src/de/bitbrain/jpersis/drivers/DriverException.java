@@ -14,37 +14,20 @@
  */
 package de.bitbrain.jpersis.drivers;
 
-import de.bitbrain.jpersis.util.Naming;
-
 /**
- * Driver for database communication
+ * Exception which is triggered in drivers
  * 
  * @author Miguel Gonzalez
  * @since 1.0
  * @version 1.0
  */
-public interface Driver {
+public class DriverException extends Exception {
+
+	public DriverException(String m) {
+		super(m);
+	}
 	
-  /**
-   * Creates a new query compatible with this driver
-   * 
-   * @param model model to create a query for
-   * @return
-   */
-	Query query(Class<?> model, Naming naming);
-	
-	/**
-	 * Connects this driver with the data source
-	 */
-	void connect() throws DriverException;
-	
-	/**
-	 * Closes this driver from the data source 
-	 */
-	void close() throws DriverException;
-	
-	/**
-	 * Commits the given query
-	 */
-	Object commit(Query query) throws DriverException;
+	public DriverException(Throwable t) {
+		super(t);
+	}
 }

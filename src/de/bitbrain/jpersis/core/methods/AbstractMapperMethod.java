@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.util.Naming;
 
@@ -50,13 +51,17 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 		}
 		if (driver == null) {
 		  throw new JPersisException("No driver has been set.");
+		}		
+		try {
+			driver.connect();
+			Query query = driver.query(model, naming);
+			on(model, args, query);
+			Object result = driver.commit(query);
+			driver.close();
+			return result;
+		} catch (DriverException e) {
+			throw new JPersisException(e);
 		}
-		driver.connect();
-		Query query = driver.query(model, naming);
-		on(model, args, query);
-		Object result = driver.commit(query);
-		driver.close();
-		return result;
 	}
 	
 	protected abstract void on(Class<?> model, Object[] params, Query query);
