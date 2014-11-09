@@ -33,7 +33,10 @@ public class CountMethod extends AbstractMapperMethod<Count> {
 	@Override
 	public void on(Class<?> model, Object[] params, Query query) {
 		Count a = getAnnotation();
-		query.condition(a.condition(), params).count();
+		query.count();
+		if (!a.condition().isEmpty()) {
+			query.condition(a.condition(), params);
+		}
 	}
 	
 	@Override

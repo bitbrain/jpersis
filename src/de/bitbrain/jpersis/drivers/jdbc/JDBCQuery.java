@@ -52,7 +52,7 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query condition(String condition, Object[] args) {
-    condition = SQL.WHERE + " " + generateConditionString(condition, args);
+    this.condition = " " + SQL.WHERE + " " + generateConditionString(condition, args);
     return this;
   }
 

@@ -79,6 +79,7 @@ public abstract class JDBCDriver extends AbstractDriver {
   public Object commit(Query query, Class<?> returnType, Class<?> model, Naming naming) throws DriverException {
     String sql = query.toString();
     try {
+    	System.out.println(sql);
       query.createTable();
       if (statement.execute(sql)) {
     	  return resultSetReader.read(statement.getResultSet(), returnType, model, naming);

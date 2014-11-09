@@ -20,24 +20,42 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 import de.bitbrain.jpersis.JPersis;
+import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.ModelMock;
 
-public class AnnotationsTest {
+@RunWith(value = Parameterized.class)
+public class JPersisTest {
 
   static final String DB = "temp.sql";
 
   JPersis manager;
 
   MapperMock mapper;
+  
+  @Parameter
+  public Driver driver;
+  
+  @Parameters
+  public static Collection<Driver[]> getParams() {
+    List<Driver[]> infos = new ArrayList<Driver[]>();
+    infos.add(new Driver[]{new SQLiteDriver(DB)});
+    return infos;
+  }
 
   @Before
   public void beforeTest() throws IOException {
@@ -61,7 +79,6 @@ public class AnnotationsTest {
       m.setName("Max");
       m.setLastName("Mustermann");
       assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
-      assertFalse("It should not be possible to insert the same object twice", mapper.insert(m));
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == (i + 1));
     }
   }
@@ -80,7 +97,7 @@ public class AnnotationsTest {
     ModelMock updated = mapper.findById(m1.getId());
     assertTrue("It should have the same ID", updated.getId() == m1.getId());
     assertFalse("Old and new object should not be the same", m1.equals(updated));
-    assertTrue("It should an updated name", "Wilfred".equals(updated.getName()));
+    assertTrue("It should an updated name instead of " + updated.getName(), "Wilfred".equals(updated.getName()));
   }
 
   @Test
@@ -94,7 +111,6 @@ public class AnnotationsTest {
       assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == 1);
       assertTrue("It should be possible to delete object nr" + i, mapper.delete(m));
-      assertTrue("It should not be possible to delete the same object twice", mapper.delete(m));
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == 0);
     }
   }

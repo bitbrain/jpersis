@@ -35,7 +35,10 @@ public class SelectMethod extends AbstractMapperMethod<Select> {
 	@Override
 	public void on(Class<?> model, Object[] params, Query query) {		
 		Select a = getAnnotation();
-		query.condition(a.condition(), params).select();
+		query.select();		
+		if (!a.condition().isEmpty()) {
+			query.condition(a.condition(), params);
+		}
 	}
 	
 	@Override

@@ -69,7 +69,7 @@ public final class SQLUtils {
     String condition = "";
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
-      condition += naming.javaToField(f.getName()) + "=$" + i;
+      condition += naming.javaToField(f.getName()) + "=$" + (i + 1);
       if (i < fields.length - 1) {
         condition += " " + SQL.AND + " ";
       }
@@ -120,7 +120,7 @@ public final class SQLUtils {
   public static String generateConditionString(String condition, Object[] values) {	  
 	for (int i = 0; values != null &&  i < values.length; ++i) {
 		Object value = values[i];
-		condition = condition.replace("$" + i, typeToString(value));
+		condition = condition.replace("$" + (i + 1), typeToString(value));
 	}
     return condition;
   }
