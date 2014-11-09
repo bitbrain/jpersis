@@ -15,6 +15,8 @@
 
 package de.bitbrain.jpersis.mocks;
 
+import de.bitbrain.jpersis.annotations.PrimaryKey;
+
 /**
  * Mock model
  * 
@@ -24,6 +26,7 @@ package de.bitbrain.jpersis.mocks;
  */
 public class ModelMock {
 
+	@PrimaryKey(true)
 	private int id;
 	
 	private String name;
