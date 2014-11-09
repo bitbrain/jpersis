@@ -38,6 +38,6 @@ public class CountMethod extends AbstractMapperMethod<Count> {
 	
 	@Override
 	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{Integer.class};
+		return new Class<?>[]{Integer.class, int.class};
 	}
 }

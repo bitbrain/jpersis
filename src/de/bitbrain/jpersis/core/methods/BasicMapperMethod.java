@@ -54,7 +54,7 @@ public abstract class BasicMapperMethod<T extends Annotation> extends AbstractMa
 	
 	@Override
 	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{Boolean.class};
+		return new Class<?>[]{Boolean.class, boolean.class};
 	}
 	
 	protected abstract void action(Object object, Query query);

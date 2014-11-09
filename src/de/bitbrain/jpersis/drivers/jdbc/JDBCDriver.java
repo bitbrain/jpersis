@@ -83,7 +83,7 @@ public abstract class JDBCDriver extends AbstractDriver {
       if (statement.execute(sql)) {
     	  return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
       } else {
-    	  return statement.getUpdateCount() < 0;
+    	  return statement.getUpdateCount() > 0;
       }
     } catch (SQLException e) {
       throw new DriverException(e + " " + sql);

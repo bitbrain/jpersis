@@ -34,9 +34,4 @@ public class InsertMethod extends BasicMapperMethod<Insert> {
 	protected void action(Object object, Query query) {
 		query.insert(object);
 	}
-	
-	@Override
-	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-	  return new Class[]{Boolean.class, boolean.class};
-	}
 }

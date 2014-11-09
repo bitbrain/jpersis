@@ -85,7 +85,7 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query count() {
-    clause = SQL.COUNT + " * ";
+    clause = SQL.COUNT + " " + tableName();
     return this;
   }
 

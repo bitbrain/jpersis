@@ -34,7 +34,7 @@ public class SQL {
   public static final String PRIMARY_KEY    = "PRIMARY KEY";
   public static final String FROM           = "FROM";
   public static final String SET            = "SET";
-  public static final String COUNT          = "COUNT";
+  public static final String COUNT          = "SELECT COUNT(*) FROM";
   public static final String LIMIT          = "LIMIT";
   public static final String ORDER          = "ORDER BY";
   public static final String VALUES         = " VALUES";
