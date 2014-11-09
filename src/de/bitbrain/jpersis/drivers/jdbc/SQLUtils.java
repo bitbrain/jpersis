@@ -15,7 +15,9 @@
 package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Ignored;
@@ -117,7 +119,29 @@ public final class SQLUtils {
    * @param naming
    * @return
    */
-  public static String generateConditionString(String condition, Object[] args, Naming naming) {
-    return "";
+  public static String generateConditionString(String condition, Object[] values) {
+	for (int i = 0; i < values.length; ++i) {
+		Object value = values[i];
+		condition = condition.replace("$" + i, typeToString(value));
+	}
+    return condition;
+  }
+  
+  public static String typeToString(Object o) {
+	  if (o instanceof String) {
+		  return "\"" + (String)o + "\"";
+	  } else return String.valueOf(o);
+  }
+  
+  public static String generateCommaString(Object ... collection) {
+	  String s = "(";
+	  int i = 0;
+	  for (Object o : collection) {
+		  s += typeToString(o);
+		  if (i++ < collection.length - 1) {
+			  s += ",";
+		  }
+	  }
+	  return s + ")";
   }
 }

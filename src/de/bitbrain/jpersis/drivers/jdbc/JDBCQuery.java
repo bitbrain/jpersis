@@ -51,7 +51,7 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query condition(String condition, Object[] args) {
-    condition = SQL.WHERE + " " + generateConditionString(condition, args, naming);
+    condition = SQL.WHERE + " " + generateConditionString(condition, args);
     return this;
   }
 
@@ -64,8 +64,8 @@ public class JDBCQuery implements Query {
   @Override
   public Query update(Object object) {    
     String cond = generatePreparedConditionString(object, naming);
-    Object[] args = FieldExtractor.extractFields(object);
-    clause = SQL.UPDATE + " `" + tableName() + " " + SQL.SET + " " + generateConditionString(cond, args, naming);
+    Object[] values = FieldExtractor.extractFieldValues(object);
+    clause = SQL.UPDATE + " `" + tableName() + " " + SQL.SET + " " + generateConditionString(cond, values);
     return this;
   }
 
@@ -77,7 +77,8 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query insert(Object object) {
-    clause = SQL.INSERT + " " + tableName();
+	Object[] args = FieldExtractor.extractFieldValues(object);
+    clause = SQL.INSERT + " " + tableName() + SQL.VALUES + SQLUtils.generateCommaString(args);
     return this;
   }
 
@@ -116,6 +117,6 @@ public class JDBCQuery implements Query {
   }
   
   private String tableName() {
-    return "`" + naming.javaToCollection(model.getName()) + "`";
+    return "`" + naming.javaToCollection(model.getSimpleName()) + "`";
   }
 }

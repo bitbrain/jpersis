@@ -29,13 +29,17 @@ import de.bitbrain.jpersis.JPersisException;
  */
 public final class FieldExtractor {
 
-  public static Object[] extractFields(Object object) {    
+  public static Object[] extractFieldValues(Object object) {    
     List<Object> values = new ArrayList<Object>();
-    for (Field f : object.getClass().getFields()) {
+    for (Field f : object.getClass().getDeclaredFields()) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
       try {
         values.add(f.get(object));
       } catch (IllegalArgumentException | IllegalAccessException e) {
         throw new JPersisException(e);
+      } finally {
+    	  f.setAccessible(accessable);
       }
     }    
     return values.toArray(new Object[values.size()]);

@@ -36,7 +36,9 @@ public class SQL {
   public static final String SET            = "SET";
   public static final String COUNT          = "COUNT";
   public static final String LIMIT          = "LIMIT";
-  public static final String ORDER          = "ORDER BY";  
+  public static final String ORDER          = "ORDER BY";
+  public static final String VALUES         = " VALUES";
+  
   // Primary Types
   public static final String CHAR           = "CHAR";
   public static final String VARCHAR        = "VARCHAR";
@@ -46,5 +48,5 @@ public class SQL {
   public static final String ENUM           = "VARCHAR";
   public static final String BOOL           = "BOOL";
   public static final String DATETIME       = "DATETIME";
-  public static final String INTEGER        = "INTEGER";  
+  public static final String INTEGER        = "INTEGER";
 }

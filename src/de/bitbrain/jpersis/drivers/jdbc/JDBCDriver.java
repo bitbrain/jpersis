@@ -67,6 +67,7 @@ public abstract class JDBCDriver extends AbstractDriver {
   public void connect() {
     try {
       this.connection = DriverManager.getConnection(getURL(host, port, database), user, password);
+      this.statement = this.connection.createStatement();
     } catch (SQLException ex) {
       throw new JPersisException(ex);
     }
@@ -84,7 +85,7 @@ public abstract class JDBCDriver extends AbstractDriver {
         throw new JPersisException("Could not execute SQL: " + sql);
       }
     } catch (SQLException e) {
-      throw new JPersisException(e);
+      throw new JPersisException(e + ": " + sql);
     }
   }
 

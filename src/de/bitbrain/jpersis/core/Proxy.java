@@ -51,6 +51,7 @@ public class Proxy<T> implements InvocationHandler, Serializable {
 		this.factory = factory;
 		this.driverProvider = driverProvider;
 		this.model = model;
+		this.naming = naming;
 	}
 
 	@Override

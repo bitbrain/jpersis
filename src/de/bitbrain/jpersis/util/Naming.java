@@ -14,7 +14,6 @@
  */
 package de.bitbrain.jpersis.util;
 
-import java.lang.reflect.Field;
 
 /**
  * JPersis main class which provides mapper creation and database interaction
