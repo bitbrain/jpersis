@@ -120,32 +120,32 @@ public class AnnotationsTest {
 
   @Test
   public void testFindAll() {
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 5; i++) {
       ModelMock m = new ModelMock();
       m.setName("Maximilian");
       m.setLastName("Wutang");
       mapper.insert(m);
     }
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 6; i++) {
       ModelMock m = new ModelMock();
       m.setName("Johannes");
       m.setLastName("Wutang");
       mapper.insert(m);
     }
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 7; i++) {
       ModelMock m = new ModelMock();
       m.setName("Sebastian");
       m.setLastName("Walter");
       mapper.insert(m);
     }
     Collection<ModelMock> mocks1 = mapper.findAllByName("Maximilian");
-    assertTrue("There are not enough models1 -> " + mocks1.size(), mocks1.size() == 20);
+    assertTrue("There are not enough models1 -> " + mocks1.size(), mocks1.size() == 5);
     
     Collection<ModelMock> mocks2 = mapper.findAllByName("Johannes");
-    assertTrue("There are not enough models2 -> " + mocks2.size(), mocks2.size() == 30);
+    assertTrue("There are not enough models2 -> " + mocks2.size(), mocks2.size() == 6);
     
     Collection<ModelMock> mocks3 = mapper.findAllByName("Sebastian");
-    assertTrue("There are not enough models3 -> " + mocks3.size(), mocks3.size() == 40);
+    assertTrue("There are not enough models3 -> " + mocks3.size(), mocks3.size() == 7);
   }
 
   private void createDatabase() throws IOException {
