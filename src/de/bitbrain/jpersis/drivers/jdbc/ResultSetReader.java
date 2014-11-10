@@ -16,6 +16,7 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -70,6 +71,9 @@ public class ResultSetReader {
 			Object o = returnType.getConstructor().newInstance();
 			Field[] fields = returnType.getDeclaredFields();
 			for (Field f : fields) {
+				if (Modifier.isStatic(f.getModifiers())) {
+			    	  continue;
+			      }
 				String value = set.getString(naming.javaToField(f.getName()));
 				FieldInvoker.invoke(o, f, value);
 			}

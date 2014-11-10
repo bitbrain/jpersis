@@ -15,6 +15,7 @@
 package de.bitbrain.jpersis.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,9 @@ public final class FieldInvoker {
 	 */
 	public static void invoke(Object object, Field field, String value)
 			throws InvokeException {
+		if (Modifier.isStatic(field.getModifiers())) {
+			return;
+		}
 		boolean accessable = field.isAccessible();
 		field.setAccessible(true);
 		if (value == null || value.isEmpty()) {

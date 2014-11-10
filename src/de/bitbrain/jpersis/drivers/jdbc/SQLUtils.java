@@ -15,6 +15,7 @@
 package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Date;
 
 import de.bitbrain.jpersis.JPersisException;
@@ -47,7 +48,7 @@ public final class SQLUtils {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       // Ignore annotated fields which have the @Ignored annotation
-      if (f.getAnnotation(Ignored.class) != null) {
+      if (f.getAnnotation(Ignored.class) != null || Modifier.isStatic(f.getModifiers())) {
         continue;
       }
       String name = naming.javaToField(f.getName());
@@ -85,6 +86,9 @@ public final class SQLUtils {
     int index = 0;
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
+      if (Modifier.isStatic(f.getModifiers())) {
+    	  continue;
+      }
       if (!f.isAnnotationPresent(PrimaryKey.class) || !f.getAnnotation(PrimaryKey.class).value()) {
 	      condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
 	      if (i < fields.length - 1) {
@@ -158,6 +162,9 @@ public final class SQLUtils {
 	  String s = "(";
 	  int index  = 0;
 	  for (Field f : fields) {
+		  if (Modifier.isStatic(f.getModifiers())) {
+	    	  continue;
+	      }
 		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
 			  continue;
 		  } else {
