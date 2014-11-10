@@ -24,7 +24,7 @@ public interface MapperMock {
 	@Count
 	int count();
 	
-	@Select(condition = "id = $1")
+	@Select(condition = "id=$1")
 	ModelMock findById(int id);
 	
 	@Select

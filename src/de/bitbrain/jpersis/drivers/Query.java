@@ -30,7 +30,7 @@ public interface Query {
 	 * @param args arguments
 	 * @return this query
 	 */
-	Query condition(String condition, Object[] args);
+	Query condition(String condition, Object ... args);
 
 	/**
 	 * Changes to select mode

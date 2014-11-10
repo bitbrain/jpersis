@@ -41,6 +41,7 @@ public final class SQLUtils {
   public static String generateTableString(Class<?> model, Naming naming) {
     String r = "(";
     Field[] fields = model.getDeclaredFields();
+    boolean primaryKeyFound = false;
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
       boolean accessable = f.isAccessible();
@@ -53,28 +54,46 @@ public final class SQLUtils {
       r += "`" + name + "` " + convertDatatype(f.getType());
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
-      if (pKey != null && pKey.value()) {
-        r += SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
+      
+      if (pKey != null) {
+        if (primaryKeyFound) {
+          throw new JPersisException(model.getName() + " defines multiple primary keys!");
+        }
+        primaryKeyFound = true;       
+        if (pKey.value()) {
+          r += SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
+        }
       }
       if (i < fields.length - 1) {
         r += ",";
       }
       f.setAccessible(accessable);
     }
+    if (!primaryKeyFound) {
+      throw new JPersisException(model.getName() + " does not define a primary key");
+    }
     return r + ")";
   }
-
+  
   public static String generatePreparedConditionString(Object object, Naming naming) {
+    return generatePreparedConditionString(object, naming, SQL.AND);
+  }
+
+  public static String generatePreparedConditionString(Object object, Naming naming, String div) {
     Field[] fields = object.getClass().getDeclaredFields();
     String condition = "";
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
-      condition += naming.javaToField(f.getName()) + "=$" + (i + 1);
+      condition += "`" + naming.javaToField(f.getName()) + "`=$" + (i + 1);
       if (i < fields.length - 1) {
-        condition += " " + SQL.AND + " ";
+        condition += div;
       }
     }
     return condition;
+  }
+
+  public static String generatePrimaryKeyCondition(Field primaryKey, Naming naming) {
+    return "`" + naming.javaToField(primaryKey.getName()) + "`=$1";
   }
 
   public static String convertDatatype(Class<?> type) {

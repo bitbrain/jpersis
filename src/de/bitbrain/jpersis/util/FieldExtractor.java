@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.PrimaryKey;
 
 /**
  * This extractor takes care of objects and extracts their fields
@@ -43,5 +44,37 @@ public final class FieldExtractor {
       }
     }    
     return values.toArray(new Object[values.size()]);
+  }
+  
+  public static Field extractPrimaryKey(Object object) {
+    for (Field f : object.getClass().getDeclaredFields()) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      try {
+        if (f.isAnnotationPresent(PrimaryKey.class)) {
+          return f;
+        }
+      } finally {
+        f.setAccessible(accessable);
+      }
+    }
+    return null;
+  }
+
+  public static Object extractPrimaryKeyValue(Object object) {
+    Field f = extractPrimaryKey(object);
+    if (f != null) {
+      boolean accessable = f.isAccessible();
+      try {
+        f.setAccessible(true);
+        return f.get(object);
+      } catch (IllegalArgumentException | IllegalAccessException e) {
+        throw new JPersisException(e);
+      } finally {
+        f.setAccessible(accessable);
+      }
+    } else {
+      throw new JPersisException(object.getClass() + " has no primary key");
+    }
   }
 }

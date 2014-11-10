@@ -15,7 +15,6 @@
 
 package de.bitbrain.jpersis.annotations;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -87,24 +86,20 @@ public class JPersisTest {
   @Test
   public void testUpdate() {
     ModelMock m1 = new ModelMock();
-
     m1.setName("Hans");
     m1.setLastName("Kramer");
     mapper.insert(m1);
-
     m1.setName("Wilfred");
     mapper.update(m1);
-
     ModelMock updated = mapper.findById(m1.getId());
     assertTrue("It should have the same ID", updated.getId() == m1.getId());
-    assertFalse("Old and new object should not be the same", m1.equals(updated));
+    assertTrue("Old and new object should be the same", m1.equals(updated));
     assertTrue("It should be an updated name instead of " + updated.getName(), "Wilfred".equals(updated.getName()));
   }
 
   @Test
   public void testDelete() {
     final int RUNS = 5;
-
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
       m.setName("Max");
@@ -119,14 +114,12 @@ public class JPersisTest {
   @Test
   public void testFindById() {
     final int RUNS = 5;
-
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
       m.setName("Max");
       m.setLastName("Mustermann");
       mapper.insert(m);
-    }
-    
+    }    
     Collection<ModelMock> mocks = mapper.findAll();
     assertTrue("There are not enough mocks to find", mocks.size() == RUNS);
     for (ModelMock m : mocks) {

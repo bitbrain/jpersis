@@ -18,6 +18,7 @@ import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateConditionString;
 import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generatePreparedConditionString;
 import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -51,7 +52,7 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public Query condition(String condition, Object[] args) {
+  public Query condition(String condition, Object ... args) {
     this.condition = " " + SQL.WHERE + " " + generateConditionString(condition, args);
     return this;
   }
@@ -64,9 +65,13 @@ public class JDBCQuery implements Query {
 
   @Override
   public Query update(Object object) {    
-    String cond = generatePreparedConditionString(object, naming);
+    String cond = generatePreparedConditionString(object, naming, ",");
     Object[] values = FieldExtractor.extractFieldValues(object);
     clause = SQL.UPDATE + " " + tableName() + " " + SQL.SET + " " + generateConditionString(cond, values);
+    Field primaryKey = FieldExtractor.extractPrimaryKey(object);    
+    String primaryKeyCondition = SQLUtils.generatePrimaryKeyCondition(primaryKey, naming);
+    Object primaryKeyValue = FieldExtractor.extractPrimaryKeyValue(object);
+    condition(primaryKeyCondition, primaryKeyValue);
     return this;
   }
 
