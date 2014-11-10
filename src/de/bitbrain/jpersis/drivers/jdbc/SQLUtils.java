@@ -61,7 +61,7 @@ public final class SQLUtils {
         }
         primaryKeyFound = true;       
         if (pKey.value()) {
-          r += SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
+          r += " " + SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
         }
       }
       if (i < fields.length - 1) {
@@ -82,11 +82,14 @@ public final class SQLUtils {
   public static String generatePreparedConditionString(Object object, Naming naming, String div) {
     Field[] fields = object.getClass().getDeclaredFields();
     String condition = "";
+    int index = 0;
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
-      condition += "`" + naming.javaToField(f.getName()) + "`=$" + (i + 1);
-      if (i < fields.length - 1) {
-        condition += div;
+      if (!f.isAnnotationPresent(PrimaryKey.class) || !f.getAnnotation(PrimaryKey.class).value()) {
+	      condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
+	      if (i < fields.length - 1) {
+	        condition += div;
+	      }
       }
     }
     return condition;
@@ -148,6 +151,23 @@ public final class SQLUtils {
 	  if (o instanceof String) {
 		  return "\"" + (String)o + "\"";
 	  } else return String.valueOf(o);
+  }
+  
+  public static String generateFieldString(Object o, Naming naming, boolean ignorePrimaryKey) {
+	  Field[] fields = o.getClass().getDeclaredFields();
+	  String s = "(";
+	  int index  = 0;
+	  for (Field f : fields) {
+		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
+			  continue;
+		  } else {
+			  s += "`" + naming.javaToField(f.getName()) + "`";
+			  if (index++ < fields.length - 2) {
+				  s += ",";
+			  }
+		  }
+	  }
+	  return s + ")";
   }
   
   public static String generateCommaString(Object ... collection) {

@@ -36,7 +36,11 @@ public final class FieldExtractor {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       try {
-        values.add(f.get(object));
+    	if (f.isAnnotationPresent(PrimaryKey.class) && f.getAnnotation(PrimaryKey.class).value()) {
+    		continue;
+    	} else {
+    		values.add(f.get(object));
+    	}
       } catch (IllegalArgumentException | IllegalAccessException e) {
         throw new JPersisException(e);
       } finally {

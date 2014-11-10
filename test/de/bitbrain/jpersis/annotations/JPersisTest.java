@@ -92,6 +92,7 @@ public class JPersisTest {
     m1.setName("Wilfred");
     mapper.update(m1);
     ModelMock updated = mapper.findById(m1.getId());
+    assertTrue("It should not be null", updated != null);
     assertTrue("It should have the same ID", updated.getId() == m1.getId());
     assertTrue("Old and new object should be the same", m1.equals(updated));
     assertTrue("It should be an updated name instead of " + updated.getName(), "Wilfred".equals(updated.getName()));

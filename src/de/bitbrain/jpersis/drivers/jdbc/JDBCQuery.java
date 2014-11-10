@@ -35,94 +35,105 @@ import de.bitbrain.jpersis.util.Naming;
  * @version 1.0
  */
 public class JDBCQuery implements Query {
-  
-  private String clause = "";
-  private String order = "";
-  private String limit = "";
-  private String condition = "";
-  
-  private Statement statement;
-  private Naming naming;
-  private Class<?> model;
-  
-  public JDBCQuery(Class<?> model, Naming naming, Statement statement) {
-    this.naming = naming;
-    this.model = model;
-    this.statement = statement;
-  }
 
-  @Override
-  public Query condition(String condition, Object ... args) {
-    this.condition = " " + SQL.WHERE + " " + generateConditionString(condition, args);
-    return this;
-  }
+	private String clause = "";
+	private String order = "";
+	private String limit = "";
+	private String condition = "";
 
-  @Override
-  public Query select() {
-    clause = SQL.SELECT + " " + tableName();
-    return this;
-  }
+	private Statement statement;
+	private Naming naming;
+	private Class<?> model;
+	private boolean updated;
 
-  @Override
-  public Query update(Object object) {    
-    String cond = generatePreparedConditionString(object, naming, ",");
-    Object[] values = FieldExtractor.extractFieldValues(object);
-    clause = SQL.UPDATE + " " + tableName() + " " + SQL.SET + " " + generateConditionString(cond, values);
-    Field primaryKey = FieldExtractor.extractPrimaryKey(object);    
-    String primaryKeyCondition = SQLUtils.generatePrimaryKeyCondition(primaryKey, naming);
-    Object primaryKeyValue = FieldExtractor.extractPrimaryKeyValue(object);
-    condition(primaryKeyCondition, primaryKeyValue);
-    return this;
-  }
+	public JDBCQuery(Class<?> model, Naming naming, Statement statement) {
+		this.naming = naming;
+		this.model = model;
+		this.statement = statement;
+	}
 
-  @Override
-  public Query delete(Object object) {
-    clause = SQL.DELETE + " " + tableName();
-    return this;
-  }
+	@Override
+	public Query condition(String condition, Object... args) {
+		this.condition = " " + SQL.WHERE + " "
+				+ generateConditionString(condition, args);
+		return this;
+	}
 
-  @Override
-  public Query insert(Object object) {
-	Object[] args = FieldExtractor.extractFieldValues(object);
-    clause = SQL.INSERT + " " + tableName() + SQL.VALUES + SQLUtils.generateCommaString(args);
-    return this;
-  }
+	@Override
+	public Query select() {
+		clause = SQL.SELECT + " " + tableName();
+		return this;
+	}
 
-  @Override
-  public Query count() {
-    clause = SQL.COUNT + " " + tableName();
-    return this;
-  }
+	@Override
+	public Query update(Object object) {
+		String cond = generatePreparedConditionString(object, naming, ",");
+		Object[] values = FieldExtractor.extractFieldValues(object);
+		clause = SQL.UPDATE + " " + tableName() + " " + SQL.SET + " "
+				+ generateConditionString(cond, values);
+		Field primaryKey = FieldExtractor.extractPrimaryKey(object);
+		String primaryKeyCondition = SQLUtils.generatePrimaryKeyCondition(
+				primaryKey, naming);
+		Object primaryKeyValue = FieldExtractor.extractPrimaryKeyValue(object);
+		condition(primaryKeyCondition, primaryKeyValue);
+		return this;
+	}
 
-  @Override
-  public Query limit(int limit) {
-    this.limit = SQL.LIMIT + " " + limit;
-    return this;
-  }
+	@Override
+	public Query delete(Object object) {
+		clause = SQL.DELETE + " " + tableName();
+		return this;
+	}
 
-  @Override
-  public Query order(Order order) {
-    this.order = SQL.ORDER + " " + order.name();
-    return this;
-  }
+	@Override
+	public Query insert(Object object) {
+		Object[] args = FieldExtractor.extractFieldValues(object);
+		clause = SQL.INSERT + " " + tableName() + " " + SQLUtils.generateFieldString(object, naming, true) + " " + SQL.VALUES
+				+ SQLUtils.generateCommaString(args);
+		updated = true;
+		return this;
+	}
 
-  @Override
-  public void createTable() throws DriverException {
-    String q = SQL.CREATE_TABLE + " " + tableName();
-    q += generateTableString(model, naming);
-    try {
-      statement.executeUpdate(q);
-    } catch (SQLException e) {
-      throw new DriverException(e);
-    }
-  }
-  
-  @Override
-  public String toString() {
-    return clause + condition + order + limit;
-  }
-  
-  private String tableName() {
-    return "`" + naming.javaToCollection(model.getSimpleName()) + "`";
-  }
+	@Override
+	public Query count() {
+		clause = SQL.COUNT + " " + tableName();
+		return this;
+	}
+
+	@Override
+	public Query limit(int limit) {
+		this.limit = SQL.LIMIT + " " + limit;
+		return this;
+	}
+
+	@Override
+	public Query order(Order order) {
+		this.order = SQL.ORDER + " " + order.name();
+		return this;
+	}
+
+	@Override
+	public void createTable() throws DriverException {
+		String q = SQL.CREATE_TABLE + " " + tableName();
+		q += generateTableString(model, naming);
+		try {
+			System.out.println(q);
+			statement.executeUpdate(q);
+		} catch (SQLException e) {
+			throw new DriverException(e);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return clause + condition + order + limit;
+	}
+
+	private String tableName() {
+		return "`" + naming.javaToCollection(model.getSimpleName()) + "`";
+	}
+
+	public boolean primaryKeyUpdated() {
+		return updated;
+	}
 }

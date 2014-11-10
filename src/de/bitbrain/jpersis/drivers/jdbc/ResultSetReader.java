@@ -57,7 +57,9 @@ public class ResultSetReader {
                 return set.getInt(1);
             }
 		} else if (!returnType.isAssignableFrom(Boolean.class) && !returnType.isAssignableFrom(boolean.class)) {
-			return readSingle(set, returnType, naming);
+			while (set.next()) { 
+				return readSingle(set, returnType, naming);
+			};
 		}
 		return null;
 	}
