@@ -117,7 +117,6 @@ public class JDBCQuery implements Query {
 		String q = SQL.CREATE_TABLE + " " + tableName();
 		q += generateTableString(model, naming);
 		try {
-			System.out.println(q);
 			statement.executeUpdate(q);
 		} catch (SQLException e) {
 			throw new DriverException(e);

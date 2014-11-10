@@ -79,7 +79,7 @@ public class JPersisTest {
       m.setLastName("Mustermann");
       assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == (i + 1));
-      assertTrue("Primary key should be " + i + " instead of " + m.getId(), m.getId() == i);
+      assertTrue("Primary key should be " + (i + 1) + " instead of " + m.getId(), m.getId() == i + 1);
     }
   }
 

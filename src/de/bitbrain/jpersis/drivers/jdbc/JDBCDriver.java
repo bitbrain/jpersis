@@ -14,14 +14,20 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.AbstractDriver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
+import de.bitbrain.jpersis.util.FieldExtractor;
+import de.bitbrain.jpersis.util.FieldInvoker;
+import de.bitbrain.jpersis.util.FieldInvoker.InvokeException;
 import de.bitbrain.jpersis.util.Naming;
 
 /**
@@ -33,72 +39,100 @@ import de.bitbrain.jpersis.util.Naming;
  */
 public abstract class JDBCDriver extends AbstractDriver {
 
-  private String database;
+	private String database;
 
-  private String host;
+	private String host;
 
-  private String port;
+	private String port;
 
-  private String user;
+	private String user;
 
-  private String password;
+	private String password;
 
-  protected Statement statement;
-  
-  protected Connection connection;
-  
-  private ResultSetReader resultSetReader;
+	protected Statement statement;
 
-  public JDBCDriver(String host, String port, String database, String user, String password) {
-    this.database = database;
-    this.host = host;
-    this.user = user;
-    this.password = password;
-    this.port = port;
-    resultSetReader = new ResultSetReader();
-  }
+	protected Connection connection;
 
-  protected abstract String getURL(String host, String port, String database);
+	private ResultSetReader resultSetReader;
 
-  @Override
-  protected Query createQuery(Class<?> model, Naming naming) {
-    return new JDBCQuery(model, naming, statement);
-  }
+	public JDBCDriver(String host, String port, String database, String user,
+			String password) {
+		this.database = database;
+		this.host = host;
+		this.user = user;
+		this.password = password;
+		this.port = port;
+		resultSetReader = new ResultSetReader();
+	}
 
-  @Override
-  public void connect() throws DriverException {
-    try {
-      this.connection = DriverManager.getConnection(getURL(host, port, database), user, password);
-      this.statement = this.connection.createStatement();
-    } catch (SQLException ex) {
-      throw new DriverException(ex);
-    }
-  }
-  
-  @Override
-  public Object commit(Query query, Class<?> returnType, Class<?> model, Naming naming) throws DriverException {
-    String sql = query.toString();
-    System.out.println(sql);
-    try {
-      query.createTable();
-      if (statement.execute(sql)) {
-    	  return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
-      } else {
-    	  return statement.getUpdateCount() > 0;
-      }
-    } catch (SQLException e) {
-      throw new DriverException(e + " " + sql);
-    }
-  }
+	protected abstract String getURL(String host, String port, String database);
 
-  @Override
-  public void close() throws DriverException {
-    if (connection != null) {
-      try {
-        connection.close();
-      } catch (SQLException ex) {
-        throw new DriverException(ex);
-      }
-    }
-  }
+	@Override
+	protected Query createQuery(Class<?> model, Naming naming) {
+		return new JDBCQuery(model, naming, statement);
+	}
+
+	@Override
+	public void connect() throws DriverException {
+		try {
+			this.connection = DriverManager.getConnection(
+					getURL(host, port, database), user, password);
+			this.statement = this.connection.createStatement();
+		} catch (SQLException ex) {
+			throw new DriverException(ex);
+		}
+	}
+
+	@Override
+	public Object commit(Query query, Class<?> returnType, Object[] args,
+			Class<?> model, Naming naming) throws DriverException {
+		String sql = query.toString();
+		try {
+			query.createTable();
+			if (statement.execute(sql)) {
+				return resultSetReader.read(statement.getResultSet(),
+						returnType, model, naming);
+			} else {
+				return statement.getUpdateCount() > 0;
+			}
+		} catch (SQLException e) {
+			throw new DriverException(e + " " + sql);
+		} finally {
+			invokePrimaryKey(query, args);
+		}
+	}
+
+	private void invokePrimaryKey(Query query, Object[] args) throws DriverException {
+		if (query instanceof JDBCQuery) {
+			JDBCQuery q = (JDBCQuery) query;
+			if (q.primaryKeyUpdated() && args != null && args.length == 1) {
+				ResultSet keys;
+				try {
+					keys = statement.getGeneratedKeys();
+					String value = "0";
+					while (keys.next()) {
+						value = String.valueOf(keys.getInt(1));
+						break;
+					}
+					Field f = FieldExtractor.extractPrimaryKey(args[0]);
+					FieldInvoker.invoke(args[0], f, value);
+				} catch (SQLException e) {
+					throw new DriverException(e);
+				} catch (InvokeException e) {
+					throw new JPersisException(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void close() throws DriverException {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException ex) {
+				throw new DriverException(ex);
+			}
+		}
+	}
 }
