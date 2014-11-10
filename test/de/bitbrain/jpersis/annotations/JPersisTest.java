@@ -82,6 +82,38 @@ public class JPersisTest {
       assertTrue("Primary key should be " + (i + 1) + " instead of " + m.getId(), m.getId() == i + 1);
     }
   }
+  
+  @Test
+  public void testInsertCollection() {
+	  
+	  final int AMOUNT = 10;
+	  
+	  List<ModelMock> mocks = new ArrayList<ModelMock>();
+	  
+	  for (int i = 0; i < AMOUNT; ++i) {
+		  ModelMock m = new ModelMock();
+		  m.setName("Hans" + i);
+		  m.setLastName("ImGlueck" + i);
+		  mocks.add(m);
+	  }
+	  mapper.insert(mocks);
+	  
+	  for (int i = 0; i < AMOUNT; ++i) {
+		  ModelMock m = mocks.get(i);
+		  assertTrue("The id of " + m + " should be " + (i + 1), m.getId() == (i + 1));
+	  }
+	  
+	  Collection<ModelMock> dbMocks = mapper.findAll();
+	  assertTrue("There should be the same amount as inserted", dbMocks.size() == AMOUNT);
+	  
+	  int i = 0;
+	  for (ModelMock m : dbMocks) {
+		  assertTrue("The id of " + m + " should be " + (i + 1), m.getId() == (i + 1));
+		  assertTrue("The name should be Hans" + i, m.getName().equals("Hans" + i));
+		  assertTrue("The last name should be ImGlueck" + i, m.getLastName().equals("ImGlueck" + i));
+		  i++;
+	  }
+  }
 
   @Test
   public void testUpdate() {

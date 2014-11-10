@@ -16,6 +16,7 @@ package de.bitbrain.jpersis.core.methods;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.Driver;
@@ -37,6 +38,19 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 	
 	@Override
 	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {	
+		if (args != null && args.length == 1 && args[0] instanceof Collection) {
+			Object last = null;
+			Collection<?> c = (Collection<?>) args[0];
+			for (Object o : c) {
+				last = executeInternally(method, model, driver, naming, o);
+			}
+			return last;
+		} else {
+			return executeInternally(method, model, driver, naming, args);
+		}
+	}
+	
+	private Object executeInternally(Method method, Class<?> model, Driver driver, Naming naming, Object ... args) {
 		if (!validateArgs(args, model)) {
 			throw new JPersisException("Arguments are not supported.");
 		}
