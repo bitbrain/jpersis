@@ -163,13 +163,15 @@ public final class SQLUtils {
 	  int index  = 0;
 	  for (Field f : fields) {
 		  if (Modifier.isStatic(f.getModifiers())) {
+			  index++;
 	    	  continue;
 	      }
 		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
+			  index++;
 			  continue;
 		  } else {
 			  s += "`" + naming.javaToField(f.getName()) + "`";
-			  if (index++ < fields.length - 2) {
+			  if (index++ < fields.length - 1) {
 				  s += ",";
 			  }
 		  }
