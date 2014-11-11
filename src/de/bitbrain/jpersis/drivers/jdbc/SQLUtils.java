@@ -154,6 +154,8 @@ public final class SQLUtils {
   public static String typeToString(Object o) {
 	  if (o instanceof String) {
 		  return "\"" + (String)o + "\"";
+	  } else if (o instanceof Enum) {
+		return  "\"" + ((Enum<?>)o).name()+ "\"";
 	  } else return String.valueOf(o);
   }
   
