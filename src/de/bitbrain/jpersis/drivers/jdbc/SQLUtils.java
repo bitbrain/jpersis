@@ -16,7 +16,9 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Ignored;
@@ -41,21 +43,16 @@ public final class SQLUtils {
    */
   public static String generateTableString(Class<?> model, Naming naming) {
     String r = "(";
-    Field[] fields = model.getDeclaredFields();
+    List<Field> valids = getValidFields(model, false);
     boolean primaryKeyFound = false;
-    for (int i = 0; i < fields.length; ++i) {
-      Field f = fields[i];
+    int index = 0;
+    for (Field f : valids) {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
-      // Ignore annotated fields which have the @Ignored annotation
-      if (f.getAnnotation(Ignored.class) != null || Modifier.isStatic(f.getModifiers())) {
-        continue;
-      }
       String name = naming.javaToField(f.getName());
       r += "`" + name + "` " + convertDatatype(f.getType());
       // Add primary key information
-      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
-      
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);      
       if (pKey != null) {
         if (primaryKeyFound) {
           throw new JPersisException(model.getName() + " defines multiple primary keys!");
@@ -65,7 +62,7 @@ public final class SQLUtils {
           r += " " + SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
         }
       }
-      if (i < fields.length - 1) {
+      if (index++ < valids.size() - 1) {
         r += ",";
       }
       f.setAccessible(accessable);
@@ -160,25 +157,37 @@ public final class SQLUtils {
   }
   
   public static String generateFieldString(Object o, Naming naming, boolean ignorePrimaryKey) {
-	  Field[] fields = o.getClass().getDeclaredFields();
+	 
 	  String s = "(";
-	  int index  = 0;
-	  for (Field f : fields) {
-		  if (Modifier.isStatic(f.getModifiers())) {
-			  index++;
-	    	  continue;
-	      }
-		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
-			  index++;
-			  continue;
-		  } else {
-			  s += "`" + naming.javaToField(f.getName()) + "`";
-			  if (index++ < fields.length - 1) {
-				  s += ",";
-			  }
+	  List<Field> valids = getValidFields(o.getClass(), ignorePrimaryKey);
+	  int index = 0;
+	  for (Field f : valids) {
+		  s += "`" + naming.javaToField(f.getName()) + "`";
+		  if (index++ < valids.size() - 1) {
+			  s += ",";
 		  }
 	  }
+	  
 	  return s + ")";
+  }
+  
+  private static List<Field> getValidFields(Class<?> model, boolean ignorePrimaryKey) {
+	  Field[] fields = model.getDeclaredFields();
+	  List<Field> valids = new ArrayList<Field>();
+	  for (Field f : fields) {
+		  if (Modifier.isStatic(f.getModifiers())) {
+	    	  continue;
+	      }
+		  if (f.isAnnotationPresent(Ignored.class)) {
+			  continue;
+		  }
+		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
+			  continue;
+		  } else {
+			 valids.add(f); 
+		  }
+	  }
+	  return valids;
   }
   
   public static String generateCommaString(Object ... collection) {

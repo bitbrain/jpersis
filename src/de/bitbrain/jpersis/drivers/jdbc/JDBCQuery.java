@@ -119,7 +119,7 @@ public class JDBCQuery implements Query {
 		try {
 			statement.executeUpdate(q);
 		} catch (SQLException e) {
-			throw new DriverException(e);
+			throw new DriverException(e + q);
 		}
 	}
 

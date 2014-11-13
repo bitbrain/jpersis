@@ -117,9 +117,9 @@ public abstract class JDBCDriver extends AbstractDriver {
 					Field f = FieldExtractor.extractPrimaryKey(args[0]);
 					FieldInvoker.invoke(args[0], f, value);
 				} catch (SQLException e) {
-					throw new DriverException(e);
+					throw new DriverException(e + query.toString());
 				} catch (InvokeException e) {
-					throw new JPersisException(e);
+					throw new JPersisException(e + query.toString());
 				}
 			}
 		}
