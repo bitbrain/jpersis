@@ -58,7 +58,20 @@
 	        <url>file://${project.build.directory}/mvn-repo</url>
 	    </repository>
 	</distributionManagement>
-	<dependencies>
-		
+	<dependencies>		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>compile</scope>
+      		<optional>true</optional>
+		</dependency>				
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.7.2</version>
+			<scope>compile</scope>
+      		<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>
