@@ -181,7 +181,7 @@ public final class SQLUtils {
 		  if (f.isAnnotationPresent(Ignored.class)) {
 			  continue;
 		  }
-		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class)) {
+		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class) && f.getAnnotation(PrimaryKey.class).value()) {
 			  continue;
 		  } else {
 			 valids.add(f); 
