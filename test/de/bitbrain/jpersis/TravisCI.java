@@ -24,9 +24,17 @@ package de.bitbrain.jpersis;
  */
 public final class TravisCI {
 
+  // MySQL
   public static final String MYSQL_USERNAME = "travis";
   public static final String MYSQL_PASSWORD = "";
   public static final String MYSQL_PORT     = "3306";
-  public static final String MYSQL_DATABASE = "travis";
+  public static final String MYSQL_DATABASE = "jpersis";
   public static final String MYSQL_HOST     = "127.0.0.1";
+  
+  // PostgreSQL
+  public static final String POSTGRES_USERNAME = "postgres";
+  public static final String POSTGRES_PASSWORD = "";
+  public static final String POSTGRES_PORT     = "5432";
+  public static final String POSTGRES_DATABASE = "jpersis";
+  public static final String POSTGRES_HOST     = "127.0.0.1";
 }

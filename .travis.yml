@@ -1,1 +1,5 @@
 language: java
+
+before_script:
+  - mysql -e 'create database jpersis;'
+  - psql -c 'create database jpersis;' -U postgres
