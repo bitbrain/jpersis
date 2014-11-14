@@ -31,7 +31,7 @@ import de.bitbrain.jpersis.util.FieldInvoker.InvokeException;
 import de.bitbrain.jpersis.util.Naming;
 
 /**
- * Implementation for SQLite
+ * Abstract implementation for JDBC
  * 
  * @author Miguel Gonzalez
  * @since 1.0

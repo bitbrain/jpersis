@@ -13,9 +13,10 @@
  * limitations under the License.
  */
 
-package de.bitbrain.jpersis.annotations;
+package de.bitbrain.jpersis;
 
 import static org.junit.Assert.assertTrue;
+import static de.bitbrain.jpersis.TravisCI.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import de.bitbrain.jpersis.JPersis;
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.MinimalMapperMock;
@@ -57,13 +59,14 @@ public class JPersisTest {
   public static Collection<Driver[]> getParams() {
     List<Driver[]> infos = new ArrayList<Driver[]>();
     infos.add(new Driver[]{new SQLiteDriver(DB)});
+    infos.add(new Driver[]{new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD)});
     return infos;
   }
 
   @Before
   public void beforeTest() throws IOException {
     createDatabase();
-    manager = new JPersis(new SQLiteDriver(DB));
+    manager = new JPersis(driver);
     mapper = manager.map(MapperMock.class);
     minimalMapper = manager.map(MinimalMapperMock.class);
   }

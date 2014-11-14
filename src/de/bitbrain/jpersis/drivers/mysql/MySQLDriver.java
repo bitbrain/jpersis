@@ -13,45 +13,25 @@
  * limitations under the License.
  */
 
-package de.bitbrain.jpersis.drivers.sqllite;
+package de.bitbrain.jpersis.drivers.mysql;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
 
 /**
- * Implementation for SQLite
+ * Implementation for MySQL
  * 
  * @author Miguel Gonzalez
  * @since 1.0
  * @version 1.0
  */
-public class SQLiteDriver extends JDBCDriver {
-  
-  private String file;
+public class MySQLDriver extends JDBCDriver {
 
-  public SQLiteDriver(String file) {
-    super("", "", "", "", "");
-    this.file = file;
+  public MySQLDriver(String host, String port, String database, String user, String password) {
+    super(host, port, database, user, password);
   }
 
   @Override
   protected String getURL(String host, String port, String database) {
-    return null;
-  }
-
-  @Override
-  public void connect() {
-    try {
-      Class.forName("org.sqlite.JDBC");
-      connection = DriverManager.getConnection("jdbc:sqlite:" + file);
-      statement = connection.createStatement();
-    } catch (ClassNotFoundException e) {
-      throw new JPersisException(e);
-    } catch (SQLException e) {
-      throw new JPersisException(e);
-    }
+    return "jdbc:mysql://" + host + ":" + port + "/" + database + "?";
   }
 }
