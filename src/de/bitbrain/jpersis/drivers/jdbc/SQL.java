@@ -30,14 +30,16 @@ public class SQL {
   public static final String DELETE         = "DELETE FROM";
   public static final String AND            = "AND";
   public static final String WHERE          = "WHERE";
-  public static final String AUTO_INCREMENT = "AUTOINCREMENT";
   public static final String PRIMARY_KEY    = "PRIMARY KEY";
   public static final String FROM           = "FROM";
   public static final String SET            = "SET";
   public static final String COUNT          = "SELECT COUNT(*) FROM";
   public static final String LIMIT          = "LIMIT";
   public static final String ORDER          = "ORDER BY";
-  public static final String VALUES         = " VALUES";
+  public static final String VALUES         = " VALUES";  
+
+  public static final String AUTOINCREMENT_SQLITE = "AUTOINCREMENT";
+  public static final String AUTOINCREMENT_MYSQL  = "AUTO_INCREMENT";
   
   // Primary Types
   public static final String CHAR           = "CHAR";

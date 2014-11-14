@@ -115,12 +115,16 @@ public class JDBCQuery implements Query {
 	@Override
 	public void createTable() throws DriverException {
 		String q = SQL.CREATE_TABLE + " " + tableName();
-		q += generateTableString(model, naming);
+		q += generateTableString(model, naming, sqliteMode());
 		try {
 			statement.executeUpdate(q);
 		} catch (SQLException e) {
 			throw new DriverException(e + q);
 		}
+	}
+	
+	protected boolean sqliteMode() {
+	  return false;
 	}
 
 	@Override

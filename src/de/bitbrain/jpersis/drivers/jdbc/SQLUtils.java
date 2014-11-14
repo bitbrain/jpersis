@@ -41,7 +41,7 @@ public final class SQLUtils {
    * @param naming
    * @return
    */
-  public static String generateTableString(Class<?> model, Naming naming) {
+  public static String generateTableString(Class<?> model, Naming naming, boolean sqlite) {
     String r = "(";
     List<Field> valids = getValidFields(model, false);
     boolean primaryKeyFound = false;
@@ -50,7 +50,7 @@ public final class SQLUtils {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       String name = naming.javaToField(f.getName());
-      r += "`" + name + "` " + convertDatatype(f.getType());
+      r += "`" + name + "` " + convertDatatype(f.getType(), sqlite);
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);      
       if (pKey != null) {
@@ -59,7 +59,7 @@ public final class SQLUtils {
         }
         primaryKeyFound = true;       
         if (pKey.value()) {
-          r += " " + SQL.PRIMARY_KEY + " " + SQL.AUTO_INCREMENT;
+          r += " " + SQL.PRIMARY_KEY + " " + (sqlite ? SQL.AUTOINCREMENT_SQLITE : SQL.AUTOINCREMENT_MYSQL);
         }
       }
       if (index++ < valids.size() - 1) {
@@ -100,15 +100,15 @@ public final class SQLUtils {
     return "`" + naming.javaToField(primaryKey.getName()) + "`=$1";
   }
 
-  public static String convertDatatype(Class<?> type) {
+  public static String convertDatatype(Class<?> type, boolean sqliteMode) {
     if (type.isEnum()) {
-      return SQL.ENUM;
+      return SQL.ENUM + (sqliteMode ? "" : "(255)");
       // Date
     } else if (type.equals(Date.class) || type.equals(java.sql.Date.class)) {
       return SQL.DATETIME;
       // Integer
     } else if (type.equals(Integer.TYPE)) {
-      return SQL.INTEGER;
+      return SQL.INTEGER + (sqliteMode ? "" : "(255)");
       // Boolean
     } else if (type.equals(Boolean.TYPE)) {
       return SQL.BOOL;
@@ -123,7 +123,7 @@ public final class SQLUtils {
       return SQL.DOUBLE;
       // String
     } else if (type.equals(String.class)) {
-      return SQL.VARCHAR;
+      return SQL.VARCHAR + (sqliteMode ? "" : "(255)");
       // Char
     } else if (type.equals(Character.TYPE)) {
       return SQL.CHAR;

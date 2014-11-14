@@ -40,5 +40,5 @@ public interface MapperMock {
 	Collection<ModelMock> findAll();
 	
 	@Select(condition = "name=$1")
-    Collection<ModelMock> findAllByName(String name);
+  Collection<ModelMock> findAllByName(String name);
 }

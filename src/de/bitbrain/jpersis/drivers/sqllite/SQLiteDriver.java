@@ -15,11 +15,15 @@
 
 package de.bitbrain.jpersis.drivers.sqllite;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
+import de.bitbrain.jpersis.util.Naming;
 
 /**
  * Implementation for SQLite
@@ -30,28 +34,43 @@ import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
  */
 public class SQLiteDriver extends JDBCDriver {
   
-  private String file;
+  private String path;
 
   public SQLiteDriver(String file) {
     super("", "", "", "", "");
-    this.file = file;
+    this.path = file;
   }
 
   @Override
   protected String getURL(String host, String port, String database) {
     return null;
   }
+  
+  @Override
+  protected Query createQuery(Class<?> model, Naming naming) {
+    return new SQLiteQuery(model, naming, statement);
+  }
 
   @Override
   public void connect() {
     try {
+      ensureFile();
       Class.forName("org.sqlite.JDBC");
-      connection = DriverManager.getConnection("jdbc:sqlite:" + file);
+      connection = DriverManager.getConnection("jdbc:sqlite:" + path);
       statement = connection.createStatement();
     } catch (ClassNotFoundException e) {
       throw new JPersisException(e);
     } catch (SQLException e) {
       throw new JPersisException(e);
+    }
+  }
+  
+  private void ensureFile() {
+    File file = new File(path);
+    try {
+      file.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }

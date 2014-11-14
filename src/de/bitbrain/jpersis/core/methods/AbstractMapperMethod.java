@@ -37,10 +37,14 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
 	}
 	
 	@Override
-	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {	
-		if (args != null && args.length == 1 && args[0] instanceof Collection) {
+	public Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) {
+
+		if (args != null && args.length == 1 && args[0] != null && args[0] instanceof Collection) {
 			Object last = null;
 			Collection<?> c = (Collection<?>) args[0];
+			if (c == null || c.isEmpty()) {
+			  return Boolean.FALSE;
+			}
 			for (Object o : c) {
 				last = executeInternally(method, model, driver, naming, o);
 			}

@@ -12,26 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.bitbrain.jpersis.drivers.sqllite;
 
-package de.bitbrain.jpersis.drivers.mysql;
+import java.sql.Statement;
 
-import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
+import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery;
+import de.bitbrain.jpersis.util.Naming;
 
-/**
- * Implementation for MySQL
- * 
- * @author Miguel Gonzalez
- * @since 1.0
- * @version 1.0
- */
-public class MySQLDriver extends JDBCDriver {
+public class SQLiteQuery extends JDBCQuery {
 
-  public MySQLDriver(String host, String port, String database, String user, String password) {
-    super(host, port, database, user, password);
+  public SQLiteQuery(Class<?> model, Naming naming, Statement statement) {
+    super(model, naming, statement);
   }
-
+  
   @Override
-  protected String getURL(String host, String port, String database) {
-    return "jdbc:mysql://" + host + ":" + port + "/" + database;
+  protected boolean sqliteMode() {
+    return true;
   }
 }

@@ -15,10 +15,13 @@
 
 package de.bitbrain.jpersis;
 
+import static de.bitbrain.jpersis.TravisCI.MYSQL_DATABASE;
+import static de.bitbrain.jpersis.TravisCI.MYSQL_HOST;
+import static de.bitbrain.jpersis.TravisCI.MYSQL_PASSWORD;
+import static de.bitbrain.jpersis.TravisCI.MYSQL_PORT;
+import static de.bitbrain.jpersis.TravisCI.MYSQL_USERNAME;
 import static org.junit.Assert.assertTrue;
-import static de.bitbrain.jpersis.TravisCI.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,8 +35,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import de.bitbrain.jpersis.JPersis;
 import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
@@ -65,15 +68,15 @@ public class JPersisTest {
 
   @Before
   public void beforeTest() throws IOException {
-    createDatabase();
     manager = new JPersis(driver);
     mapper = manager.map(MapperMock.class);
     minimalMapper = manager.map(MinimalMapperMock.class);
+    dropData();
   }
 
   @After
-  public void afterTest() {
-    deleteDatabase();
+  public void afterTest() throws DriverException {
+    dropData();
   }
 
   @Test
@@ -206,14 +209,11 @@ public class JPersisTest {
     Collection<ModelMock> mocks3 = mapper.findAllByName("Sebastian");
     assertTrue("There are not enough models3 -> " + mocks3.size(), mocks3.size() == 7);
   }
-
-  private void createDatabase() throws IOException {
-	  File file = new File(DB);
-	  file.createNewFile();
-  }
-
-  private void deleteDatabase() {
-	  File file = new File(DB);
-	  file.delete();
+  
+  private void dropData() {
+    Collection<ModelMock> mocks = mapper.findAll();
+    mapper.delete(mocks);
+    Collection<MinimalMock> minimals = minimalMapper.findAll();
+    minimalMapper.delete(minimals);
   }
 }

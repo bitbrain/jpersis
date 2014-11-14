@@ -26,7 +26,7 @@ public final class TravisCI {
 
   public static final String MYSQL_USERNAME = "travis";
   public static final String MYSQL_PASSWORD = "";
-  public static final String MYSQL_PORT     = "8080";
-  public static final String MYSQL_DATABASE = "jpersis";
+  public static final String MYSQL_PORT     = "3306";
+  public static final String MYSQL_DATABASE = "travis";
   public static final String MYSQL_HOST     = "127.0.0.1";
 }

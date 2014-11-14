@@ -19,7 +19,7 @@ public interface MinimalMapperMock {
 	boolean insert(Collection<MinimalMock> mocks);
 	
 	@Update
-	boolean update(ModelMock mock);
+	boolean update(MinimalMock mock);
 	
 	@Update
 	boolean update(Collection<MinimalMock> mocks);
