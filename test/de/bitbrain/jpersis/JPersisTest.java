@@ -83,22 +83,39 @@ public class JPersisTest {
   public void testInsert() {
 
     final int RUNS = 5;
-
+    boolean firstKey = true;
+    int expected = 1;
     for (int i = 0; i < RUNS; ++i) {
       ModelMock m = new ModelMock();
       m.setName("Max");
       m.setLastName("Mustermann");
       assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
+      if (firstKey) {
+        expected = m.getId();
+      }
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == (i + 1));
-      assertTrue("Primary key should be " + (i + 1) + " instead of " + m.getId(), m.getId() == i + 1);
+      assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
+      
+      if (firstKey) {
+        firstKey = false;
+      }
+      expected = m.getId() + 1;
     }
 
+    firstKey = true;
     for (int i = 0; i < RUNS; ++i) {
       MinimalMock m = new MinimalMock(); 
       m.setName("Meh");
       assertTrue("It should be possible to insert element nr" + i, minimalMapper.insert(m));
+      if (firstKey) {
+        expected = m.getId();
+      }
       assertTrue("There should be " + (i + 1) + " elements.", minimalMapper.count() == (i + 1));
-      assertTrue("Primary key should be " + (i + 1) + " instead of " + m.getId(), m.getId() == i + 1);
+      assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
+      if (firstKey) {
+        firstKey = false;
+      }
+      expected = m.getId() + 1;
     }
   }
   
@@ -117,17 +134,11 @@ public class JPersisTest {
 	  }
 	  mapper.insert(mocks);
 	  
-	  for (int i = 0; i < AMOUNT; ++i) {
-		  ModelMock m = mocks.get(i);
-		  assertTrue("The id of " + m + " should be " + (i + 1), m.getId() == (i + 1));
-	  }
-	  
 	  Collection<ModelMock> dbMocks = mapper.findAll();
 	  assertTrue("There should be the same amount as inserted", dbMocks.size() == AMOUNT);
 	  
 	  int i = 0;
 	  for (ModelMock m : dbMocks) {
-		  assertTrue("The id of " + m + " should be " + (i + 1), m.getId() == (i + 1));
 		  assertTrue("The name should be Hans" + i, m.getName().equals("Hans" + i));
 		  assertTrue("The last name should be ImGlueck" + i, m.getLastName().equals("ImGlueck" + i));
 		  i++;
