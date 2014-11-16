@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.PrimaryKey;
 import de.bitbrain.jpersis.drivers.AbstractDriver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
@@ -108,14 +109,16 @@ public abstract class JDBCDriver extends AbstractDriver {
 			if (q.primaryKeyUpdated() && args != null && args.length == 1) {
 				ResultSet keys;
 				try {
-					keys = statement.getGeneratedKeys();
-					String value = "0";
-					while (keys.next()) {
-						value = String.valueOf(keys.getInt(1));
-						break;
-					}
 					Field f = FieldExtractor.extractPrimaryKey(args[0]);
-					FieldInvoker.invoke(args[0], f, value);
+					if (f.getAnnotation(PrimaryKey.class).value()) {
+						keys = statement.getGeneratedKeys();
+						String value = "0";
+						while (keys.next()) {
+							value = String.valueOf(keys.getInt(1));
+							break;
+						}
+						FieldInvoker.invoke(args[0], f, value);
+					}
 				} catch (SQLException e) {
 					throw new DriverException(e + query.toString());
 				} catch (InvokeException e) {
