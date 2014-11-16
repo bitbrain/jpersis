@@ -15,11 +15,6 @@
 
 package de.bitbrain.jpersis;
 
-import static de.bitbrain.jpersis.TravisCI.MYSQL_DATABASE;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_HOST;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PASSWORD;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PORT;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_USERNAME;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -37,12 +32,13 @@ import org.junit.runners.Parameterized.Parameters;
 
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
-import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.MinimalMapperMock;
 import de.bitbrain.jpersis.mocks.MinimalMock;
 import de.bitbrain.jpersis.mocks.ModelMock;
+import de.bitbrain.jpersis.mocks.StringIdMapperMock;
+import de.bitbrain.jpersis.mocks.StringIdMock;
 
 @RunWith(value = Parameterized.class)
 public class JPersisTest {
@@ -55,6 +51,8 @@ public class JPersisTest {
   
   MinimalMapperMock minimalMapper;
   
+  StringIdMapperMock stringMapper;
+  
   @Parameter
   public Driver driver;
   
@@ -62,7 +60,7 @@ public class JPersisTest {
   public static Collection<Driver[]> getParams() {
     List<Driver[]> infos = new ArrayList<Driver[]>();
     infos.add(new Driver[]{new SQLiteDriver(DB)});
-    infos.add(new Driver[]{new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD)});
+    //infos.add(new Driver[]{new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD)});
     return infos;
   }
 
@@ -71,6 +69,7 @@ public class JPersisTest {
     manager = new JPersis(driver);
     mapper = manager.map(MapperMock.class);
     minimalMapper = manager.map(MinimalMapperMock.class);
+    stringMapper = manager.map(StringIdMapperMock.class);
     dropData();
   }
 
@@ -81,7 +80,6 @@ public class JPersisTest {
 
   @Test
   public void testInsert() {
-
     final int RUNS = 5;
     boolean firstKey = true;
     int expected = 1;
@@ -116,6 +114,14 @@ public class JPersisTest {
         firstKey = false;
       }
       expected = m.getId() + 1;
+    }
+    
+    for (int i = 0; i < RUNS; ++i) {
+    	StringIdMock m = new StringIdMock("id_" + i);
+    	m.setName("Meh");
+    	assertTrue("It should be possible to insert element nr" + i, stringMapper.insert(m));
+    	assertTrue("There should be " + (i + 1) + " elements.", stringMapper.count() == (i + 1));
+    	assertTrue("Primary key should be id_" + i + " instead of " + m.getId(), m.getId().equals("id_" + i));
     }
   }
   
@@ -158,20 +164,44 @@ public class JPersisTest {
     assertTrue("It should have the same ID", updated.getId() == m1.getId());
     assertTrue("Old and new object should be the same", m1.equals(updated));
     assertTrue("It should be an updated name instead of " + updated.getName(), "Wilfred".equals(updated.getName()));
+
+    StringIdMock m2 = new StringIdMock("test");
+    m2.setName("Hans");
+    stringMapper.insert(m2);
+    m2.setName("Wilfred");
+    stringMapper.update(m2);
+    StringIdMock updated2 = stringMapper.findById(m2.getId());
+    assertTrue("It should not be null", updated2 != null);
+    assertTrue("It should have the same ID", updated2.getId().equals(m2.getId()));
+    assertTrue("Old and new object should be the same", m2.equals(updated2));
+    assertTrue("It should be an updated name instead of " + updated2.getName(), "Wilfred".equals(updated2.getName()));
   }
 
   @Test
   public void testDelete() {
     final int RUNS = 5;
+    int[] ids = new int[RUNS];
     for (int i = 0; i < RUNS; ++i) {
-      ModelMock m = new ModelMock();
-      m.setName("Max");
-      m.setLastName("Mustermann");
-      assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
-      assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == 1);
-      assertTrue("It should be possible to delete object nr" + i, mapper.delete(m));
-      assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == 0);
+        ModelMock m = new ModelMock();
+        m.setName("Max");
+        m.setLastName("Mustermann");
+        assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
+        ids[i] = m.getId();
     }
+    for (int i = 0; i < RUNS; ++i) {
+      ModelMock m = mapper.findById(ids[i]);
+      assertTrue("ModelMock should be there", m != null);
+      assertTrue("It should be possible to delete object nr" + i, mapper.delete(m));
+      assertTrue("There should be " + (RUNS - (i +1)) + " elements.", mapper.count() == (RUNS - (i +1)));
+    }
+    for (int i = 0; i < RUNS; ++i) {
+        StringIdMock m = new StringIdMock("id_" + i);
+        m.setName("Max");
+        assertTrue("It should be possible to insert element nr" + i, stringMapper.insert(m));
+        assertTrue("There should be " + (i + 1) + " elements instead of " + stringMapper.count(), stringMapper.count() == 1);
+        assertTrue("It should be possible to delete object nr" + i + " with id " + m.getId(), stringMapper.delete(m));
+        assertTrue("There should be " + (i + 1) + " elements.", stringMapper.count() == 0);
+      }
   }
 
   @Test
@@ -189,6 +219,18 @@ public class JPersisTest {
       ModelMock found = mapper.findById(m.getId());
       assertTrue("The objects should be the same", m.equals(found));
     }
+    
+    for (int i = 0; i < RUNS; ++i) {
+        StringIdMock m = new StringIdMock("id_" + i);
+        m.setName("Max");
+        stringMapper.insert(m);
+      }    
+      Collection<StringIdMock> mocks2 = stringMapper.findAll();
+      assertTrue("There are not enough mocks to find", mocks.size() == RUNS);
+      for (StringIdMock m : mocks2) {
+        StringIdMock found = stringMapper.findById(m.getId());
+        assertTrue("The objects should be the same", m.equals(found));
+      }
   }
 
   @Test
@@ -226,5 +268,7 @@ public class JPersisTest {
     mapper.delete(mocks);
     Collection<MinimalMock> minimals = minimalMapper.findAll();
     minimalMapper.delete(minimals);
+    Collection<StringIdMock> strings = stringMapper.findAll();
+    stringMapper.delete(strings);
   }
 }

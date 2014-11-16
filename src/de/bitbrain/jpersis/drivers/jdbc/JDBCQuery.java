@@ -82,6 +82,11 @@ public class JDBCQuery implements Query {
 	@Override
 	public Query delete(Object object) {
 		clause = SQL.DELETE + " " + tableName();
+		Field primaryKey = FieldExtractor.extractPrimaryKey(object);
+		String primaryKeyCondition = SQLUtils.generatePrimaryKeyCondition(
+				primaryKey, naming);
+		Object primaryKeyValue = FieldExtractor.extractPrimaryKeyValue(object);
+		condition(primaryKeyCondition, primaryKeyValue);
 		return this;
 	}
 
