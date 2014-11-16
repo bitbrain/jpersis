@@ -16,6 +16,7 @@
 package de.bitbrain.jpersis;
 
 import static org.junit.Assert.assertTrue;
+import static de.bitbrain.jpersis.TravisCI.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
+import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.MapperMock;
 import de.bitbrain.jpersis.mocks.MinimalMapperMock;
@@ -60,7 +62,7 @@ public class JPersisTest {
   public static Collection<Driver[]> getParams() {
     List<Driver[]> infos = new ArrayList<Driver[]>();
     infos.add(new Driver[]{new SQLiteDriver(DB)});
-    //infos.add(new Driver[]{new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD)});
+    infos.add(new Driver[]{new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD)});
     return infos;
   }
 
