@@ -22,6 +22,9 @@ import java.lang.annotation.Target;
 /**
  * Marks an field as primary key. It can only be set once per
  * class.
+ * <p>
+ * Set the value to "true" in order to enable auto incrementing. Auto incrementing
+ * is is ignored when primary key is NOT type of <code>java.lang.Integer</code>
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0

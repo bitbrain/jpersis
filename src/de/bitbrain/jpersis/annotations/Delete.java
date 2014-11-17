@@ -20,7 +20,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Deletes an element
+ * Deletes one or more models from data source
+ * 
+ * <p><b>Interface Method Signature:</b></p>
+ * <p><code>[void][boolean] methodName([Model][Collection&lt;Model&gt;]);</code></p>
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0

@@ -20,8 +20,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Counts number of elements which fit to the condition. If condition
+ * Counts number of models which fit to the condition. If condition
  * is not set, all elements are taken into account.
+ * <p><b>Interface Method Signature:</b></p>
+ * <p><code>int methodName();</code></p>
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
