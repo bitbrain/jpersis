@@ -16,10 +16,10 @@ public interface MapperMock {
 	boolean insert(ModelMock mock);
 	
 	@Insert
-	boolean insert(Collection<ModelMock> mocks);
+	void insert(Collection<ModelMock> mocks);
 	
 	@Update
-	boolean update(ModelMock mock);
+	void update(ModelMock mock);
 	
 	@Update
 	boolean update(Collection<ModelMock> mocks);
@@ -28,7 +28,7 @@ public interface MapperMock {
 	boolean delete(ModelMock mock);
 	
 	@Delete 
-	boolean delete(Collection<ModelMock> mocks);
+	void delete(Collection<ModelMock> mocks);
 	
 	@Count
 	int count();

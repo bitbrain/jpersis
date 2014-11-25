@@ -177,6 +177,7 @@ public class JPersisTest {
     assertTrue("It should have the same ID", updated2.getId().equals(m2.getId()));
     assertTrue("Old and new object should be the same", m2.equals(updated2));
     assertTrue("It should be an updated name instead of " + updated2.getName(), "Wilfred".equals(updated2.getName()));
+  
   }
 
   @Test
