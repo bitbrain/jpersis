@@ -18,3 +18,5 @@ hs_err_pid*
 # Test files
 
 temp.sql
+
+*-developer.properties
