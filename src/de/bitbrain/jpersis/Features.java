@@ -58,9 +58,10 @@ class Features {
 		try {
 			if (stream != null) {
 				tmp.load(stream);
-				
+
 				for (Entry<Object, Object> entry : tmp.entrySet()) {
-					properties.setProperty((String)entry.getKey(), (String)entry.getValue());
+					properties.setProperty((String) entry.getKey(),
+							(String) entry.getValue());
 				}
 			} else {
 				throw new IOException(file + " not found!");
