@@ -87,6 +87,9 @@ public final class FieldInvoker {
 		// Char
 		} else if (type.equals(Character.TYPE)) {
 			obj = invokeChar(value);
+		// Class
+		} else if (type.equals(Class.class)) {
+			obj = invokeClass(type, value);
 		} else {
 			throw new InvokeException("Type " + type.getName() + " is not supported by JPersis");
 		}
@@ -96,6 +99,14 @@ public final class FieldInvoker {
 
 	private static Object invokeEnum(Class type, String value) {
 		return Enum.valueOf(type, value);
+	}
+	
+	private static Object invokeClass(Class type, String value) throws InvokeException {
+		try {
+			return Class.forName(value);
+		} catch (ClassNotFoundException e) {
+			throw new InvokeException("Class '" + value + "' could not be found.");
+		}
 	}
 	
 	private static Object invokeChar(String value) throws InvokeException {

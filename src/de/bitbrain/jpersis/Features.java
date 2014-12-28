@@ -14,6 +14,7 @@
  */
 package de.bitbrain.jpersis;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
@@ -51,10 +52,15 @@ class Features {
 		return val.equals("true");
 	}
 
-	private void loadProperties(String file) throws IOException {
+	private void loadProperties(String path) throws IOException {
+		File file = new File(path);
+		if (!file.exists()) {
+			return;
+		}
+
 		Properties tmp = new Properties();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream stream = loader.getResourceAsStream(file);
+		InputStream stream = loader.getResourceAsStream(path);
 		try {
 			if (stream != null) {
 				tmp.load(stream);
@@ -64,7 +70,7 @@ class Features {
 							(String) entry.getValue());
 				}
 			} else {
-				throw new IOException(file + " not found!");
+				throw new IOException(path + " not found!");
 			}
 		} finally {
 			stream.close();

@@ -25,9 +25,9 @@ import de.bitbrain.jpersis.annotations.PrimaryKey;
  * @version 1.1
  */
 public class ModelMock {
-	
+
 	static String TEST = "TEST1";
-	
+
 	static String TEST2 = "TEST2";
 
 	@PrimaryKey(true)
@@ -38,6 +38,8 @@ public class ModelMock {
 	private String lastName;
 
 	private TestEnum enumTest = TestEnum.TEST1;
+
+	private Class<?> cl = ModelMock.class;
 
 	public int getId() {
 		return id;
@@ -58,11 +60,11 @@ public class ModelMock {
 	public TestEnum getEnumTest() {
 		return enumTest;
 	}
-	
+
 	public void setEnumTest(TestEnum enumTest) {
 		this.enumTest = enumTest;
 	}
-	
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -80,6 +82,14 @@ public class ModelMock {
 				+ ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
+	}
+
+	public void setClass(Class<?> cl) {
+		this.cl = cl;
+	}
+
+	public Class<?> getClassType() {
+		return cl;
 	}
 
 	@Override

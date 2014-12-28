@@ -8,6 +8,8 @@ public class MinimalMock {
 	private int id;
 	
 	private String name;
+	
+	private Class<?> cl = MinimalMock.class;
 
 	static MinimalMock mock = new MinimalMock();
 	
@@ -29,5 +31,13 @@ public class MinimalMock {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setClass(Class<?> cl) {
+		this.cl = cl;
+	}
+	
+	public Class<?> getClassType() {
+		return cl;
 	}
 }

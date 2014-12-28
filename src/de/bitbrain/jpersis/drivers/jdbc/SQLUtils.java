@@ -127,6 +127,9 @@ public final class SQLUtils {
       // Char
     } else if (type.equals(Character.TYPE)) {
       return SQL.CHAR;
+      // Class
+    } else if (type.equals(Class.class)) {
+    	return SQL.VARCHAR;
     } else {
       throw new JPersisException("Type " + type.getName() + " is not supported by JPersis");
     }
@@ -153,6 +156,8 @@ public final class SQLUtils {
 		  return "\"" + (String)o + "\"";
 	  } else if (o instanceof Enum) {
 		return  "\"" + ((Enum<?>)o).name()+ "\"";
+	  } else if (o instanceof Class) {
+		return "\"" + ((Class<?>)o).getName() + "\"";
 	  } else return String.valueOf(o);
   }
   
