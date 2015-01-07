@@ -3,3 +3,6 @@ language: java
 before_script:
   - mysql -e 'create database jpersis;'
   - psql -c 'create database jpersis;' -U postgres
+after_success:
+- echo "<settings><servers><server><id>ossrh</id><username>\${env.OSSRH_USER}</username><password>\${env.OSSRH_PASS}</password></server></servers></settings>" > ~/settings.xml
+- mvn deploy --settings ~/settings.xml
