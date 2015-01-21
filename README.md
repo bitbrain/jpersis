@@ -6,6 +6,15 @@ Light weighted persistence framework for Java.
 
 [![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis)
 
+To use the latest snapshot ```jpersis-1.0-SNAPSHOT``` add the following dependency to your project:
+```maven
+<dependency>
+   <artifactId>jpersis</artifactId>
+   <groupId>com.github.myrealitycoding</groupId>
+   <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
 Getting started
 ===
 
