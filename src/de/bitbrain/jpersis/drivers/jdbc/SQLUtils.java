@@ -23,6 +23,7 @@ import java.util.List;
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Ignored;
 import de.bitbrain.jpersis.annotations.PrimaryKey;
+import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery.Slang;
 import de.bitbrain.jpersis.util.Naming;
 
 /**
@@ -41,7 +42,7 @@ public final class SQLUtils {
    * @param naming
    * @return
    */
-  public static String generateTableString(Class<?> model, Naming naming, boolean sqlite) {
+  public static String generateTableString(Class<?> model, Naming naming, Slang slang) {
     String r = "(";
     List<Field> valids = getValidFields(model, false);
     boolean primaryKeyFound = false;
@@ -50,16 +51,16 @@ public final class SQLUtils {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       String name = naming.javaToField(f.getName());
-      r += "`" + name + "` " + convertDatatype(f.getType(), sqlite);
+      r += "`" + name + "` " + convertDatatype(f.getType(), slang);
       // Add primary key information
-      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);      
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
       if (pKey != null) {
         if (primaryKeyFound) {
           throw new JPersisException(model.getName() + " defines multiple primary keys!");
         }
-        primaryKeyFound = true;       
+        primaryKeyFound = true;
         if (pKey.value()) {
-          r += " " + SQL.PRIMARY_KEY + " " + (sqlite ? SQL.AUTOINCREMENT_SQLITE : SQL.AUTOINCREMENT_MYSQL);
+          r += " " + SQL.PRIMARY_KEY + " " + slang.getAutoIncrement();
         }
       }
       if (index++ < valids.size() - 1) {
@@ -72,7 +73,7 @@ public final class SQLUtils {
     }
     return r + ")";
   }
-  
+
   public static String generatePreparedConditionString(Object object, Naming naming) {
     return generatePreparedConditionString(object, naming, SQL.AND);
   }
@@ -84,13 +85,13 @@ public final class SQLUtils {
     for (int i = 0; i < fields.length; ++i) {
       Field f = fields[i];
       if (Modifier.isStatic(f.getModifiers())) {
-    	  continue;
+        continue;
       }
       if (!f.isAnnotationPresent(PrimaryKey.class) || !f.getAnnotation(PrimaryKey.class).value()) {
-	      condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
-	      if (i < fields.length - 1) {
-	        condition += div;
-	      }
+        condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
+        if (i < fields.length - 1) {
+          condition += div;
+        }
       }
     }
     return condition;
@@ -100,15 +101,15 @@ public final class SQLUtils {
     return "`" + naming.javaToField(primaryKey.getName()) + "`=$1";
   }
 
-  public static String convertDatatype(Class<?> type, boolean sqliteMode) {
+  public static String convertDatatype(Class<?> type, Slang slang) {
     if (type.isEnum()) {
-      return SQL.ENUM + (sqliteMode ? "" : "(255)");
+      return SQL.ENUM + slang.getTypeRangeString();
       // Date
     } else if (type.equals(Date.class) || type.equals(java.sql.Date.class)) {
       return SQL.DATETIME;
       // Integer
     } else if (type.equals(Integer.TYPE)) {
-      return SQL.INTEGER + (sqliteMode ? "" : "(255)");
+      return SQL.INTEGER + slang.getTypeRangeString();
       // Boolean
     } else if (type.equals(Boolean.TYPE)) {
       return SQL.BOOL;
@@ -123,13 +124,13 @@ public final class SQLUtils {
       return SQL.DOUBLE;
       // String
     } else if (type.equals(String.class)) {
-      return SQL.VARCHAR + (sqliteMode ? "" : "(255)");
+      return SQL.VARCHAR + slang.getTypeRangeString();
       // Char
     } else if (type.equals(Character.TYPE)) {
       return SQL.CHAR;
       // Class
     } else if (type.equals(Class.class)) {
-    	return SQL.VARCHAR;
+      return SQL.VARCHAR;
     } else {
       throw new JPersisException("Type " + type.getName() + " is not supported by JPersis");
     }
@@ -143,67 +144,68 @@ public final class SQLUtils {
    * @param naming
    * @return
    */
-  public static String generateConditionString(String condition, Object[] values) {	  
-	for (int i = 0; values != null &&  i < values.length; ++i) {
-		Object value = values[i];
-		condition = condition.replace("$" + (i + 1), typeToString(value));
-	}
+  public static String generateConditionString(String condition, Object[] values) {
+    for (int i = 0; values != null && i < values.length; ++i) {
+      Object value = values[i];
+      condition = condition.replace("$" + (i + 1), typeToString(value));
+    }
     return condition;
   }
-  
+
   public static String typeToString(Object o) {
-	  if (o instanceof String) {
-		  return "\"" + (String)o + "\"";
-	  } else if (o instanceof Enum) {
-		return  "\"" + ((Enum<?>)o).name()+ "\"";
-	  } else if (o instanceof Class) {
-		return "\"" + ((Class<?>)o).getName() + "\"";
-	  } else return String.valueOf(o);
+    if (o instanceof String) {
+      return "\"" + (String) o + "\"";
+    } else if (o instanceof Enum) {
+      return "\"" + ((Enum<?>) o).name() + "\"";
+    } else if (o instanceof Class) {
+      return "\"" + ((Class<?>) o).getName() + "\"";
+    } else
+      return String.valueOf(o);
   }
-  
+
   public static String generateFieldString(Object o, Naming naming, boolean ignorePrimaryKey) {
-	 
-	  String s = "(";
-	  List<Field> valids = getValidFields(o.getClass(), ignorePrimaryKey);
-	  int index = 0;
-	  for (Field f : valids) {
-		  s += "`" + naming.javaToField(f.getName()) + "`";
-		  if (index++ < valids.size() - 1) {
-			  s += ",";
-		  }
-	  }
-	  
-	  return s + ")";
+
+    String s = "(";
+    List<Field> valids = getValidFields(o.getClass(), ignorePrimaryKey);
+    int index = 0;
+    for (Field f : valids) {
+      s += "`" + naming.javaToField(f.getName()) + "`";
+      if (index++ < valids.size() - 1) {
+        s += ",";
+      }
+    }
+
+    return s + ")";
   }
-  
+
   private static List<Field> getValidFields(Class<?> model, boolean ignorePrimaryKey) {
-	  Field[] fields = model.getDeclaredFields();
-	  List<Field> valids = new ArrayList<Field>();
-	  for (Field f : fields) {
-		  if (Modifier.isStatic(f.getModifiers())) {
-	    	  continue;
-	      }
-		  if (f.isAnnotationPresent(Ignored.class)) {
-			  continue;
-		  }
-		  if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class) && f.getAnnotation(PrimaryKey.class).value()) {
-			  continue;
-		  } else {
-			 valids.add(f); 
-		  }
-	  }
-	  return valids;
+    Field[] fields = model.getDeclaredFields();
+    List<Field> valids = new ArrayList<Field>();
+    for (Field f : fields) {
+      if (Modifier.isStatic(f.getModifiers())) {
+        continue;
+      }
+      if (f.isAnnotationPresent(Ignored.class)) {
+        continue;
+      }
+      if (ignorePrimaryKey && f.isAnnotationPresent(PrimaryKey.class) && f.getAnnotation(PrimaryKey.class).value()) {
+        continue;
+      } else {
+        valids.add(f);
+      }
+    }
+    return valids;
   }
-  
-  public static String generateCommaString(Object ... collection) {
-	  String s = "(";
-	  int i = 0;
-	  for (Object o : collection) {
-		  s += typeToString(o);
-		  if (i++ < collection.length - 1) {
-			  s += ",";
-		  }
-	  }
-	  return s + ")";
+
+  public static String generateCommaString(Object... collection) {
+    String s = "(";
+    int i = 0;
+    for (Object o : collection) {
+      s += typeToString(o);
+      if (i++ < collection.length - 1) {
+        s += ",";
+      }
+    }
+    return s + ")";
   }
 }

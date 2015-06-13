@@ -17,6 +17,7 @@ package de.bitbrain.jpersis.drivers.sqllite;
 import java.sql.Statement;
 
 import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery;
+import de.bitbrain.jpersis.drivers.jdbc.SQL;
 import de.bitbrain.jpersis.util.Naming;
 
 public class SQLiteQuery extends JDBCQuery {
@@ -24,9 +25,21 @@ public class SQLiteQuery extends JDBCQuery {
   public SQLiteQuery(Class<?> model, Naming naming, Statement statement) {
     super(model, naming, statement);
   }
-  
+
   @Override
-  protected boolean sqliteMode() {
-    return true;
+  protected Slang createSlang() {
+    return new Slang() {
+
+      @Override
+      public String getAutoIncrement() {
+        return SQL.AUTOINCREMENT_SQLITE;
+      }
+
+      @Override
+      public String getTypeRangeString() {
+        return "";
+      }
+
+    };
   }
 }
