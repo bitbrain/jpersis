@@ -26,12 +26,12 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public class InsertMethod extends BasicMapperMethod<Insert> {
 
-	public InsertMethod(Insert insert) {
-		super(insert);
-	}
+  public InsertMethod(Insert insert) {
+    super(insert);
+  }
 
-	@Override
-	protected void action(Object object, Query query) {
-		query.insert(object);
-	}
+  @Override
+  protected void action(Object object, Query query) {
+    query.insert(object);
+  }
 }

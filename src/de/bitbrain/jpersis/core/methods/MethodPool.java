@@ -29,25 +29,25 @@ import de.bitbrain.jpersis.JPersisException;
  * @version 1.0
  */
 public class MethodPool {
-	
-	private Map<Class<?>,Class<?> > map = new HashMap<>();
 
-	public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?>> method) {
-		map.put(annotation, method);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Class<? extends MapperMethod<?>> get(Class<? extends Annotation> annotation) {
-		return (Class<? extends MapperMethod<?>>) map.get(annotation);
-	}
-	
-	public Annotation getSupported(Method method) {
-		
-		for (Annotation annotation : method.getAnnotations()) {
-			if (map.containsKey(annotation.annotationType())) {
-				return annotation;
-			}
-		}
-		throw new JPersisException(method + " does not provide any supported annotations");
-	}
+  private Map<Class<?>, Class<?>> map = new HashMap<>();
+
+  public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?>> method) {
+    map.put(annotation, method);
+  }
+
+  @SuppressWarnings("unchecked")
+  public Class<? extends MapperMethod<?>> get(Class<? extends Annotation> annotation) {
+    return (Class<? extends MapperMethod<?>>) map.get(annotation);
+  }
+
+  public Annotation getSupported(Method method) {
+
+    for (Annotation annotation : method.getAnnotations()) {
+      if (map.containsKey(annotation.annotationType())) {
+        return annotation;
+      }
+    }
+    throw new JPersisException(method + " does not provide any supported annotations");
+  }
 }

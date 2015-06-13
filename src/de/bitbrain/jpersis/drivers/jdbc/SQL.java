@@ -23,32 +23,32 @@ package de.bitbrain.jpersis.drivers.jdbc;
  */
 public class SQL {
   // Statements
-  public static final String CREATE_TABLE   = "CREATE TABLE IF NOT EXISTS";
-  public static final String SELECT         = "SELECT * FROM";
-  public static final String INSERT         = "INSERT INTO";
-  public static final String UPDATE         = "UPDATE";
-  public static final String DELETE         = "DELETE FROM";
-  public static final String AND            = "AND";
-  public static final String WHERE          = "WHERE";
-  public static final String PRIMARY_KEY    = "PRIMARY KEY";
-  public static final String FROM           = "FROM";
-  public static final String SET            = "SET";
-  public static final String COUNT          = "SELECT COUNT(*) FROM";
-  public static final String LIMIT          = "LIMIT";
-  public static final String ORDER          = "ORDER BY";
-  public static final String VALUES         = " VALUES";  
+  public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS";
+  public static final String SELECT = "SELECT * FROM";
+  public static final String INSERT = "INSERT INTO";
+  public static final String UPDATE = "UPDATE";
+  public static final String DELETE = "DELETE FROM";
+  public static final String AND = "AND";
+  public static final String WHERE = "WHERE";
+  public static final String PRIMARY_KEY = "PRIMARY KEY";
+  public static final String FROM = "FROM";
+  public static final String SET = "SET";
+  public static final String COUNT = "SELECT COUNT(*) FROM";
+  public static final String LIMIT = "LIMIT";
+  public static final String ORDER = "ORDER BY";
+  public static final String VALUES = " VALUES";
 
   public static final String AUTOINCREMENT_SQLITE = "AUTOINCREMENT";
-  public static final String AUTOINCREMENT_MYSQL  = "AUTO_INCREMENT";
-  
+  public static final String AUTOINCREMENT_MYSQL = "AUTO_INCREMENT";
+
   // Primary Types
-  public static final String CHAR           = "CHAR";
-  public static final String VARCHAR        = "VARCHAR";
-  public static final String FLOAT          = "FLOAT";
-  public static final String DOUBLE         = "DOUBLE";
-  public static final String LONG           = "LONG";
-  public static final String ENUM           = "VARCHAR";
-  public static final String BOOL           = "BOOL";
-  public static final String DATETIME       = "DATETIME";
-  public static final String INTEGER        = "INTEGER";
+  public static final String CHAR = "CHAR";
+  public static final String VARCHAR = "VARCHAR";
+  public static final String FLOAT = "FLOAT";
+  public static final String DOUBLE = "DOUBLE";
+  public static final String LONG = "LONG";
+  public static final String ENUM = "VARCHAR";
+  public static final String BOOL = "BOOL";
+  public static final String DATETIME = "DATETIME";
+  public static final String INTEGER = "INTEGER";
 }

@@ -28,21 +28,21 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public class SelectMethod extends AbstractMapperMethod<Select> {
 
-	public SelectMethod(Select select) {
-		super(select);
-	}
+  public SelectMethod(Select select) {
+    super(select);
+  }
 
-	@Override
-	public void on(Class<?> model, Object[] params, Query query) {		
-		Select a = getAnnotation();
-		query.select();		
-		if (!a.condition().isEmpty()) {
-			query.condition(a.condition(), params);
-		}
-	}
-	
-	@Override
-	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{model, Collection.class};
-	}
+  @Override
+  public void on(Class<?> model, Object[] params, Query query) {
+    Select a = getAnnotation();
+    query.select();
+    if (!a.condition().isEmpty()) {
+      query.condition(a.condition(), params);
+    }
+  }
+
+  @Override
+  protected Class<?>[] supportedReturnTypes(Class<?> model) {
+    return new Class<?>[] { model, Collection.class };
+  }
 }

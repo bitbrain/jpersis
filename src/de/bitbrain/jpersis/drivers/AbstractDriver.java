@@ -16,7 +16,6 @@ package de.bitbrain.jpersis.drivers;
 
 import de.bitbrain.jpersis.util.Naming;
 
-
 /**
  * Abstract implementation of {@link Driver}
  * 
@@ -25,21 +24,22 @@ import de.bitbrain.jpersis.util.Naming;
  * @version 1.0
  */
 public abstract class AbstractDriver implements Driver {
-	
-	public AbstractDriver() {
 
-	}
+  public AbstractDriver() {
 
-	@Override
-	public final Query query(Class<?> model, Naming naming) {
-	  return createQuery(model, naming);
-	}
-	
-	/**
-	 * Let the child decide which query to create
-	 * 
-	 * @param model model of the query
-	 * @return newly created query
-	 */
-	protected abstract Query createQuery(Class<?> model, Naming naming);
+  }
+
+  @Override
+  public final Query query(Class<?> model, Naming naming) {
+    return createQuery(model, naming);
+  }
+
+  /**
+   * Let the child decide which query to create
+   * 
+   * @param model
+   *          model of the query
+   * @return newly created query
+   */
+  protected abstract Query createQuery(Class<?> model, Naming naming);
 }

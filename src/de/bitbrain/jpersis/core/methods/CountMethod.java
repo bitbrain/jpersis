@@ -26,21 +26,21 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public class CountMethod extends AbstractMapperMethod<Count> {
 
-	public CountMethod(Count count) {
-		super(count);
-	}
+  public CountMethod(Count count) {
+    super(count);
+  }
 
-	@Override
-	public void on(Class<?> model, Object[] params, Query query) {
-		Count a = getAnnotation();
-		query.count();
-		if (!a.condition().isEmpty()) {
-			query.condition(a.condition(), params);
-		}
-	}
-	
-	@Override
-	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{Integer.class, int.class};
-	}
+  @Override
+  public void on(Class<?> model, Object[] params, Query query) {
+    Count a = getAnnotation();
+    query.count();
+    if (!a.condition().isEmpty()) {
+      query.condition(a.condition(), params);
+    }
+  }
+
+  @Override
+  protected Class<?>[] supportedReturnTypes(Class<?> model) {
+    return new Class<?>[] { Integer.class, int.class };
+  }
 }

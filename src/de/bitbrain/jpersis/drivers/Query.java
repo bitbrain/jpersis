@@ -23,81 +23,90 @@ package de.bitbrain.jpersis.drivers;
  */
 public interface Query {
 
-	/**
-	 * Changes the condition of the current query
-	 * 
-	 * @param condition condition to make
-	 * @param args arguments
-	 * @return this query
-	 */
-	Query condition(String condition, Object ... args);
+  /**
+   * Changes the condition of the current query
+   * 
+   * @param condition
+   *          condition to make
+   * @param args
+   *          arguments
+   * @return this query
+   */
+  Query condition(String condition, Object... args);
 
-	/**
-	 * Changes to select mode
-	 * 
-	 * @return this query
-	 */
-	Query select();
+  /**
+   * Changes to select mode
+   * 
+   * @return this query
+   */
+  Query select();
 
-	/**
-	 * Changes to update mode and adds the object to the update list
-	 * 
-	 * @param object object to update
-	 * @return this query
-	 */
-	Query update(Object object);
+  /**
+   * Changes to update mode and adds the object to the update list
+   * 
+   * @param object
+   *          object to update
+   * @return this query
+   */
+  Query update(Object object);
 
-	/**
-	 * Changes to delete mode and adds the object to the delete list
-	 * 
-	 * @param object object to delete
-	 * @return this query
-	 */
-	Query delete(Object object);
+  /**
+   * Changes to delete mode and adds the object to the delete list
+   * 
+   * @param object
+   *          object to delete
+   * @return this query
+   */
+  Query delete(Object object);
 
-	/**
-	 * Changes to insert mode and adds the object to the insert list
-	 * 
-	 * @param object object to insert
-	 * @return this query
-	 */
-	Query insert(Object object);
+  /**
+   * Changes to insert mode and adds the object to the insert list
+   * 
+   * @param object
+   *          object to insert
+   * @return this query
+   */
+  Query insert(Object object);
 
-	/**
-	 * Changes to count mode
-	 * 
-	 * @return this query
-	 */
-	Query count();
+  /**
+   * Changes to count mode
+   * 
+   * @return this query
+   */
+  Query count();
 
-	/**
-	 * Sets a limit for this query
-	 * 
-	 * @param limit limit amount
-	 * @return this query
-	 */
-	Query limit(int limit);
+  /**
+   * Sets a limit for this query
+   * 
+   * @param limit
+   *          limit amount
+   * @return this query
+   */
+  Query limit(int limit);
 
-	/**
-	 * Sets the order of this query
-	 * 
-	 * @param order order
-	 * @return this query
-	 */
-	Query order(Order order);
-	
-	/**
-	 * Creates a new table of the given model
-	 * 
-	 * @param model model to create the table from
-	 * @return true if successful
-	 */
-	void createTable() throws DriverException;
+  /**
+   * Sets the order of this query
+   * 
+   * @param order
+   *          order
+   * @return this query
+   */
+  Query order(Order order);
 
-	/**
-	 * Query orders of a query
-	 */
-	public enum Order {
-		ASC, DESC;
-	}
+  /**
+   * Creates a new table of the given model
+   * 
+   * @param model
+   *          model to create the table from
+   * @return true if successful
+   */
+  void createTable() throws DriverException;
+
+  /**
+   * Query orders of a query
+   */
+  public enum Order {
+    ASC,
+    DESC;
+  }
 }

@@ -26,12 +26,12 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public class DeleteMethod extends BasicMapperMethod<Delete> {
 
-	public DeleteMethod(Delete delete) {
-		super(delete);
-	}
+  public DeleteMethod(Delete delete) {
+    super(delete);
+  }
 
-	@Override
-	protected void action(Object object, Query query) {
-		query.delete(object);
-	}
+  @Override
+  protected void action(Object object, Query query) {
+    query.delete(object);
+  }
 }

@@ -22,8 +22,12 @@ import java.lang.annotation.Target;
 /**
  * Deletes one or more models from data source
  * 
- * <p><b>Interface Method Signature:</b></p>
- * <p><code>[void][boolean] methodName([Model][Collection&lt;Model&gt;]);</code></p>
+ * <p>
+ * <b>Interface Method Signature:</b>
+ * </p>
+ * <p>
+ * <code>[void][boolean] methodName([Model][Collection&lt;Model&gt;]);</code>
+ * </p>
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -31,4 +35,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Delete { }
+public @interface Delete {
+}

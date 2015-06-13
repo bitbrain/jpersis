@@ -34,48 +34,47 @@ import de.bitbrain.jpersis.util.Naming;
  */
 public class Proxy<T> implements InvocationHandler, Serializable {
 
-	private static final long serialVersionUID = 886746435635193772L;
-	
-	private final Map<Method, MapperMethod<?> > cache;
-	
-	private DriverProvider driverProvider;
-	
-	private MethodFactory factory;
-	
-	private Class<?> model;
-	
-	private Naming naming;
-	
-	public Proxy(Class<?> model, DriverProvider driverProvider, MethodFactory factory, Naming naming) {
-		cache = new HashMap<>();
-		this.factory = factory;
-		this.driverProvider = driverProvider;
-		this.model = model;
-		this.naming = naming;
-	}
+  private static final long serialVersionUID = 886746435635193772L;
 
-	@Override
-	public Object invoke(Object proxy, Method method, Object[] args)
-			throws Throwable {
-		if (valid(method)) {
-			return getCached(method).execute(method, model, args, driverProvider.getDriver(), naming);
-		} else {
-			return method.invoke(this, args);
-		}
-	}
-	
-	private MapperMethod<?> getCached(Method method) {
-		 MapperMethod<?> mapped = cache.get(method);
-		 
-		 if (mapped == null) {
-			 mapped = factory.create(method);
-			 cache.put(method, mapped);
-		 }
-		
-		return mapped;
-	}
+  private final Map<Method, MapperMethod<?>> cache;
 
-	private boolean valid(Method method) {
-		return !method.getClass().equals(Object.class);
-	}
+  private DriverProvider driverProvider;
+
+  private MethodFactory factory;
+
+  private Class<?> model;
+
+  private Naming naming;
+
+  public Proxy(Class<?> model, DriverProvider driverProvider, MethodFactory factory, Naming naming) {
+    cache = new HashMap<>();
+    this.factory = factory;
+    this.driverProvider = driverProvider;
+    this.model = model;
+    this.naming = naming;
+  }
+
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    if (valid(method)) {
+      return getCached(method).execute(method, model, args, driverProvider.getDriver(), naming);
+    } else {
+      return method.invoke(this, args);
+    }
+  }
+
+  private MapperMethod<?> getCached(Method method) {
+    MapperMethod<?> mapped = cache.get(method);
+
+    if (mapped == null) {
+      mapped = factory.create(method);
+      cache.put(method, mapped);
+    }
+
+    return mapped;
+  }
+
+  private boolean valid(Method method) {
+    return !method.getClass().equals(Object.class);
+  }
 }

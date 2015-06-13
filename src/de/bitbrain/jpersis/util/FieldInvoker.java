@@ -31,112 +31,113 @@ import java.util.Date;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class FieldInvoker {
 
-	/**
-	 * This method invokes a field of the object and inserts data
-	 * 
-	 * @param object target object
-	 * @param field field to set
-	 * @param value data for the field
-	 */
-	public static void invoke(Object object, Field field, String value)
-			throws InvokeException {
-		if (Modifier.isStatic(field.getModifiers())) {
-			return;
-		}
-		boolean accessable = field.isAccessible();
-		field.setAccessible(true);
-		if (value == null || value.isEmpty()) {
-			throw new InvokeException(field.getName() + " is null");
-		}
-		
-		try {
-			field.set(object, convertToObject(field.getType(), value));
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new InvokeException(e);
-		} finally {
-			field.setAccessible(accessable);
-		}
-	}
-	
-	private static Object convertToObject(Class type, String value) throws InvokeException {
-		Object obj = null;
-		// Enum
-		if (type.isEnum()) {
-			obj = invokeEnum(type, value);
-		// Date
-		} else if (type.equals(Date.class) || type.equals(java.sql.Date.class)) {
-			obj = invokeDate(value);
-		// Integer
-		} else if (type.equals(Integer.TYPE)) {
-			obj = Integer.valueOf(value);
-		// Boolean
-		} else if (type.equals(Boolean.TYPE)) {
-			obj = Boolean.valueOf(value);
-		// Long
-		} else if (type.equals(Long.TYPE)) {
-			obj = Long.valueOf(value);
-		// Float
-		} else if (type.equals(Float.TYPE)) {
-			obj = Float.valueOf(value);
-		// Double
-		} else if (type.equals(Double.TYPE)) {
-			obj = Double.valueOf(value);
-		// String
-		} else if (type.equals(String.class)) {
-			obj = value;
-		// Char
-		} else if (type.equals(Character.TYPE)) {
-			obj = invokeChar(value);
-		// Class
-		} else if (type.equals(Class.class)) {
-			obj = invokeClass(type, value);
-		} else {
-			throw new InvokeException("Type " + type.getName() + " is not supported by JPersis");
-		}
-		
-		return obj;
-	}
+  /**
+   * This method invokes a field of the object and inserts data
+   * 
+   * @param object
+   *          target object
+   * @param field
+   *          field to set
+   * @param value
+   *          data for the field
+   */
+  public static void invoke(Object object, Field field, String value) throws InvokeException {
+    if (Modifier.isStatic(field.getModifiers())) {
+      return;
+    }
+    boolean accessable = field.isAccessible();
+    field.setAccessible(true);
+    if (value == null || value.isEmpty()) {
+      throw new InvokeException(field.getName() + " is null");
+    }
 
-	private static Object invokeEnum(Class type, String value) {
-		return Enum.valueOf(type, value);
-	}
-	
-	private static Object invokeClass(Class type, String value) throws InvokeException {
-		try {
-			return Class.forName(value);
-		} catch (ClassNotFoundException e) {
-			throw new InvokeException("Class '" + value + "' could not be found.");
-		}
-	}
-	
-	private static Object invokeChar(String value) throws InvokeException {
-		if (value.length() == 1) {
-            return Character.valueOf(value.toCharArray()[0]);
-        } else {
-            throw new InvokeException(value + " is not a valid character");
-        }
-	}
-	
-	private static Object invokeDate(String value)
-			throws InvokeException {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		try {
-			return (Date) format.parse(value);
-		} catch (ParseException | IllegalArgumentException e) {
-			throw new InvokeException(e);
-		}
-	}
+    try {
+      field.set(object, convertToObject(field.getType(), value));
+    } catch (IllegalArgumentException | IllegalAccessException e) {
+      throw new InvokeException(e);
+    } finally {
+      field.setAccessible(accessable);
+    }
+  }
 
-	public static class InvokeException extends Exception {
+  private static Object convertToObject(Class type, String value) throws InvokeException {
+    Object obj = null;
+    // Enum
+    if (type.isEnum()) {
+      obj = invokeEnum(type, value);
+      // Date
+    } else if (type.equals(Date.class) || type.equals(java.sql.Date.class)) {
+      obj = invokeDate(value);
+      // Integer
+    } else if (type.equals(Integer.TYPE)) {
+      obj = Integer.valueOf(value);
+      // Boolean
+    } else if (type.equals(Boolean.TYPE)) {
+      obj = Boolean.valueOf(value);
+      // Long
+    } else if (type.equals(Long.TYPE)) {
+      obj = Long.valueOf(value);
+      // Float
+    } else if (type.equals(Float.TYPE)) {
+      obj = Float.valueOf(value);
+      // Double
+    } else if (type.equals(Double.TYPE)) {
+      obj = Double.valueOf(value);
+      // String
+    } else if (type.equals(String.class)) {
+      obj = value;
+      // Char
+    } else if (type.equals(Character.TYPE)) {
+      obj = invokeChar(value);
+      // Class
+    } else if (type.equals(Class.class)) {
+      obj = invokeClass(type, value);
+    } else {
+      throw new InvokeException("Type " + type.getName() + " is not supported by JPersis");
+    }
 
-		private static final long serialVersionUID = 7413162412732936818L;
-		
-		public InvokeException(String s) {
-			super(s);
-		}
+    return obj;
+  }
 
-		public InvokeException(Throwable e) {
-			super(e);
-		}
-	}
+  private static Object invokeEnum(Class type, String value) {
+    return Enum.valueOf(type, value);
+  }
+
+  private static Object invokeClass(Class type, String value) throws InvokeException {
+    try {
+      return Class.forName(value);
+    } catch (ClassNotFoundException e) {
+      throw new InvokeException("Class '" + value + "' could not be found.");
+    }
+  }
+
+  private static Object invokeChar(String value) throws InvokeException {
+    if (value.length() == 1) {
+      return Character.valueOf(value.toCharArray()[0]);
+    } else {
+      throw new InvokeException(value + " is not a valid character");
+    }
+  }
+
+  private static Object invokeDate(String value) throws InvokeException {
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+      return (Date) format.parse(value);
+    } catch (ParseException | IllegalArgumentException e) {
+      throw new InvokeException(e);
+    }
+  }
+
+  public static class InvokeException extends Exception {
+
+    private static final long serialVersionUID = 7413162412732936818L;
+
+    public InvokeException(String s) {
+      super(s);
+    }
+
+    public InvokeException(Throwable e) {
+      super(e);
+    }
+  }
 }

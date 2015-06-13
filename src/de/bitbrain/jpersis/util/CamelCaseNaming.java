@@ -14,7 +14,6 @@
  */
 package de.bitbrain.jpersis.util;
 
-
 public class CamelCaseNaming implements Naming {
 
   @Override

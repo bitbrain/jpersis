@@ -26,12 +26,12 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public class UpdateMethod extends BasicMapperMethod<Update> {
 
-	public UpdateMethod(Update update) {
-		super(update);
-	}
+  public UpdateMethod(Update update) {
+    super(update);
+  }
 
-	@Override
-	protected void action(Object object, Query query) {
-		query.update(object);
-	}
+  @Override
+  protected void action(Object object, Query query) {
+    query.update(object);
+  }
 }

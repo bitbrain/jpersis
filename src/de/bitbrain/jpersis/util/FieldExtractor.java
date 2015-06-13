@@ -31,63 +31,61 @@ import de.bitbrain.jpersis.annotations.PrimaryKey;
  */
 public final class FieldExtractor {
 
-	public static Object[] extractFieldValues(Object object) {
-		List<Object> values = new ArrayList<Object>();
-		for (Field f : object.getClass().getDeclaredFields()) {
-			if (Modifier.isStatic(f.getModifiers())) {
-				continue;
-			}
-			boolean accessable = f.isAccessible();
-			f.setAccessible(true);
-			try {
-				if (f.isAnnotationPresent(PrimaryKey.class)
-						&& f.getAnnotation(PrimaryKey.class).value()) {
-					continue;
-				} else {
-					values.add(f.get(object));
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new JPersisException(e);
-			} finally {
-				f.setAccessible(accessable);
-			}
-		}
-		return values.toArray(new Object[values.size()]);
-	}
+  public static Object[] extractFieldValues(Object object) {
+    List<Object> values = new ArrayList<Object>();
+    for (Field f : object.getClass().getDeclaredFields()) {
+      if (Modifier.isStatic(f.getModifiers())) {
+        continue;
+      }
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      try {
+        if (f.isAnnotationPresent(PrimaryKey.class) && f.getAnnotation(PrimaryKey.class).value()) {
+          continue;
+        } else {
+          values.add(f.get(object));
+        }
+      } catch (IllegalArgumentException | IllegalAccessException e) {
+        throw new JPersisException(e);
+      } finally {
+        f.setAccessible(accessable);
+      }
+    }
+    return values.toArray(new Object[values.size()]);
+  }
 
-	public static Field extractPrimaryKey(Object object) {
-		for (Field f : object.getClass().getDeclaredFields()) {
-			if (Modifier.isStatic(f.getModifiers())) {
-				continue;
-			}
-			boolean accessable = f.isAccessible();
-			f.setAccessible(true);
-			try {
-				if (f.isAnnotationPresent(PrimaryKey.class)) {
-					return f;
-				}
-			} finally {
-				f.setAccessible(accessable);
-			}
-		}
-		return null;
-	}
+  public static Field extractPrimaryKey(Object object) {
+    for (Field f : object.getClass().getDeclaredFields()) {
+      if (Modifier.isStatic(f.getModifiers())) {
+        continue;
+      }
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      try {
+        if (f.isAnnotationPresent(PrimaryKey.class)) {
+          return f;
+        }
+      } finally {
+        f.setAccessible(accessable);
+      }
+    }
+    return null;
+  }
 
-	public static Object extractPrimaryKeyValue(Object object) {
-		Field f = extractPrimaryKey(object);
-		if (f != null) {
-			boolean accessable = f.isAccessible();
-			try {
-				f.setAccessible(true);
-				return f.get(object);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new JPersisException(e);
-			} finally {
-				f.setAccessible(accessable);
-			}
-		} else {
-			throw new JPersisException(object.getClass()
-					+ " has no primary key");
-		}
-	}
+  public static Object extractPrimaryKeyValue(Object object) {
+    Field f = extractPrimaryKey(object);
+    if (f != null) {
+      boolean accessable = f.isAccessible();
+      try {
+        f.setAccessible(true);
+        return f.get(object);
+      } catch (IllegalArgumentException | IllegalAccessException e) {
+        throw new JPersisException(e);
+      } finally {
+        f.setAccessible(accessable);
+      }
+    } else {
+      throw new JPersisException(object.getClass() + " has no primary key");
+    }
+  }
 }

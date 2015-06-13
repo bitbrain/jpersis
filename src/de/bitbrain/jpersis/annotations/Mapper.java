@@ -20,8 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates a class or interface as a mapper. You need to pass the complete
- * model class path as an argument.
+ * Annotates a class or interface as a mapper. You need to pass the complete model class path as an argument.
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0

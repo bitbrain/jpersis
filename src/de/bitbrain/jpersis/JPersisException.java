@@ -34,7 +34,7 @@ public class JPersisException extends RuntimeException {
   public JPersisException(String message) {
     super(message);
   }
-  
+
   public JPersisException(Throwable t) {
     super(t);
   }

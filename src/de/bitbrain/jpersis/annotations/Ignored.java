@@ -20,8 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a field, a method or a class as ignored so it will not be
- * taken into account.
+ * Marks a field, a method or a class as ignored so it will not be taken into account.
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -29,4 +28,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Ignored { }
+public @interface Ignored {
+}

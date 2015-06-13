@@ -23,17 +23,18 @@ package de.bitbrain.jpersis.drivers;
  */
 public interface DriverProvider {
 
-	/**
-	 * Sets a new driver
-	 * 
-	 * @param driver new driver
-	 */
-	void setDriver(Driver driver);
-	
-	/**
-	 * Returns the current driver
-	 * 
-	 * @return current driver
-	 */
-	Driver getDriver();
+  /**
+   * Sets a new driver
+   * 
+   * @param driver
+   *          new driver
+   */
+  void setDriver(Driver driver);
+
+  /**
+   * Returns the current driver
+   * 
+   * @return current driver
+   */
+  Driver getDriver();
 }

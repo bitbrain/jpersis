@@ -22,8 +22,12 @@ import java.lang.annotation.Target;
 /**
  * Updates one or more models in a data source
  * 
- * <p><b>Interface Method Signature:</b></p>
- * <p><code>[void][boolean] methodName([Model][Collection&lt;Model&gt;]);</code></p>
+ * <p>
+ * <b>Interface Method Signature:</b>
+ * </p>
+ * <p>
+ * <code>[void][boolean] methodName([Model][Collection&lt;Model&gt;]);</code>
+ * </p>
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -32,8 +36,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Update {
-    
-    String[] fields() default {};
-    
-    String condition() default "";
+
+  String[] fields() default {};
+
+  String condition() default "";
 }

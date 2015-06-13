@@ -26,30 +26,30 @@ import de.bitbrain.jpersis.annotations.PrimaryKey;
  */
 public class EnumIdMock {
 
-	@PrimaryKey
-	private TestEnum id;
+  @PrimaryKey
+  private TestEnum id;
 
-	private String name;
-	
-	public EnumIdMock() {
-		
-	}
-	
-	public EnumIdMock(TestEnum id) {
-		this.id = id;
-	}
+  private String name;
 
-	public TestEnum getId() {
-		return id;
-	}
+  public EnumIdMock() {
 
-	public String getName() {
-		return name;
-	}
+  }
 
-	public void setId(TestEnum id) {
-		this.id = id;
-	}
+  public EnumIdMock(TestEnum id) {
+    this.id = id;
+  }
+
+  public TestEnum getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setId(TestEnum id) {
+    this.id = id;
+  }
 
   public void setName(String name) {
     this.name = name;
@@ -82,6 +82,5 @@ public class EnumIdMock {
       return false;
     return true;
   }
-  
-  
+
 }
