@@ -20,8 +20,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
- * Manages features for jpersis internally. This class is marked as package
- * private for internal usage only.
+ * Manages features for jpersis internally. This class is marked as package private for internal usage only.
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -29,51 +28,50 @@ import java.util.Properties;
  */
 class Features {
 
-	static final String FILE = "features";
-	private static final String DEV = "-developer";
-	private static final String EXT = ".properties";
+  static final String FILE = "features";
+  private static final String DEV = "-developer";
+  private static final String EXT = ".properties";
 
-	private Properties properties;
+  private Properties properties;
 
-	Features() {
-		properties = new Properties();
-		try {
-			loadProperties(FILE + EXT);
-			loadProperties(FILE + DEV + EXT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  Features() {
+    properties = new Properties();
+    try {
+      loadProperties(FILE + EXT);
+      loadProperties(FILE + DEV + EXT);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	boolean isEnabled(Feature feature) {
-		String val = properties.getProperty(feature.name().toLowerCase(),
-				"false");
-		return val.equals("true");
-	}
+  boolean isEnabled(Feature feature) {
+    String val = properties.getProperty(feature.name().toLowerCase(), "false");
+    return val.equals("true");
+  }
 
-	private void loadProperties(String path) throws IOException {
-		Properties tmp = new Properties();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream stream = loader.getResourceAsStream(path);
-		try {
-			if (stream != null) {
-				tmp.load(stream);
+  private void loadProperties(String path) throws IOException {
+    Properties tmp = new Properties();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    InputStream stream = loader.getResourceAsStream(path);
+    try {
+      if (stream != null) {
+        tmp.load(stream);
 
-				for (Entry<Object, Object> entry : tmp.entrySet()) {
-					properties.setProperty((String) entry.getKey(),
-							(String) entry.getValue());
-				}
-			} else {
-				return;
-			}
-		} finally {
-			if (stream != null) {
-				stream.close();
-			}
-		}
-	}
+        for (Entry<Object, Object> entry : tmp.entrySet()) {
+          properties.setProperty((String) entry.getKey(), (String) entry.getValue());
+        }
+      } else {
+        return;
+      }
+    } finally {
+      if (stream != null) {
+        stream.close();
+      }
+    }
+  }
 
-	enum Feature {
-		MYSQL;
-	}
+  enum Feature {
+    MYSQL,
+    POSTGRESQL;
+  }
 }
