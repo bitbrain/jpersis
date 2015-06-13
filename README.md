@@ -4,7 +4,7 @@
 Light weighted persistence framework for Java.
 
 
-[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis)
+[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MyRealityCoding/jpersis/blob/master/LICENSE)
 
 To use the latest snapshot ```jpersis-1.0-SNAPSHOT``` add the following dependency to your project:
 ```maven
