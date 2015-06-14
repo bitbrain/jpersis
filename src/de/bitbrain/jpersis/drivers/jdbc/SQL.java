@@ -50,5 +50,5 @@ public class SQL {
   public static final String ENUM = "VARCHAR";
   public static final String BOOL = "BOOL";
   public static final String DATETIME = "DATETIME";
-  public static final String INTEGER = "INT";
+  public static final String INTEGER = "INTEGER";
 }
