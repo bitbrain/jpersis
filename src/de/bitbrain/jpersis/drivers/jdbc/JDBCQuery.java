@@ -123,16 +123,10 @@ public class JDBCQuery implements Query {
       statement.executeUpdate(q);
       String primaryKeyField = SQLUtils.extractPrimaryKey(model, naming);
       if (primaryKeyField != null) {
-        String pkQuery = primaryKeyModification(tableName(), primaryKeyField);
-        if (pkQuery != null) {
-          statement.executeUpdate(pkQuery);
-        }
         boolean autoIncrement = SQLUtils.hasAutoIncrement(model, naming);
-        if (autoIncrement) {
-          String aiQuery = autoIncrementModification(tableName(), primaryKeyField);
-          if (aiQuery != null) {
-            statement.executeUpdate(aiQuery);
-          }
+        String[] queries = modifications(tableName(), primaryKeyField, autoIncrement);
+        for (String query : queries) {
+          statement.executeUpdate(query);
         }
       }
     } catch (SQLException e) {
@@ -168,12 +162,8 @@ public class JDBCQuery implements Query {
     };
   }
 
-  protected String primaryKeyModification(String table, String field) {
-    return null;
-  }
-
-  protected String autoIncrementModification(String table, String field) {
-    return null;
+  protected String[] modifications(String table, String primaryKey, boolean autoIncrement) {
+    return new String[0];
   }
 
   protected interface Slang {
