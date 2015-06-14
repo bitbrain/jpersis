@@ -16,7 +16,9 @@
 package de.bitbrain.jpersis.drivers.postgresql;
 
 import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
+import de.bitbrain.jpersis.util.Naming;
 
 public class PostgreSQLDriver extends JDBCDriver {
 
@@ -32,7 +34,11 @@ public class PostgreSQLDriver extends JDBCDriver {
     } catch (ClassNotFoundException e) {
       throw new JPersisException("Unable to find PostgreSQL driver 'org.postgresql.Driver'");
     }
+  }
 
+  @Override
+  protected Query createQuery(Class<?> model, Naming naming) {
+    return new PostgreSQLQuery(model, naming, statement);
   }
 
 }
