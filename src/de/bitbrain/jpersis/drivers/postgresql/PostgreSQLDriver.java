@@ -15,6 +15,7 @@
 
 package de.bitbrain.jpersis.drivers.postgresql;
 
+import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
 
 public class PostgreSQLDriver extends JDBCDriver {
@@ -25,7 +26,13 @@ public class PostgreSQLDriver extends JDBCDriver {
 
   @Override
   protected String getURL(String host, String port, String database) {
-    return "jdbc:postgresql://" + host + ":" + port + "/" + database;
+    try {
+      Class.forName("org.postgresql.Driver");
+      return "jdbc:postgresql://" + host + ":" + port + "/" + database;
+    } catch (ClassNotFoundException e) {
+      throw new JPersisException("Unable to find PostgreSQL driver 'org.postgresql.Driver'");
+    }
+
   }
 
 }
