@@ -51,7 +51,7 @@ class Features {
 
   private void loadProperties(String path) throws IOException {
     Properties tmp = new Properties();
-    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    ClassLoader loader = Features.class.getClassLoader();
     InputStream stream = loader.getResourceAsStream(path);
     try {
       if (stream != null) {
