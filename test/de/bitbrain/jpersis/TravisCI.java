@@ -36,5 +36,5 @@ public final class TravisCI {
   public static final String POSTGRES_PASSWORD = "";
   public static final String POSTGRES_PORT = "5432";
   public static final String POSTGRES_DATABASE = "jpersis";
-  public static final String POSTGRES_HOST = "127.0.0.1";
+  public static final String POSTGRES_HOST = "localhost";
 }
