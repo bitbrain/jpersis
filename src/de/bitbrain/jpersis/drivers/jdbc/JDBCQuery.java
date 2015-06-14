@@ -121,6 +121,20 @@ public class JDBCQuery implements Query {
     q += generateTableString(model, naming, slang);
     try {
       statement.executeUpdate(q);
+      String primaryKeyField = SQLUtils.extractPrimaryKey(model, naming);
+      if (primaryKeyField != null) {
+        String pkQuery = primaryKeyModification(tableName(), primaryKeyField);
+        if (pkQuery != null) {
+          statement.executeUpdate(pkQuery);
+        }
+        boolean autoIncrement = SQLUtils.hasAutoIncrement(model, naming);
+        if (autoIncrement) {
+          String aiQuery = autoIncrementModification(tableName(), primaryKeyField);
+          if (aiQuery != null) {
+            statement.executeUpdate(aiQuery);
+          }
+        }
+      }
     } catch (SQLException e) {
       throw new DriverException(e + q);
     }
@@ -152,6 +166,14 @@ public class JDBCQuery implements Query {
         return "(255)";
       }
     };
+  }
+
+  protected String primaryKeyModification(String table, String field) {
+    return null;
+  }
+
+  protected String autoIncrementModification(String table, String field) {
+    return null;
   }
 
   protected interface Slang {

@@ -74,6 +74,38 @@ public final class SQLUtils {
     return r + ")";
   }
 
+  public static String extractPrimaryKey(Class<?> model, Naming naming) {
+    List<Field> valids = getValidFields(model, false);
+    for (Field f : valids) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      if (pKey != null) {
+        String pkField = naming.javaToField(f.getName());
+        f.setAccessible(accessable);
+        return pkField;
+      }
+      f.setAccessible(accessable);
+    }
+    return null;
+  }
+
+  public static boolean hasAutoIncrement(Class<?> model, Naming naming) {
+    List<Field> valids = getValidFields(model, false);
+    for (Field f : valids) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      if (pKey != null) {
+        boolean autoIncrement = pKey.value();
+        f.setAccessible(accessable);
+        return autoIncrement;
+      }
+      f.setAccessible(accessable);
+    }
+    return false;
+  }
+
   public static String generatePreparedConditionString(Object object, Naming naming) {
     return generatePreparedConditionString(object, naming, SQL.AND);
   }
