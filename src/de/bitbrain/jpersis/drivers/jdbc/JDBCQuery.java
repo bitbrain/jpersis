@@ -159,6 +159,11 @@ public class JDBCQuery implements Query {
       public String getTypeRangeString() {
         return "(255)";
       }
+
+      @Override
+      public String getPrimaryKey() {
+        return SQL.PRIMARY_KEY;
+      }
     };
   }
 
@@ -169,6 +174,8 @@ public class JDBCQuery implements Query {
   protected interface Slang {
 
     String getAutoIncrement();
+
+    String getPrimaryKey();
 
     String getTypeRangeString();
 

@@ -60,7 +60,12 @@ public final class SQLUtils {
         }
         primaryKeyFound = true;
         if (pKey.value()) {
-          r += " " + SQL.PRIMARY_KEY + " " + slang.getAutoIncrement();
+          if (!slang.getPrimaryKey().isEmpty()) {
+            r += " " + slang.getPrimaryKey();
+          }
+          if (!slang.getAutoIncrement().isEmpty()) {
+            r += " " + slang.getAutoIncrement();
+          }
         }
       }
       if (index++ < valids.size() - 1) {

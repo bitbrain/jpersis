@@ -40,6 +40,11 @@ public class SQLiteQuery extends JDBCQuery {
         return "";
       }
 
+      @Override
+      public String getPrimaryKey() {
+        return SQL.PRIMARY_KEY;
+      }
+
     };
   }
 }

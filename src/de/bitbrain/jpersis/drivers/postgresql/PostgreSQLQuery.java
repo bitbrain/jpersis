@@ -40,6 +40,11 @@ public class PostgreSQLQuery extends JDBCQuery {
         return "";
       }
 
+      @Override
+      public String getPrimaryKey() {
+        return "";
+      }
+
     };
   }
 
