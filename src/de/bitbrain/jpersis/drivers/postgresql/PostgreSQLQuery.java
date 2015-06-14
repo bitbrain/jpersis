@@ -45,8 +45,15 @@ public class PostgreSQLQuery extends JDBCQuery {
 
   @Override
   protected String[] modifications(String table, String primaryKey, boolean autoIncrement) {
+    String pk_name = table + "_" + primaryKey + "_pk";
     String sequence_name = table + "_" + primaryKey + "_seq";
-    return new String[] { "CREATE SEQUENCE `" + sequence_name + "`;",
-        "ALTER TABLE `" + table + "` ALTER `" + primaryKey + "` SET DEFAULT NEXTVAL('" + sequence_name + "')" };
+    String pkQuery = "ALTER TABLE `" + table + "` ADD CONSTRAINT `" + pk_name + "` PRIMARY KEY ('" + primaryKey + "')";
+    if (autoIncrement) {
+      return new String[] { pkQuery, "CREATE SEQUENCE `" + sequence_name + "`",
+          "ALTER TABLE `" + table + "` ALTER `" + primaryKey + "` SET DEFAULT NEXTVAL('" + sequence_name + "')" };
+    } else {
+      return new String[] { pkQuery };
+    }
+
   }
 }
