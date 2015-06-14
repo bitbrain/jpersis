@@ -162,7 +162,7 @@ public final class SQLUtils {
       return SQL.CHAR;
       // Class
     } else if (type.equals(Class.class)) {
-      return SQL.VARCHAR;
+      return SQL.VARCHAR + slang.getTypeRangeString();
     } else {
       throw new JPersisException("Type " + type.getName() + " is not supported by JPersis");
     }
