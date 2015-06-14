@@ -140,7 +140,7 @@ public class JDBCQuery implements Query {
   }
 
   private String tableName() {
-    return "`" + naming.javaToCollection(model.getSimpleName()) + "`";
+    return " " + naming.javaToCollection(model.getSimpleName()) + " ";
   }
 
   public boolean primaryKeyUpdated() {

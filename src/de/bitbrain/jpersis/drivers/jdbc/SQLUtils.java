@@ -51,7 +51,7 @@ public final class SQLUtils {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       String name = naming.javaToField(f.getName());
-      r += "`" + name + "` " + convertDatatype(f.getType(), slang);
+      r += " " + name + "  " + convertDatatype(f.getType(), slang);
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
       if (pKey != null) {
@@ -120,7 +120,7 @@ public final class SQLUtils {
         continue;
       }
       if (!f.isAnnotationPresent(PrimaryKey.class) || !f.getAnnotation(PrimaryKey.class).value()) {
-        condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
+        condition += " " + naming.javaToField(f.getName()) + " =$" + (index++ + 1);
         if (i < fields.length - 1) {
           condition += div;
         }
@@ -130,7 +130,7 @@ public final class SQLUtils {
   }
 
   public static String generatePrimaryKeyCondition(Field primaryKey, Naming naming) {
-    return "`" + naming.javaToField(primaryKey.getName()) + "`=$1";
+    return " " + naming.javaToField(primaryKey.getName()) + " =$1";
   }
 
   public static String convertDatatype(Class<?> type, Slang slang) {
@@ -201,7 +201,7 @@ public final class SQLUtils {
     List<Field> valids = getValidFields(o.getClass(), ignorePrimaryKey);
     int index = 0;
     for (Field f : valids) {
-      s += "`" + naming.javaToField(f.getName()) + "`";
+      s += " " + naming.javaToField(f.getName()) + " ";
       if (index++ < valids.size() - 1) {
         s += ",";
       }
