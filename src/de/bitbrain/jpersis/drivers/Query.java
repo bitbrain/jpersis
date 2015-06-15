@@ -14,6 +14,8 @@
  */
 package de.bitbrain.jpersis.drivers;
 
+import java.sql.Connection;
+
 /**
  * Query for a driver
  * 
@@ -96,11 +98,9 @@ public interface Query {
   /**
    * Creates a new table of the given model
    * 
-   * @param model
-   *          model to create the table from
    * @return true if successful
    */
-  void createTable() throws DriverException;
+  void createTable(Connection connection) throws DriverException;
 
   /**
    * Query orders of a query

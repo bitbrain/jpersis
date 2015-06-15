@@ -19,6 +19,7 @@ import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generatePreparedConditio
 import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -116,17 +117,19 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public void createTable() throws DriverException {
+  public void createTable(Connection connection) throws DriverException {
     String q = SQL.CREATE_TABLE + " " + tableName();
-    q += generateTableString(model, naming, slang);
     try {
-      statement.executeUpdate(q);
-      String primaryKeyField = SQLUtils.extractPrimaryKey(model, naming);
-      if (primaryKeyField != null) {
-        boolean autoIncrement = SQLUtils.hasAutoIncrement(model, naming);
-        String[] queries = modifications(tableName(), primaryKeyField, autoIncrement);
-        for (String query : queries) {
-          statement.executeUpdate(query);
+      if (!SQLUtils.tableExists(tableName(), connection)) {
+        q += generateTableString(model, naming, slang);
+        statement.executeUpdate(q);
+        String primaryKeyField = SQLUtils.extractPrimaryKey(model, naming);
+        if (primaryKeyField != null) {
+          boolean autoIncrement = SQLUtils.hasAutoIncrement(model, naming);
+          String[] queries = modifications(tableName(), primaryKeyField, autoIncrement);
+          for (String query : queries) {
+            statement.executeUpdate(query);
+          }
         }
       }
     } catch (SQLException e) {

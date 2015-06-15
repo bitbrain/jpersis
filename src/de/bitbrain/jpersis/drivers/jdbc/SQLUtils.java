@@ -16,6 +16,10 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -213,6 +217,13 @@ public final class SQLUtils {
     }
 
     return s + ")";
+  }
+
+  public static boolean tableExists(String name, Connection connection) throws SQLException {
+    DatabaseMetaData metadata = connection.getMetaData();
+    ResultSet resultSet;
+    resultSet = metadata.getTables(null, null, name, null);
+    return resultSet.next();
   }
 
   private static List<Field> getValidFields(Class<?> model, boolean ignorePrimaryKey) {
