@@ -195,11 +195,11 @@ public final class SQLUtils {
 
   public static String typeToString(Object o) {
     if (o instanceof String) {
-      return "\"" + (String) o + "\"";
+      return "'" + (String) o + "'";
     } else if (o instanceof Enum) {
-      return "\"" + ((Enum<?>) o).name() + "\"";
+      return "'" + ((Enum<?>) o).name() + "'";
     } else if (o instanceof Class) {
-      return "\"" + ((Class<?>) o).getName() + "\"";
+      return "'" + ((Class<?>) o).getName() + "'";
     } else
       return String.valueOf(o);
   }
