@@ -51,7 +51,7 @@ public final class SQLUtils {
       boolean accessable = f.isAccessible();
       f.setAccessible(true);
       String name = naming.javaToField(f.getName());
-      r += " " + name + "  " + convertDatatype(f.getType(), slang);
+      r += name + " " + convertDatatype(f.getType(), slang);
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
       if (pKey != null) {
@@ -69,7 +69,7 @@ public final class SQLUtils {
         }
       }
       if (index++ < valids.size() - 1) {
-        r += ",";
+        r += ", ";
       }
       f.setAccessible(accessable);
     }
