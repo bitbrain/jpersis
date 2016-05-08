@@ -15,11 +15,7 @@
 package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.PrimaryKey;
@@ -88,7 +84,13 @@ public abstract class JDBCDriver extends AbstractDriver {
     String sql = query.toString();
     try {
       query.createTable(connection);
-      if (statement.execute(sql)) {
+      boolean result;
+      if (((JDBCQuery)query).primaryKeyUpdated() && generateKeyUpdateSupported()) {
+        result = statement.execute(sql, Statement.RETURN_GENERATED_KEYS);
+      } else {
+        result = statement.execute(sql);
+      }
+      if (result) {
         return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
       } else if (returnType.equals(Void.class) || returnType.equals(void.class)) {
         return void.class;
@@ -114,7 +116,6 @@ public abstract class JDBCDriver extends AbstractDriver {
             String value = "0";
             while (keys.next()) {
               value = String.valueOf(keys.getInt(1));
-              System.out.println(value);
               break;
             }
             FieldInvoker.invoke(args[0], f, value);
@@ -137,5 +138,9 @@ public abstract class JDBCDriver extends AbstractDriver {
         throw new DriverException(ex);
       }
     }
+  }
+
+  protected boolean generateKeyUpdateSupported() {
+    return true;
   }
 }

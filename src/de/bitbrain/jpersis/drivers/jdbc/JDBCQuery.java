@@ -124,8 +124,6 @@ public class JDBCQuery implements Query {
         System.out.println("Creating new table '" + tableName() + "'..");
         q += generateTableString(model, naming, slang);
         statement.executeUpdate(q);
-      } else {
-        System.out.println("Warning: Table '" + tableName() + "' already exists!");
       }
     } catch (SQLException e) {
       throw new DriverException(e + q);

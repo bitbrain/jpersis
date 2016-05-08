@@ -65,6 +65,11 @@ public class SQLiteDriver extends JDBCDriver {
     }
   }
 
+  @Override
+  protected boolean generateKeyUpdateSupported() {
+    return false;
+  }
+
   private void ensureFile() {
     File file = new File(path);
     try {
