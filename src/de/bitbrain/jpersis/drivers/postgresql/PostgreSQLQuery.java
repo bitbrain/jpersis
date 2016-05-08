@@ -32,7 +32,7 @@ public class PostgreSQLQuery extends JDBCQuery {
 
       @Override
       public String getAutoIncrement() {
-        return "";
+        return "SERIAL";
       }
 
       @Override
@@ -42,23 +42,9 @@ public class PostgreSQLQuery extends JDBCQuery {
 
       @Override
       public String getPrimaryKey() {
-        return "";
+        return "PRIMARY KEY";
       }
 
     };
-  }
-
-  @Override
-  protected String[] modifications(String table, String primaryKey, boolean autoIncrement) {
-    String pk_name = table + "_" + primaryKey + "_pk";
-    String sequence_name = table + "_" + primaryKey + "_seq";
-    String pkQuery = "ALTER TABLE  " + table + "  ADD CONSTRAINT  " + pk_name + "  PRIMARY KEY(" + primaryKey + ")";
-    if (autoIncrement) {
-      return new String[] { pkQuery, "CREATE SEQUENCE  " + sequence_name,
-          "ALTER TABLE  " + table + "  ALTER COLUMN " + primaryKey + " SET DEFAULT NEXTVAL('" + sequence_name + "')" };
-    } else {
-      return new String[] { pkQuery };
-    }
-
   }
 }

@@ -123,14 +123,6 @@ public class JDBCQuery implements Query {
       if (!SQLUtils.tableExists(tableName(), connection)) {
         q += generateTableString(model, naming, slang);
         statement.executeUpdate(q);
-        String primaryKeyField = SQLUtils.extractPrimaryKey(model, naming);
-        if (primaryKeyField != null) {
-          boolean autoIncrement = SQLUtils.hasAutoIncrement(model, naming);
-          String[] queries = modifications(tableName(), primaryKeyField, autoIncrement);
-          for (String query : queries) {
-            statement.executeUpdate(query);
-          }
-        }
       }
     } catch (SQLException e) {
       throw new DriverException(e + q);
@@ -168,10 +160,6 @@ public class JDBCQuery implements Query {
         return SQL.PRIMARY_KEY;
       }
     };
-  }
-
-  protected String[] modifications(String table, String primaryKey, boolean autoIncrement) {
-    return new String[0];
   }
 
   protected interface Slang {
