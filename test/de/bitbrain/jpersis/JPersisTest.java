@@ -79,13 +79,13 @@ public class JPersisTest {
     Features features = new Features();
     List<Driver[]> infos = new ArrayList<Driver[]>();
     infos.add(new Driver[] { new SQLiteDriver(DB) });
-    // if (features.isEnabled(Feature.MYSQL)) {
-    infos.add(new Driver[] { new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD) });
-    // }
-    // if (features.isEnabled(Feature.POSTGRESQL)) {
+    if (features.isEnabled(Features.Feature.MYSQL)) {
+        infos.add(new Driver[] { new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD) });
+    }
+    if (features.isEnabled(Features.Feature.POSTGRESQL)) {
     infos.add(new Driver[] { new PostgreSQLDriver(POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DATABASE, POSTGRES_USERNAME,
         POSTGRES_PASSWORD) });
-    // }
+    }
     return infos;
   }
 

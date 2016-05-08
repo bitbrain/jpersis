@@ -70,7 +70,7 @@ class Features {
     }
   }
 
-  enum Feature {
+  public enum Feature {
     MYSQL,
     POSTGRESQL;
   }
