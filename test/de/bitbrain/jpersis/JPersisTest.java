@@ -15,16 +15,16 @@
 
 package de.bitbrain.jpersis;
 
-import static de.bitbrain.jpersis.TravisCI.MYSQL_DATABASE;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_HOST;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PASSWORD;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PORT;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_USERNAME;
-import static de.bitbrain.jpersis.TravisCI.POSTGRES_DATABASE;
-import static de.bitbrain.jpersis.TravisCI.POSTGRES_HOST;
-import static de.bitbrain.jpersis.TravisCI.POSTGRES_PASSWORD;
-import static de.bitbrain.jpersis.TravisCI.POSTGRES_PORT;
-import static de.bitbrain.jpersis.TravisCI.POSTGRES_USERNAME;
+import static de.bitbrain.jpersis.Connections.MYSQL_DATABASE;
+import static de.bitbrain.jpersis.Connections.MYSQL_HOST;
+import static de.bitbrain.jpersis.Connections.MYSQL_PASSWORD;
+import static de.bitbrain.jpersis.Connections.MYSQL_PORT;
+import static de.bitbrain.jpersis.Connections.MYSQL_USERNAME;
+import static de.bitbrain.jpersis.Connections.POSTGRES_DATABASE;
+import static de.bitbrain.jpersis.Connections.POSTGRES_HOST;
+import static de.bitbrain.jpersis.Connections.POSTGRES_PASSWORD;
+import static de.bitbrain.jpersis.Connections.POSTGRES_PORT;
+import static de.bitbrain.jpersis.Connections.POSTGRES_USERNAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
