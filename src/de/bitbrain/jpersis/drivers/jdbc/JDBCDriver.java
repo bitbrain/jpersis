@@ -81,33 +81,38 @@ public abstract class JDBCDriver extends AbstractDriver {
   @Override
   public Object commit(Query query, Class<?> returnType, Object[] args, Class<?> model, Naming naming)
       throws DriverException {
+    JDBCQuery jdbcQuery = (JDBCQuery)query;
     String sql = query.toString();
     try {
       query.createTable(connection);
-      boolean result;
-      if (((JDBCQuery)query).primaryKeyUpdated() && generateKeyUpdateSupported()) {
-        result = statement.execute(sql, Statement.RETURN_GENERATED_KEYS);
-      } else {
-        result = statement.execute(sql);
-      }
-      if (result) {
-        return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
-      } else if (returnType.equals(Void.class) || returnType.equals(void.class)) {
-        return void.class;
-      } else {
-        return statement.getUpdateCount() > 0;
-      }
+      return extractObjectFromResult(jdbcQuery, returnType, model, naming);
     } catch (SQLException e) {
       throw new DriverException(e + " " + sql);
     } finally {
-      invokePrimaryKey(query, args);
+      invokePrimaryKey(jdbcQuery, args);
     }
   }
 
-  private void invokePrimaryKey(Query query, Object[] args) throws DriverException {
-    if (query instanceof JDBCQuery) {
-      JDBCQuery q = (JDBCQuery) query;
-      if (q.primaryKeyUpdated() && args != null && args.length == 1) {
+  private Object extractObjectFromResult(JDBCQuery query, Class<?> returnType, Class<?> model, Naming naming) throws SQLException {
+    if (executeWithResult(query)) {
+      return resultSetReader.read(statement.getResultSet(), returnType, model, naming);
+    } else if (returnType.equals(Void.class) || returnType.equals(void.class)) {
+      return void.class;
+    } else {
+      return statement.getUpdateCount() > 0;
+    }
+  }
+
+  private boolean executeWithResult(JDBCQuery query) throws SQLException {
+    if (query.primaryKeyUpdated() && generateKeyUpdateSupported()) {
+      return statement.execute(query.toString(), Statement.RETURN_GENERATED_KEYS);
+    } else {
+      return statement.execute(query.toString());
+    }
+  }
+
+  private void invokePrimaryKey(JDBCQuery query, Object[] args) throws DriverException {
+      if (query.primaryKeyUpdated() && args != null && args.length == 1) {
         ResultSet keys;
         try {
           Field f = FieldExtractor.extractPrimaryKey(args[0]);
@@ -126,7 +131,6 @@ public abstract class JDBCDriver extends AbstractDriver {
           throw new JPersisException(e + query.toString());
         }
       }
-    }
   }
 
   @Override
@@ -140,6 +144,8 @@ public abstract class JDBCDriver extends AbstractDriver {
     }
   }
 
+  // Normally JDBC should support returning generated keys. Some driver
+  // may not support this feature so it can be toggled off.
   protected boolean generateKeyUpdateSupported() {
     return true;
   }
