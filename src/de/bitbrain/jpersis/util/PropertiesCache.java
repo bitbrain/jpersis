@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -46,11 +47,14 @@ public class PropertiesCache {
 
     private void readProperties(String filename, Properties properties) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(filename).getFile());
-        if (!file.exists()) {
-            System.out.println(filename + " is not on classpath!");
-        } else try (InputStream in = new FileInputStream(file)) {
-            properties.load(in);
+        URL url = classLoader.getResource(filename);
+        if (url != null) {
+            File file = new File(url.getFile());
+            if (!file.exists()) {
+                System.out.println(filename + " is not on classpath!");
+            } else try (InputStream in = new FileInputStream(file)) {
+                properties.load(in);
+            }
         }
     }
 }
