@@ -1,5 +1,7 @@
 package de.bitbrain.jpersis.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -43,10 +45,12 @@ public class PropertiesCache {
     }
 
     private void readProperties(String filename, Properties properties) throws IOException {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(filename);
-        if (in == null) {
-            throw new IOException(filename + " is not on classpath!");
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(filename).getFile());
+        if (!file.exists()) {
+            System.out.println(filename + " is not on classpath!");
+        } else try (InputStream in = new FileInputStream(file)) {
+            properties.load(in);
         }
-        properties.load(in);
     }
 }
