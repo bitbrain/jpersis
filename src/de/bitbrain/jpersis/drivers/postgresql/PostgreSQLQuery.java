@@ -31,6 +31,11 @@ public class PostgreSQLQuery extends JDBCQuery {
     return new Slang() {
 
       @Override
+      public boolean isAutoIncrementTyped() {
+        return true;
+      }
+
+      @Override
       public String getAutoIncrement() {
         return "SERIAL";
       }
@@ -45,6 +50,10 @@ public class PostgreSQLQuery extends JDBCQuery {
         return "PRIMARY KEY";
       }
 
+      @Override
+      public String getReturningOptional(String key) {
+        return " RETURNING " + key;
+      }
     };
   }
 }

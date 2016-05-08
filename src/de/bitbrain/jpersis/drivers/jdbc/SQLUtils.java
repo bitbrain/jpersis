@@ -52,22 +52,26 @@ public final class SQLUtils {
     boolean primaryKeyFound = false;
     int index = 0;
     for (Field f : valids) {
-      boolean accessable = f.isAccessible();
+      boolean accessible = f.isAccessible();
       f.setAccessible(true);
-      String name = naming.javaToField(f.getName());
-      r += name + " " + convertDatatype(f.getType(), slang);
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      String name = naming.javaToField(f.getName());
+      if (pKey != null && pKey.value() && slang.isAutoIncrementTyped()) {
+        r += name + " " + slang.getAutoIncrement();
+      } else {
+        r += name + " " + convertDatatype(f.getType(), slang);
+      }
       if (pKey != null) {
         if (primaryKeyFound) {
           throw new JPersisException(model.getName() + " defines multiple primary keys!");
         }
         primaryKeyFound = true;
+        if (!slang.getPrimaryKey().isEmpty()) {
+          r += " " + slang.getPrimaryKey();
+        }
         if (pKey.value()) {
-          if (!slang.getPrimaryKey().isEmpty()) {
-            r += " " + slang.getPrimaryKey();
-          }
-          if (!slang.getAutoIncrement().isEmpty()) {
+          if (!slang.getAutoIncrement().isEmpty() && !slang.isAutoIncrementTyped()) {
             r += " " + slang.getAutoIncrement();
           }
         }
@@ -75,7 +79,7 @@ public final class SQLUtils {
       if (index++ < valids.size() - 1) {
         r += ", ";
       }
-      f.setAccessible(accessable);
+      f.setAccessible(accessible);
     }
     if (!primaryKeyFound) {
       throw new JPersisException(model.getName() + " does not define a primary key");

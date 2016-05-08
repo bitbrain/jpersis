@@ -45,6 +45,15 @@ public class SQLiteQuery extends JDBCQuery {
         return SQL.PRIMARY_KEY;
       }
 
+      @Override
+      public boolean isAutoIncrementTyped() {
+        return false;
+      }
+
+      @Override
+      public String getReturningOptional(String key) {
+        return "";
+      }
     };
   }
 }

@@ -115,14 +115,11 @@ public class JPersisTest {
       m.setLastName("Mustermann");
       assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
       if (firstKey) {
+        firstKey = false;
         expected = m.getId();
       }
       assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == (i + 1));
       assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
-
-      if (firstKey) {
-        firstKey = false;
-      }
       expected = m.getId() + 1;
     }
 
@@ -132,13 +129,11 @@ public class JPersisTest {
       m.setName("Meh");
       assertTrue("It should be possible to insert element nr" + i, minimalMapper.insert(m));
       if (firstKey) {
+        firstKey = false;
         expected = m.getId();
       }
       assertTrue("There should be " + (i + 1) + " elements.", minimalMapper.count() == (i + 1));
       assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
-      if (firstKey) {
-        firstKey = false;
-      }
       expected = m.getId() + 1;
     }
 

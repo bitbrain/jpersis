@@ -121,8 +121,11 @@ public class JDBCQuery implements Query {
     String q = SQL.CREATE_TABLE + " " + tableName();
     try {
       if (!SQLUtils.tableExists(tableName(), connection)) {
+        System.out.println("Creating new table '" + tableName() + "'..");
         q += generateTableString(model, naming, slang);
         statement.executeUpdate(q);
+      } else {
+        System.out.println("Warning: Table '" + tableName() + "' already exists!");
       }
     } catch (SQLException e) {
       throw new DriverException(e + q);
@@ -159,6 +162,16 @@ public class JDBCQuery implements Query {
       public String getPrimaryKey() {
         return SQL.PRIMARY_KEY;
       }
+
+      @Override
+      public boolean isAutoIncrementTyped() {
+        return false;
+      }
+
+      @Override
+      public String getReturningOptional(String key) {
+        return "";
+      }
     };
   }
 
@@ -169,6 +182,10 @@ public class JDBCQuery implements Query {
     String getPrimaryKey();
 
     String getTypeRangeString();
+
+    boolean isAutoIncrementTyped();
+
+    String getReturningOptional(String key);
 
   }
 }

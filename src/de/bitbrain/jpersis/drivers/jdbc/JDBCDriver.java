@@ -114,6 +114,7 @@ public abstract class JDBCDriver extends AbstractDriver {
             String value = "0";
             while (keys.next()) {
               value = String.valueOf(keys.getInt(1));
+              System.out.println(value);
               break;
             }
             FieldInvoker.invoke(args[0], f, value);
