@@ -19,6 +19,7 @@ import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generatePreparedConditio
 import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -116,11 +117,14 @@ public class JDBCQuery implements Query {
   }
 
   @Override
-  public void createTable() throws DriverException {
+  public void createTable(Connection connection) throws DriverException {
     String q = SQL.CREATE_TABLE + " " + tableName();
-    q += generateTableString(model, naming, slang);
     try {
-      statement.executeUpdate(q);
+      if (!SQLUtils.tableExists(tableName(), connection)) {
+        System.out.println("Creating new table '" + tableName() + "'..");
+        q += generateTableString(model, naming, slang);
+        statement.executeUpdate(q);
+      }
     } catch (SQLException e) {
       throw new DriverException(e + q);
     }
@@ -132,7 +136,7 @@ public class JDBCQuery implements Query {
   }
 
   private String tableName() {
-    return "`" + naming.javaToCollection(model.getSimpleName()) + "`";
+    return naming.javaToCollection(model.getSimpleName());
   }
 
   public boolean primaryKeyUpdated() {
@@ -151,6 +155,21 @@ public class JDBCQuery implements Query {
       public String getTypeRangeString() {
         return "(255)";
       }
+
+      @Override
+      public String getPrimaryKey() {
+        return SQL.PRIMARY_KEY;
+      }
+
+      @Override
+      public boolean isAutoIncrementTyped() {
+        return false;
+      }
+
+      @Override
+      public String getReturningOptional(String key) {
+        return "";
+      }
     };
   }
 
@@ -158,7 +177,13 @@ public class JDBCQuery implements Query {
 
     String getAutoIncrement();
 
+    String getPrimaryKey();
+
     String getTypeRangeString();
+
+    boolean isAutoIncrementTyped();
+
+    String getReturningOptional(String key);
 
   }
 }

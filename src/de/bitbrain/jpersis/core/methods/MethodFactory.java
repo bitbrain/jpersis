@@ -30,36 +30,35 @@ import de.bitbrain.jpersis.JPersisException;
  */
 public class MethodFactory {
 
-	private MethodPool pool;
+  private MethodPool pool;
 
-	public MethodFactory(MethodPool pool) {
-		this.pool = pool;
-	}
+  public MethodFactory(MethodPool pool) {
+    this.pool = pool;
+  }
 
-	public MapperMethod<?> create(Method method) {
-		Annotation a = pool.getSupported(method);
+  public MapperMethod<?> create(Method method) {
+    Annotation a = pool.getSupported(method);
 
-		if (a != null) {
-			Class<?> methodClass = pool.get(a.annotationType());
-			try {
-				Constructor<?> c = methodClass.getConstructor(a.annotationType());
-				return (MapperMethod<?>) c.newInstance(a);
-			} catch (NoSuchMethodException e) {
-				throw new JPersisException(methodClass + " does not provide a valid constructor");
-			} catch (SecurityException e) {
-				throw new JPersisException(methodClass + " needs public methods and constructors");
-			} catch (InstantiationException e) {
-				throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
-			} catch (IllegalAccessException e) {
-				throw new JPersisException(methodClass + " needs public methods and constructors");
-			} catch (IllegalArgumentException e) {
-				throw new JPersisException(methodClass + " does not provide a valid constructor");
-			} catch (InvocationTargetException e) {
-				throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
-			}
-		} else {
-			throw new JPersisException(method
-					+ " does not provide any supported annotation");
-		}
-	}
+    if (a != null) {
+      Class<?> methodClass = pool.get(a.annotationType());
+      try {
+        Constructor<?> c = methodClass.getConstructor(a.annotationType());
+        return (MapperMethod<?>) c.newInstance(a);
+      } catch (NoSuchMethodException e) {
+        throw new JPersisException(methodClass + " does not provide a valid constructor");
+      } catch (SecurityException e) {
+        throw new JPersisException(methodClass + " needs public methods and constructors");
+      } catch (InstantiationException e) {
+        throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
+      } catch (IllegalAccessException e) {
+        throw new JPersisException(methodClass + " needs public methods and constructors");
+      } catch (IllegalArgumentException e) {
+        throw new JPersisException(methodClass + " does not provide a valid constructor");
+      } catch (InvocationTargetException e) {
+        throw new JPersisException("Could'nt instantiate " + methodClass + ": " + e.getMessage());
+      }
+    } else {
+      throw new JPersisException(method + " does not provide any supported annotation");
+    }
+  }
 }

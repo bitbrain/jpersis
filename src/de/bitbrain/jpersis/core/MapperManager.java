@@ -25,26 +25,29 @@ import de.bitbrain.jpersis.drivers.DriverProvider;
  */
 public interface MapperManager extends DriverProvider {
 
-	/**
-	 * Provides access to an existing mapper
-	 * 
-	 * @param mapper existing mapper class
-	 * @return Mapper instance or null of not found.
-	 */
-	<T> T get(Class<T> mapper);
-	
-	/**
-	 * Adds the mapper to this manager. If already there, do nothing.
-	 * 
-	 * @param mapper new mapper class
-	 */
-	<T> void add(Class<T> mapper);
-	
-	/**
-	 * Indicates if the manager contains the mapper
-	 * 
-	 * @param mapper mapper class
-	 * @return true if contained
-	 */
-	boolean contains(Class<?> mapper);
+  /**
+   * Provides access to an existing mapper
+   * 
+   * @param mapper
+   *          existing mapper class
+   * @return Mapper instance or null of not found.
+   */
+  <T> T get(Class<T> mapper);
+
+  /**
+   * Adds the mapper to this manager. If already there, do nothing.
+   * 
+   * @param mapper
+   *          new mapper class
+   */
+  <T> void add(Class<T> mapper);
+
+  /**
+   * Indicates if the manager contains the mapper
+   * 
+   * @param mapper
+   *          mapper class
+   * @return true if contained
+   */
+  boolean contains(Class<?> mapper);
 }

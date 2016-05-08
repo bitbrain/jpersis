@@ -28,22 +28,25 @@ import de.bitbrain.jpersis.util.Naming;
  * @version 1.0
  */
 public interface MapperMethod<T extends Annotation> {
-	
-	/**
-	 * Gets the underlying annotation
-	 * 
-	 * @return annotation
-	 */
-	T getAnnotation();	
 
-	/**
-	 * Executes the method internally
-	 * 
-	 * @param method original method
-	 * @param model class of the model
-	 * @param params given parameters
-	 * @param driverProvider 
-	 * @return resulting object
-	 */
-	Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming);
+  /**
+   * Gets the underlying annotation
+   * 
+   * @return annotation
+   */
+  T getAnnotation();
+
+  /**
+   * Executes the method internally
+   * 
+   * @param method
+   *          original method
+   * @param model
+   *          class of the model
+   * @param params
+   *          given parameters
+   * @param driverProvider
+   * @return resulting object
+   */
+  Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming);
 }

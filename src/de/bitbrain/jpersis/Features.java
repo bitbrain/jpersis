@@ -14,14 +14,15 @@
  */
 package de.bitbrain.jpersis;
 
+import de.bitbrain.jpersis.util.PropertiesCache;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
- * Manages features for jpersis internally. This class is marked as package
- * private for internal usage only.
+ * Manages features for jpersis internally. This class is marked as package private for internal usage only.
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -29,51 +30,21 @@ import java.util.Properties;
  */
 class Features {
 
-	static final String FILE = "features";
-	private static final String DEV = "-developer";
-	private static final String EXT = ".properties";
+  static final String FILE = "features";
 
-	private Properties properties;
+  private PropertiesCache cache;
 
-	Features() {
-		properties = new Properties();
-		try {
-			loadProperties(FILE + EXT);
-			loadProperties(FILE + DEV + EXT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  Features() {
+    cache = new PropertiesCache("features");
+  }
 
-	boolean isEnabled(Feature feature) {
-		String val = properties.getProperty(feature.name().toLowerCase(),
-				"false");
-		return val.equals("true");
-	}
+  boolean isEnabled(Feature feature) {
+    String val = cache.getProperty(feature.name().toLowerCase(), "false");
+    return val.equals("true");
+  }
 
-	private void loadProperties(String path) throws IOException {
-		Properties tmp = new Properties();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream stream = loader.getResourceAsStream(path);
-		try {
-			if (stream != null) {
-				tmp.load(stream);
-
-				for (Entry<Object, Object> entry : tmp.entrySet()) {
-					properties.setProperty((String) entry.getKey(),
-							(String) entry.getValue());
-				}
-			} else {
-				return;
-			}
-		} finally {
-			if (stream != null) {
-				stream.close();
-			}
-		}
-	}
-
-	enum Feature {
-		MYSQL;
-	}
+  public enum Feature {
+    MYSQL,
+    POSTGRESQL;
+  }
 }

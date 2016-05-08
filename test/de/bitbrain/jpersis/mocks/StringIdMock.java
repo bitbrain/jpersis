@@ -25,84 +25,82 @@ import de.bitbrain.jpersis.annotations.PrimaryKey;
  * @version 1.1
  */
 public class StringIdMock {
-	
-	static String TEST = "TEST1";
-	
-	static String TEST2 = "TEST2";
 
-	@PrimaryKey
-	private String id;
+  static String TEST = "TEST1";
 
-	private String name;
+  static String TEST2 = "TEST2";
 
-	private TestEnum enumTest = TestEnum.TEST1;
-	
-	public StringIdMock() {
-		
-	}
-	
-	public StringIdMock(String id) {
-		this.id = id;
-	}
+  @PrimaryKey
+  private String id;
 
-	public String getId() {
-		return id;
-	}
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  private TestEnum enumTest = TestEnum.TEST1;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public StringIdMock() {
 
-	public TestEnum getEnumTest() {
-		return enumTest;
-	}
-	
-	public void setEnumTest(TestEnum enumTest) {
-		this.enumTest = enumTest;
-	}
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public StringIdMock(String id) {
+    this.id = id;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((enumTest == null) ? 0 : enumTest.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
+  public String getId() {
+    return id;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		StringIdMock other = (StringIdMock) obj;
-		if (enumTest != other.enumTest)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-	
-	
+  public String getName() {
+    return name;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public TestEnum getEnumTest() {
+    return enumTest;
+  }
+
+  public void setEnumTest(TestEnum enumTest) {
+    this.enumTest = enumTest;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((enumTest == null) ? 0 : enumTest.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    StringIdMock other = (StringIdMock) obj;
+    if (enumTest != other.enumTest)
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
+  }
+
 }

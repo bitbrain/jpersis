@@ -33,7 +33,7 @@ import de.bitbrain.jpersis.util.Naming;
  * @version 1.0
  */
 public class SQLiteDriver extends JDBCDriver {
-  
+
   private String path;
 
   public SQLiteDriver(String file) {
@@ -45,7 +45,7 @@ public class SQLiteDriver extends JDBCDriver {
   protected String getURL(String host, String port, String database) {
     return null;
   }
-  
+
   @Override
   protected Query createQuery(Class<?> model, Naming naming) {
     return new SQLiteQuery(model, naming, statement);
@@ -64,7 +64,12 @@ public class SQLiteDriver extends JDBCDriver {
       throw new JPersisException(e);
     }
   }
-  
+
+  @Override
+  protected boolean generateKeyUpdateSupported() {
+    return false;
+  }
+
   private void ensureFile() {
     File file = new File(path);
     try {

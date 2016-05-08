@@ -44,84 +44,84 @@ import de.bitbrain.jpersis.util.NamingProvider;
  * @version 1.0
  */
 public final class JPersis {
-	
-	private MapperManager manager;
-	
-	private MethodPool pool;
-	
-	private Naming naming = Naming.DEFAULT;
 
-	/**
-	 * Constructor for a new JPersis object
-	 * 
-	 * @param driver database driver
-	 */
-	public JPersis(Driver driver) {
-		pool = new MethodPool();
-		manager = new SimpleMapperManager(driver, new MethodFactory(pool), new NamingProvider() {
+  private MapperManager manager;
+
+  private MethodPool pool;
+
+  private Naming naming = Naming.DEFAULT;
+
+  /**
+   * Constructor for a new JPersis object
+   * 
+   * @param driver
+   *          database driver
+   */
+  public JPersis(Driver driver) {
+    pool = new MethodPool();
+    manager = new SimpleMapperManager(driver, new MethodFactory(pool), new NamingProvider() {
       @Override
       public Naming getNaming() {
         return naming;
-      }		  
-		});
-		initDefaults();
-	}
+      }
+    });
+    initDefaults();
+  }
 
-	/**
-	 * Provides data mappers for further usage. If the given class is not
-	 * annotated with {@see Mapper} or the model of the mapper can not be found,
-	 * an {@see JPersisException} is thrown.
-	 * 
-	 * @param mapper
-	 *            given class or interface of a mapper
-	 * @return mapper instance of the given class or interface
-	 */
-	public <T> T map(Class<T> mapper) {
-		validate(mapper);
-		if (!manager.contains(mapper)) {
-			manager.add(mapper);
-		}
-		return manager.get(mapper);
-	}
-	
-	public void setNaming(Naming naming) {
-	  this.naming = naming;
-	}
+  /**
+   * Provides data mappers for further usage. If the given class is not annotated with {@see Mapper} or the model of the
+   * mapper can not be found, an {@see JPersisException} is thrown.
+   * 
+   * @param mapper
+   *          given class or interface of a mapper
+   * @return mapper instance of the given class or interface
+   */
+  public <T> T map(Class<T> mapper) {
+    validate(mapper);
+    if (!manager.contains(mapper)) {
+      manager.add(mapper);
+    }
+    return manager.get(mapper);
+  }
 
-	/**
-	 * Sets a new database driver. This method clears the current context and
-	 * all associated models.
-	 * 
-	 * @param driver
-	 *            database driver
-	 */
-	public void setDriver(Driver driver) {
-		manager.setDriver(driver);
-	}
-	
-	/**
-	 * Register a custom method and annotation
-	 * 
-	 * @param annotation target expected annotation
-	 * @param method 
-	 */
-	public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?> > method) {
-		pool.register(annotation, method);
-	}
-	
-	private void initDefaults() {
-		register(Select.class, SelectMethod.class);
-		register(Count.class, CountMethod.class);
-		register(Insert.class, InsertMethod.class);
-		register(Update.class, UpdateMethod.class);
-		register(Delete.class, DeleteMethod.class);
-	}
+  public void setNaming(Naming naming) {
+    this.naming = naming;
+  }
 
-	private void validate(Class<?> mapper) {
-		if (!mapper.isInterface()) {
-			throw new JPersisException("Only interfaces can be a Mapper");
-		} else if (mapper.getAnnotation(Mapper.class) == null) {
-			throw new JPersisException(mapper + " must be annotated with Mapper annotation.");
-		}
-	}
+  /**
+   * Sets a new database driver. This method clears the current context and all associated models.
+   * 
+   * @param driver
+   *          database driver
+   */
+  public void setDriver(Driver driver) {
+    manager.setDriver(driver);
+  }
+
+  /**
+   * Register a custom method and annotation
+   * 
+   * @param annotation
+   *          target expected annotation
+   * @param method
+   */
+  public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?>> method) {
+    pool.register(annotation, method);
+  }
+
+  private void initDefaults() {
+    register(Select.class, SelectMethod.class);
+    register(Count.class, CountMethod.class);
+    register(Insert.class, InsertMethod.class);
+    register(Update.class, UpdateMethod.class);
+    register(Delete.class, DeleteMethod.class);
+  }
+
+  private void validate(Class<?> mapper) {
+    if (!mapper.isInterface()) {
+      throw new JPersisException("Only interfaces can be a Mapper");
+    } else if (mapper.getAnnotation(Mapper.class) == null) {
+      throw new JPersisException(mapper + " must be annotated with Mapper annotation.");
+    }
+  }
 }

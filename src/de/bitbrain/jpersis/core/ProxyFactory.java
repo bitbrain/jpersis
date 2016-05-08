@@ -30,43 +30,45 @@ import de.bitbrain.jpersis.util.NamingProvider;
  * @version 1.0
  */
 public class ProxyFactory<T> {
-	
-	private MethodFactory factory;
-	
-	private Class<T> mapper;
-	
-	private DriverProvider driverProvider;
-	
-	private NamingProvider namingProvider;
-	
-	public ProxyFactory(Class<T> mapper, DriverProvider driverProvider, MethodFactory factory, NamingProvider namingProvider) {
-		this.factory = factory;
-		this.mapper = mapper;
-		this.driverProvider = driverProvider;
-		this.namingProvider = namingProvider;
-	}
-	
-	private Class<?> getModelClass(Class<?> mapperClass) {
-		for (Annotation a : mapperClass.getAnnotations()) {
-			if (a.annotationType().equals(Mapper.class)) {
-				Mapper m = (Mapper)a;
-				try {					
-					return Class.forName(m.value());
-				} catch (ClassNotFoundException e) {
-					throw new JPersisException(" Could not find model: " + m.value());
-				}
-			}
-		}
-		throw new JPersisException("Could not retrieve model for " + mapperClass);
-	}
-	
-	public T create() {
-		final Proxy<T> mapperProxy = new Proxy<T>(getModelClass(mapper), driverProvider, factory, namingProvider.getNaming());
-        return newInstance(mapperProxy);
-    }
 
-    @SuppressWarnings("unchecked")
-	protected T newInstance(Proxy<T> mapperProxy) {
-        return (T) java.lang.reflect.Proxy.newProxyInstance(mapper.getClassLoader(), new Class[]{mapper}, mapperProxy);
+  private MethodFactory factory;
+
+  private Class<T> mapper;
+
+  private DriverProvider driverProvider;
+
+  private NamingProvider namingProvider;
+
+  public ProxyFactory(Class<T> mapper, DriverProvider driverProvider, MethodFactory factory,
+      NamingProvider namingProvider) {
+    this.factory = factory;
+    this.mapper = mapper;
+    this.driverProvider = driverProvider;
+    this.namingProvider = namingProvider;
+  }
+
+  private Class<?> getModelClass(Class<?> mapperClass) {
+    for (Annotation a : mapperClass.getAnnotations()) {
+      if (a.annotationType().equals(Mapper.class)) {
+        Mapper m = (Mapper) a;
+        try {
+          return Class.forName(m.value());
+        } catch (ClassNotFoundException e) {
+          throw new JPersisException(" Could not find model: " + m.value());
+        }
+      }
     }
+    throw new JPersisException("Could not retrieve model for " + mapperClass);
+  }
+
+  public T create() {
+    final Proxy<T> mapperProxy =
+        new Proxy<T>(getModelClass(mapper), driverProvider, factory, namingProvider.getNaming());
+    return newInstance(mapperProxy);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected T newInstance(Proxy<T> mapperProxy) {
+    return (T) java.lang.reflect.Proxy.newProxyInstance(mapper.getClassLoader(), new Class[] { mapper }, mapperProxy);
+  }
 }

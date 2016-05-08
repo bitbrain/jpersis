@@ -20,10 +20,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Selects all models which fit to the given condition. 
+ * Selects all models which fit to the given condition.
  * 
- * <p><b>Interface Method Signature:</b></p>
- * <p><code>[Model][Collection&lt;Model&gt;] methodName();</code></p>
+ * <p>
+ * <b>Interface Method Signature:</b>
+ * </p>
+ * <p>
+ * <code>[Model][Collection&lt;Model&gt;] methodName();</code>
+ * </p>
  *
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -32,5 +36,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Select {
-    String condition() default "";
+  String condition() default "";
 }

@@ -14,7 +14,6 @@
  */
 package de.bitbrain.jpersis.util;
 
-
 /**
  * JPersis main class which provides mapper creation and database interaction
  *
@@ -42,7 +41,7 @@ public interface Naming {
    * @return
    */
   public String javaToCollection(String name);
-  
+
   /**
    * 
    * 

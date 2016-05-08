@@ -15,12 +15,18 @@
 
 package de.bitbrain.jpersis;
 
-import static de.bitbrain.jpersis.TravisCI.MYSQL_DATABASE;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_HOST;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PASSWORD;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_PORT;
-import static de.bitbrain.jpersis.TravisCI.MYSQL_USERNAME;
-import static org.junit.Assert.*;
+import static de.bitbrain.jpersis.Connections.MYSQL_DATABASE;
+import static de.bitbrain.jpersis.Connections.MYSQL_HOST;
+import static de.bitbrain.jpersis.Connections.MYSQL_PASSWORD;
+import static de.bitbrain.jpersis.Connections.MYSQL_PORT;
+import static de.bitbrain.jpersis.Connections.MYSQL_USERNAME;
+import static de.bitbrain.jpersis.Connections.POSTGRES_DATABASE;
+import static de.bitbrain.jpersis.Connections.POSTGRES_HOST;
+import static de.bitbrain.jpersis.Connections.POSTGRES_PASSWORD;
+import static de.bitbrain.jpersis.Connections.POSTGRES_PORT;
+import static de.bitbrain.jpersis.Connections.POSTGRES_USERNAME;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,10 +41,10 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import de.bitbrain.jpersis.Features.Feature;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
+import de.bitbrain.jpersis.drivers.postgresql.PostgreSQLDriver;
 import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.EnumIdMapperMock;
 import de.bitbrain.jpersis.mocks.EnumIdMock;
@@ -53,288 +59,248 @@ import de.bitbrain.jpersis.mocks.TestEnum;
 @RunWith(value = Parameterized.class)
 public class JPersisTest {
 
-	static final String DB = "temp.sql";
+  static final String DB = "temp.sql";
 
-	JPersis manager;
+  JPersis manager;
 
-	MapperMock mapper;
+  MapperMock mapper;
 
-	MinimalMapperMock minimalMapper;
+  MinimalMapperMock minimalMapper;
 
-	StringIdMapperMock stringMapper;
+  StringIdMapperMock stringMapper;
 
-	EnumIdMapperMock enumMapper;
+  EnumIdMapperMock enumMapper;
 
-	@Parameter
-	public Driver driver;
+  @Parameter
+  public Driver driver;
 
-	@Parameters
-	public static Collection<Driver[]> getParams() {
-		Features features = new Features();
-		List<Driver[]> infos = new ArrayList<Driver[]>();
-		infos.add(new Driver[] { new SQLiteDriver(DB) });
-		if (features.isEnabled(Feature.MYSQL)) {
-			infos.add(new Driver[] { new MySQLDriver(MYSQL_HOST, MYSQL_PORT,
-					MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD) });
-		}
-		return infos;
-	}
+  @Parameters
+  public static Collection<Driver[]> getParams() {
+    Features features = new Features();
+    List<Driver[]> infos = new ArrayList<Driver[]>();
+    infos.add(new Driver[] { new SQLiteDriver(DB) });
+    if (features.isEnabled(Features.Feature.MYSQL)) {
+        infos.add(new Driver[] { new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD) });
+    }
+    if (features.isEnabled(Features.Feature.POSTGRESQL)) {
+    infos.add(new Driver[] { new PostgreSQLDriver(POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DATABASE, POSTGRES_USERNAME,
+        POSTGRES_PASSWORD) });
+    }
+    return infos;
+  }
 
-	@Before
-	public void beforeTest() throws IOException {
-		manager = new JPersis(driver);
-		mapper = manager.map(MapperMock.class);
-		minimalMapper = manager.map(MinimalMapperMock.class);
-		stringMapper = manager.map(StringIdMapperMock.class);
-		enumMapper = manager.map(EnumIdMapperMock.class);
-		dropData();
-	}
+  @Before
+  public void beforeTest() throws IOException {
+    manager = new JPersis(driver);
+    mapper = manager.map(MapperMock.class);
+    minimalMapper = manager.map(MinimalMapperMock.class);
+    stringMapper = manager.map(StringIdMapperMock.class);
+    enumMapper = manager.map(EnumIdMapperMock.class);
+    dropData();
+  }
 
-	@After
-	public void afterTest() throws DriverException {
-		dropData();
-	}
+  @After
+  public void afterTest() throws DriverException {
+    dropData();
+  }
 
-	@Test
-	public void testInsert() {
-		final int RUNS = 5;
-		boolean firstKey = true;
-		int expected = 1;
-		for (int i = 0; i < RUNS; ++i) {
-			ModelMock m = new ModelMock();
-			m.setName("Max");
-			m.setLastName("Mustermann");
-			assertTrue("It should be possible to insert element nr" + i,
-					mapper.insert(m));
-			if (firstKey) {
-				expected = m.getId();
-			}
-			assertTrue("There should be " + (i + 1) + " elements.",
-					mapper.count() == (i + 1));
-			assertTrue(
-					"Primary key should be " + expected + " instead of "
-							+ m.getId(), m.getId() == expected);
+  @Test
+  public void testInsert() {
+    final int RUNS = 5;
+    boolean firstKey = true;
+    int expected = 1;
+    for (int i = 0; i < RUNS; ++i) {
+      ModelMock m = new ModelMock();
+      m.setName("Max");
+      m.setLastName("Mustermann");
+      assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
+      if (firstKey) {
+        firstKey = false;
+        expected = m.getId();
+      }
+      assertTrue("There should be " + (i + 1) + " elements.", mapper.count() == (i + 1));
+      assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
+      expected = m.getId() + 1;
+    }
 
-			if (firstKey) {
-				firstKey = false;
-			}
-			expected = m.getId() + 1;
-		}
+    firstKey = true;
+    for (int i = 0; i < RUNS; ++i) {
+      MinimalMock m = new MinimalMock();
+      m.setName("Meh");
+      assertTrue("It should be possible to insert element nr" + i, minimalMapper.insert(m));
+      if (firstKey) {
+        firstKey = false;
+        expected = m.getId();
+      }
+      assertTrue("There should be " + (i + 1) + " elements.", minimalMapper.count() == (i + 1));
+      assertTrue("Primary key should be " + expected + " instead of " + m.getId(), m.getId() == expected);
+      expected = m.getId() + 1;
+    }
 
-		firstKey = true;
-		for (int i = 0; i < RUNS; ++i) {
-			MinimalMock m = new MinimalMock();
-			m.setName("Meh");
-			assertTrue("It should be possible to insert element nr" + i,
-					minimalMapper.insert(m));
-			if (firstKey) {
-				expected = m.getId();
-			}
-			assertTrue("There should be " + (i + 1) + " elements.",
-					minimalMapper.count() == (i + 1));
-			assertTrue(
-					"Primary key should be " + expected + " instead of "
-							+ m.getId(), m.getId() == expected);
-			if (firstKey) {
-				firstKey = false;
-			}
-			expected = m.getId() + 1;
-		}
+    for (int i = 0; i < RUNS; ++i) {
+      StringIdMock m = new StringIdMock("id_" + i);
+      m.setName("Meh");
+      assertTrue("It should be possible to insert element nr" + i, stringMapper.insert(m));
+      assertTrue("There should be " + (i + 1) + " elements.", stringMapper.count() == (i + 1));
+      assertTrue("Primary key should be id_" + i + " instead of " + m.getId(), m.getId().equals("id_" + i));
+    }
 
-		for (int i = 0; i < RUNS; ++i) {
-			StringIdMock m = new StringIdMock("id_" + i);
-			m.setName("Meh");
-			assertTrue("It should be possible to insert element nr" + i,
-					stringMapper.insert(m));
-			assertTrue("There should be " + (i + 1) + " elements.",
-					stringMapper.count() == (i + 1));
-			assertTrue(
-					"Primary key should be id_" + i + " instead of "
-							+ m.getId(), m.getId().equals("id_" + i));
-		}
+    TestEnum[] enums = TestEnum.values();
+    for (int i = 0; i < enums.length; i++) {
+      TestEnum id = enums[i];
+      EnumIdMock m = new EnumIdMock(id);
+      m.setName("Meh");
+      assertTrue("It should be possible to insert element " + id, enumMapper.insert(m));
+      int amount = enumMapper.count();
+      assertTrue("There should be " + (i + 1) + " elements instead of " + amount, amount == (i + 1));
+      assertTrue("Primary key should be " + id + " instead of " + m.getId(), m.getId().equals(id));
+    }
+  }
 
-		TestEnum[] enums = TestEnum.values();
-		for (int i = 0; i < enums.length; i++) {
-			TestEnum id = enums[i];
-			EnumIdMock m = new EnumIdMock(id);
-			m.setName("Meh");
-			assertTrue("It should be possible to insert element " + id,
-					enumMapper.insert(m));
-			int amount = enumMapper.count();
-			assertTrue("There should be " + (i + 1) + " elements instead of "
-					+ amount, amount == (i + 1));
-			assertTrue(
-					"Primary key should be " + id + " instead of " + m.getId(),
-					m.getId().equals(id));
-		}
-	}
+  @Test
+  public void testInsertCollection() {
 
-	@Test
-	public void testInsertCollection() {
+    final int AMOUNT = 10;
 
-		final int AMOUNT = 10;
+    List<ModelMock> mocks = new ArrayList<ModelMock>();
 
-		List<ModelMock> mocks = new ArrayList<ModelMock>();
+    for (int i = 0; i < AMOUNT; ++i) {
+      ModelMock m = new ModelMock();
+      m.setName("Hans" + i);
+      m.setLastName("ImGlueck" + i);
+      mocks.add(m);
+    }
+    mapper.insert(mocks);
 
-		for (int i = 0; i < AMOUNT; ++i) {
-			ModelMock m = new ModelMock();
-			m.setName("Hans" + i);
-			m.setLastName("ImGlueck" + i);
-			mocks.add(m);
-		}
-		mapper.insert(mocks);
+    Collection<ModelMock> dbMocks = mapper.findAll();
+    assertTrue("There should be the same amount as inserted", dbMocks.size() == AMOUNT);
 
-		Collection<ModelMock> dbMocks = mapper.findAll();
-		assertTrue("There should be the same amount as inserted",
-				dbMocks.size() == AMOUNT);
+    int i = 0;
+    for (ModelMock m : dbMocks) {
+      assertTrue("The name should be Hans" + i, m.getName().equals("Hans" + i));
+      assertTrue("The last name should be ImGlueck" + i, m.getLastName().equals("ImGlueck" + i));
+      i++;
+    }
+  }
 
-		int i = 0;
-		for (ModelMock m : dbMocks) {
-			assertTrue("The name should be Hans" + i,
-					m.getName().equals("Hans" + i));
-			assertTrue("The last name should be ImGlueck" + i, m.getLastName()
-					.equals("ImGlueck" + i));
-			i++;
-		}
-	}
+  @Test
+  public void testUpdate() {
+    ModelMock m1 = new ModelMock();
+    m1.setName("Hans");
+    m1.setLastName("Kramer");
+    mapper.insert(m1);
+    m1.setName("Wilfred");
+    mapper.update(m1);
+    ModelMock updated = mapper.findById(m1.getId());
+    assertTrue("It should not be null", updated != null);
+    assertTrue("It should have the same ID", updated.getId() == m1.getId());
+    assertTrue("Old and new object should be the same", m1.equals(updated));
+    assertTrue("It should be an updated name instead of " + updated.getName(), "Wilfred".equals(updated.getName()));
 
-	@Test
-	public void testUpdate() {
-		ModelMock m1 = new ModelMock();
-		m1.setName("Hans");
-		m1.setLastName("Kramer");
-		mapper.insert(m1);
-		m1.setName("Wilfred");
-		mapper.update(m1);
-		ModelMock updated = mapper.findById(m1.getId());
-		assertTrue("It should not be null", updated != null);
-		assertTrue("It should have the same ID", updated.getId() == m1.getId());
-		assertTrue("Old and new object should be the same", m1.equals(updated));
-		assertTrue(
-				"It should be an updated name instead of " + updated.getName(),
-				"Wilfred".equals(updated.getName()));
+    StringIdMock m2 = new StringIdMock("test");
+    m2.setName("Hans");
+    stringMapper.insert(m2);
+    m2.setName("Wilfred");
+    stringMapper.update(m2);
+    StringIdMock updated2 = stringMapper.findById(m2.getId());
+    assertTrue("It should not be null", updated2 != null);
+    assertTrue("It should have the same ID", updated2.getId().equals(m2.getId()));
+    assertTrue("Old and new object should be the same", m2.equals(updated2));
+    assertTrue("It should be an updated name instead of " + updated2.getName(), "Wilfred".equals(updated2.getName()));
 
-		StringIdMock m2 = new StringIdMock("test");
-		m2.setName("Hans");
-		stringMapper.insert(m2);
-		m2.setName("Wilfred");
-		stringMapper.update(m2);
-		StringIdMock updated2 = stringMapper.findById(m2.getId());
-		assertTrue("It should not be null", updated2 != null);
-		assertTrue("It should have the same ID",
-				updated2.getId().equals(m2.getId()));
-		assertTrue("Old and new object should be the same", m2.equals(updated2));
-		assertTrue(
-				"It should be an updated name instead of " + updated2.getName(),
-				"Wilfred".equals(updated2.getName()));
+    EnumIdMock m3 = new EnumIdMock(TestEnum.TEST1);
+    m3.setName("Hans");
+    enumMapper.insert(m3);
+    m3.setName("Wilfred");
+    enumMapper.update(m3);
+    EnumIdMock updated3 = enumMapper.findById(m3.getId());
+    assertTrue("It should not be null", updated3 != null);
+    assertTrue("It should have the same ID", updated3.getId().equals(m3.getId()));
+    assertTrue("Old and new object should be the same", m3.equals(updated3));
+    assertTrue("It should be an updated name instead of " + updated3.getName(), "Wilfred".equals(updated3.getName()));
 
-		EnumIdMock m3 = new EnumIdMock(TestEnum.TEST1);
-		m3.setName("Hans");
-		enumMapper.insert(m3);
-		m3.setName("Wilfred");
-		enumMapper.update(m3);
-		EnumIdMock updated3 = enumMapper.findById(m3.getId());
-		assertTrue("It should not be null", updated3 != null);
-		assertTrue("It should have the same ID",
-				updated3.getId().equals(m3.getId()));
-		assertTrue("Old and new object should be the same", m3.equals(updated3));
-		assertTrue(
-				"It should be an updated name instead of " + updated3.getName(),
-				"Wilfred".equals(updated3.getName()));
+  }
 
-	}
+  @Test
+  public void testDelete() {
+    final int RUNS = 5;
+    int[] ids = new int[RUNS];
+    for (int i = 0; i < RUNS; ++i) {
+      ModelMock m = new ModelMock();
+      m.setName("Max");
+      m.setLastName("Mustermann");
+      assertTrue("It should be possible to insert element nr" + i, mapper.insert(m));
+      ids[i] = m.getId();
+    }
+    for (int i = 0; i < RUNS; ++i) {
+      ModelMock m = mapper.findById(ids[i]);
+      assertTrue("ModelMock should be there", m != null);
+      assertTrue("It should be possible to delete object nr" + i, mapper.delete(m));
+      assertTrue("There should be " + (RUNS - (i + 1)) + " elements.", mapper.count() == (RUNS - (i + 1)));
+    }
+    for (int i = 0; i < RUNS; ++i) {
+      StringIdMock m = new StringIdMock("id_" + i);
+      m.setName("Max");
+      assertTrue("It should be possible to insert element nr" + i, stringMapper.insert(m));
+      assertTrue("There should be " + (i + 1) + " elements instead of " + stringMapper.count(),
+          stringMapper.count() == 1);
+      assertTrue("It should be possible to delete object nr" + i + " with id " + m.getId(), stringMapper.delete(m));
+      assertTrue("There should be " + (i + 1) + " elements.", stringMapper.count() == 0);
+    }
+    TestEnum[] enums = TestEnum.values();
+    for (int i = 0; i < enums.length; ++i) {
+      TestEnum id = enums[i];
+      EnumIdMock m = new EnumIdMock(id);
+      m.setName("Max");
+      assertTrue("It should be possible to insert element nr" + i, enumMapper.insert(m));
+      assertTrue("There should be " + (i + 1) + " elements instead of " + enumMapper.count(), enumMapper.count() == 1);
+      assertTrue("It should be possible to delete object nr" + i + " with id " + m.getId(), enumMapper.delete(m));
+      assertTrue("There should be " + (i + 1) + " elements.", enumMapper.count() == 0);
+    }
+  }
 
-	@Test
-	public void testDelete() {
-		final int RUNS = 5;
-		int[] ids = new int[RUNS];
-		for (int i = 0; i < RUNS; ++i) {
-			ModelMock m = new ModelMock();
-			m.setName("Max");
-			m.setLastName("Mustermann");
-			assertTrue("It should be possible to insert element nr" + i,
-					mapper.insert(m));
-			ids[i] = m.getId();
-		}
-		for (int i = 0; i < RUNS; ++i) {
-			ModelMock m = mapper.findById(ids[i]);
-			assertTrue("ModelMock should be there", m != null);
-			assertTrue("It should be possible to delete object nr" + i,
-					mapper.delete(m));
-			assertTrue("There should be " + (RUNS - (i + 1)) + " elements.",
-					mapper.count() == (RUNS - (i + 1)));
-		}
-		for (int i = 0; i < RUNS; ++i) {
-			StringIdMock m = new StringIdMock("id_" + i);
-			m.setName("Max");
-			assertTrue("It should be possible to insert element nr" + i,
-					stringMapper.insert(m));
-			assertTrue("There should be " + (i + 1) + " elements instead of "
-					+ stringMapper.count(), stringMapper.count() == 1);
-			assertTrue("It should be possible to delete object nr" + i
-					+ " with id " + m.getId(), stringMapper.delete(m));
-			assertTrue("There should be " + (i + 1) + " elements.",
-					stringMapper.count() == 0);
-		}
-		TestEnum[] enums = TestEnum.values();
-		for (int i = 0; i < enums.length; ++i) {
-			TestEnum id = enums[i];
-			EnumIdMock m = new EnumIdMock(id);
-			m.setName("Max");
-			assertTrue("It should be possible to insert element nr" + i,
-					enumMapper.insert(m));
-			assertTrue("There should be " + (i + 1) + " elements instead of "
-					+ enumMapper.count(), enumMapper.count() == 1);
-			assertTrue("It should be possible to delete object nr" + i
-					+ " with id " + m.getId(), enumMapper.delete(m));
-			assertTrue("There should be " + (i + 1) + " elements.",
-					enumMapper.count() == 0);
-		}
-	}
+  @Test
+  public void testFindById() {
+    final int RUNS = 5;
+    for (int i = 0; i < RUNS; ++i) {
+      ModelMock m = new ModelMock();
+      m.setName("Max");
+      m.setLastName("Mustermann");
+      mapper.insert(m);
+    }
+    Collection<ModelMock> mocks = mapper.findAll();
+    assertTrue("There are not enough mocks to find", mocks.size() == RUNS);
+    for (ModelMock m : mocks) {
+      ModelMock found = mapper.findById(m.getId());
+      assertTrue("The objects should be the same", m.equals(found));
+    }
 
-	@Test
-	public void testFindById() {
-		final int RUNS = 5;
-		for (int i = 0; i < RUNS; ++i) {
-			ModelMock m = new ModelMock();
-			m.setName("Max");
-			m.setLastName("Mustermann");
-			mapper.insert(m);
-		}
-		Collection<ModelMock> mocks = mapper.findAll();
-		assertTrue("There are not enough mocks to find", mocks.size() == RUNS);
-		for (ModelMock m : mocks) {
-			ModelMock found = mapper.findById(m.getId());
-			assertTrue("The objects should be the same", m.equals(found));
-		}
+    for (int i = 0; i < RUNS; ++i) {
+      StringIdMock m = new StringIdMock("id_" + i);
+      m.setName("Max");
+      stringMapper.insert(m);
+    }
+    Collection<StringIdMock> mocks2 = stringMapper.findAll();
+    assertTrue("There are not enough mocks to find", mocks2.size() == RUNS);
+    for (StringIdMock m : mocks2) {
+      StringIdMock found = stringMapper.findById(m.getId());
+      assertTrue("The objects should be the same", m.equals(found));
+    }
 
-		for (int i = 0; i < RUNS; ++i) {
-			StringIdMock m = new StringIdMock("id_" + i);
-			m.setName("Max");
-			stringMapper.insert(m);
-		}
-		Collection<StringIdMock> mocks2 = stringMapper.findAll();
-		assertTrue("There are not enough mocks to find", mocks2.size() == RUNS);
-		for (StringIdMock m : mocks2) {
-			StringIdMock found = stringMapper.findById(m.getId());
-			assertTrue("The objects should be the same", m.equals(found));
-		}
+    for (TestEnum id : TestEnum.values()) {
+      EnumIdMock m = new EnumIdMock(id);
+      m.setName("Max");
+      enumMapper.insert(m);
+    }
+    Collection<EnumIdMock> mocks3 = enumMapper.findAll();
+    assertTrue("There are not enough mocks to find", mocks3.size() == TestEnum.values().length);
+    for (EnumIdMock m : mocks3) {
+      EnumIdMock found = enumMapper.findById(m.getId());
+      assertTrue("The objects should be the same", m.equals(found));
+    }
+  }
 
-		for (TestEnum id : TestEnum.values()) {
-			EnumIdMock m = new EnumIdMock(id);
-			m.setName("Max");
-			enumMapper.insert(m);
-		}
-		Collection<EnumIdMock> mocks3 = enumMapper.findAll();
-		assertTrue("There are not enough mocks to find",
-				mocks3.size() == TestEnum.values().length);
-		for (EnumIdMock m : mocks3) {
-			EnumIdMock found = enumMapper.findById(m.getId());
-			assertTrue("The objects should be the same", m.equals(found));
-		}
-	}
-
-	@Test
+  @Test
   public void testFindAll() {
     for (int i = 0; i < 5; i++) {
       ModelMock m = new ModelMock();
@@ -362,26 +328,26 @@ public class JPersisTest {
 
     Collection<ModelMock> mocks3 = mapper.findAllByName("Sebastian");
     assertTrue("There are not enough models3 -> " + mocks3.size(), mocks3.size() == 7);
-  
+
     for (TestEnum id : TestEnum.values()) {
-        EnumIdMock m = new EnumIdMock();
-        m.setName("Sebastian");
-        m.setId(id);
-        enumMapper.insert(m);
+      EnumIdMock m = new EnumIdMock();
+      m.setName("Sebastian");
+      m.setId(id);
+      enumMapper.insert(m);
     }
-    
+
     Collection<EnumIdMock> enumMocks = enumMapper.findAllByName("Sebastian");
     assertEquals(enumMocks.size(), TestEnum.values().length);
   }
 
-	private void dropData() {
-		Collection<ModelMock> mocks = mapper.findAll();
-		mapper.delete(mocks);
-		Collection<MinimalMock> minimals = minimalMapper.findAll();
-		minimalMapper.delete(minimals);
-		Collection<StringIdMock> strings = stringMapper.findAll();
-		stringMapper.delete(strings);
-		Collection<EnumIdMock> enums = enumMapper.findAll();
-		enumMapper.delete(enums);
-	}
+  private void dropData() {
+    Collection<ModelMock> mocks = mapper.findAll();
+    mapper.delete(mocks);
+    Collection<MinimalMock> minimals = minimalMapper.findAll();
+    minimalMapper.delete(minimals);
+    Collection<StringIdMock> strings = stringMapper.findAll();
+    stringMapper.delete(strings);
+    Collection<EnumIdMock> enums = enumMapper.findAll();
+    enumMapper.delete(enums);
+  }
 }

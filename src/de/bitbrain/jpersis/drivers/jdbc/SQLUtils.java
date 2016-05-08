@@ -16,6 +16,10 @@ package de.bitbrain.jpersis.drivers.jdbc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,30 +52,71 @@ public final class SQLUtils {
     boolean primaryKeyFound = false;
     int index = 0;
     for (Field f : valids) {
-      boolean accessable = f.isAccessible();
+      boolean accessible = f.isAccessible();
       f.setAccessible(true);
-      String name = naming.javaToField(f.getName());
-      r += "`" + name + "` " + convertDatatype(f.getType(), slang);
       // Add primary key information
       PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      String name = naming.javaToField(f.getName());
+      if (pKey != null && pKey.value() && slang.isAutoIncrementTyped()) {
+        r += name + " " + slang.getAutoIncrement();
+      } else {
+        r += name + " " + convertDatatype(f.getType(), slang);
+      }
       if (pKey != null) {
         if (primaryKeyFound) {
           throw new JPersisException(model.getName() + " defines multiple primary keys!");
         }
         primaryKeyFound = true;
+        if (!slang.getPrimaryKey().isEmpty()) {
+          r += " " + slang.getPrimaryKey();
+        }
         if (pKey.value()) {
-          r += " " + SQL.PRIMARY_KEY + " " + slang.getAutoIncrement();
+          if (!slang.getAutoIncrement().isEmpty() && !slang.isAutoIncrementTyped()) {
+            r += " " + slang.getAutoIncrement();
+          }
         }
       }
       if (index++ < valids.size() - 1) {
-        r += ",";
+        r += ", ";
       }
-      f.setAccessible(accessable);
+      f.setAccessible(accessible);
     }
     if (!primaryKeyFound) {
       throw new JPersisException(model.getName() + " does not define a primary key");
     }
     return r + ")";
+  }
+
+  public static String extractPrimaryKey(Class<?> model, Naming naming) {
+    List<Field> valids = getValidFields(model, false);
+    for (Field f : valids) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      if (pKey != null) {
+        String pkField = naming.javaToField(f.getName());
+        f.setAccessible(accessable);
+        return pkField;
+      }
+      f.setAccessible(accessable);
+    }
+    return null;
+  }
+
+  public static boolean hasAutoIncrement(Class<?> model, Naming naming) {
+    List<Field> valids = getValidFields(model, false);
+    for (Field f : valids) {
+      boolean accessable = f.isAccessible();
+      f.setAccessible(true);
+      PrimaryKey pKey = f.getAnnotation(PrimaryKey.class);
+      if (pKey != null) {
+        boolean autoIncrement = pKey.value();
+        f.setAccessible(accessable);
+        return autoIncrement;
+      }
+      f.setAccessible(accessable);
+    }
+    return false;
   }
 
   public static String generatePreparedConditionString(Object object, Naming naming) {
@@ -88,7 +133,7 @@ public final class SQLUtils {
         continue;
       }
       if (!f.isAnnotationPresent(PrimaryKey.class) || !f.getAnnotation(PrimaryKey.class).value()) {
-        condition += "`" + naming.javaToField(f.getName()) + "`=$" + (index++ + 1);
+        condition += " " + naming.javaToField(f.getName()) + " =$" + (index++ + 1);
         if (i < fields.length - 1) {
           condition += div;
         }
@@ -98,7 +143,7 @@ public final class SQLUtils {
   }
 
   public static String generatePrimaryKeyCondition(Field primaryKey, Naming naming) {
-    return "`" + naming.javaToField(primaryKey.getName()) + "`=$1";
+    return " " + naming.javaToField(primaryKey.getName()) + " =$1";
   }
 
   public static String convertDatatype(Class<?> type, Slang slang) {
@@ -130,7 +175,7 @@ public final class SQLUtils {
       return SQL.CHAR;
       // Class
     } else if (type.equals(Class.class)) {
-      return SQL.VARCHAR;
+      return SQL.VARCHAR + slang.getTypeRangeString();
     } else {
       throw new JPersisException("Type " + type.getName() + " is not supported by JPersis");
     }
@@ -154,11 +199,11 @@ public final class SQLUtils {
 
   public static String typeToString(Object o) {
     if (o instanceof String) {
-      return "\"" + (String) o + "\"";
+      return "'" + (String) o + "'";
     } else if (o instanceof Enum) {
-      return "\"" + ((Enum<?>) o).name() + "\"";
+      return "'" + ((Enum<?>) o).name() + "'";
     } else if (o instanceof Class) {
-      return "\"" + ((Class<?>) o).getName() + "\"";
+      return "'" + ((Class<?>) o).getName() + "'";
     } else
       return String.valueOf(o);
   }
@@ -169,13 +214,20 @@ public final class SQLUtils {
     List<Field> valids = getValidFields(o.getClass(), ignorePrimaryKey);
     int index = 0;
     for (Field f : valids) {
-      s += "`" + naming.javaToField(f.getName()) + "`";
+      s += " " + naming.javaToField(f.getName()) + " ";
       if (index++ < valids.size() - 1) {
         s += ",";
       }
     }
 
     return s + ")";
+  }
+
+  public static boolean tableExists(String name, Connection connection) throws SQLException {
+    DatabaseMetaData metadata = connection.getMetaData();
+    ResultSet resultSet;
+    resultSet = metadata.getTables(null, null, name, null);
+    return resultSet.next();
   }
 
   private static List<Field> getValidFields(Class<?> model, boolean ignorePrimaryKey) {

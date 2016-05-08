@@ -20,10 +20,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Counts number of models which fit to the condition. If condition
- * is not set, all elements are taken into account.
- * <p><b>Interface Method Signature:</b></p>
- * <p><code>int methodName();</code></p>
+ * Counts number of models which fit to the condition. If condition is not set, all elements are taken into account.
+ * <p>
+ * <b>Interface Method Signature:</b>
+ * </p>
+ * <p>
+ * <code>int methodName();</code>
+ * </p>
  * 
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  * @since 1.0
@@ -32,6 +35,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Count {
-    
-    String condition() default "";
+
+  String condition() default "";
 }

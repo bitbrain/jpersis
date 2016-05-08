@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Miguel Gonzalez
+ * Copyright 2015 Miguel Gonzalez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.jpersis.drivers.sqllite;
+
+package de.bitbrain.jpersis.drivers.postgresql;
 
 import java.sql.Statement;
 
 import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery;
-import de.bitbrain.jpersis.drivers.jdbc.SQL;
 import de.bitbrain.jpersis.util.Naming;
 
-public class SQLiteQuery extends JDBCQuery {
+public class PostgreSQLQuery extends JDBCQuery {
 
-  public SQLiteQuery(Class<?> model, Naming naming, Statement statement) {
+  public PostgreSQLQuery(Class<?> model, Naming naming, Statement statement) {
     super(model, naming, statement);
   }
 
@@ -31,8 +31,13 @@ public class SQLiteQuery extends JDBCQuery {
     return new Slang() {
 
       @Override
+      public boolean isAutoIncrementTyped() {
+        return true;
+      }
+
+      @Override
       public String getAutoIncrement() {
-        return SQL.AUTOINCREMENT_SQLITE;
+        return "SERIAL";
       }
 
       @Override
@@ -42,17 +47,12 @@ public class SQLiteQuery extends JDBCQuery {
 
       @Override
       public String getPrimaryKey() {
-        return SQL.PRIMARY_KEY;
-      }
-
-      @Override
-      public boolean isAutoIncrementTyped() {
-        return false;
+        return "PRIMARY KEY";
       }
 
       @Override
       public String getReturningOptional(String key) {
-        return "";
+        return " RETURNING " + key;
       }
     };
   }

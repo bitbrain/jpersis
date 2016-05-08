@@ -24,27 +24,28 @@ import de.bitbrain.jpersis.util.Naming;
  * @version 1.0
  */
 public interface Driver {
-	
+
   /**
    * Creates a new query compatible with this driver
    * 
-   * @param model model to create a query for
+   * @param model
+   *          model to create a query for
    * @return
    */
-	Query query(Class<?> model, Naming naming);
-	
-	/**
-	 * Connects this driver with the data source
-	 */
-	void connect() throws DriverException;
-	
-	/**
-	 * Closes this driver from the data source 
-	 */
-	void close() throws DriverException;
-	
-	/**
-	 * Commits the given query
-	 */
-	Object commit(Query query, Class<?> returnType, Object[] args, Class<?> model, Naming naming) throws DriverException;
+  Query query(Class<?> model, Naming naming);
+
+  /**
+   * Connects this driver with the data source
+   */
+  void connect() throws DriverException;
+
+  /**
+   * Closes this driver from the data source
+   */
+  void close() throws DriverException;
+
+  /**
+   * Commits the given query
+   */
+  Object commit(Query query, Class<?> returnType, Object[] args, Class<?> model, Naming naming) throws DriverException;
 }

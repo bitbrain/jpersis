@@ -28,34 +28,32 @@ import de.bitbrain.jpersis.drivers.Query;
  */
 public abstract class BasicMapperMethod<T extends Annotation> extends AbstractMapperMethod<T> {
 
-	public BasicMapperMethod(T annotation) {
-		super(annotation);
-	}
+  public BasicMapperMethod(T annotation) {
+    super(annotation);
+  }
 
-	@Override
-	public void on(Class<?> model, Object[] args, Query query) {
-		Object arg = args[0];		
-		if (arg.getClass().equals(model)) {
-			action(arg, query);
-		} else {
-			Collection<?> collection = (Collection<?>)arg;
-			for (Object o : collection) {
-				action(o, query);
-			}
-		}
-	}
-	
-	@Override
-	protected boolean validateArgs(Object[] args, Class<?> model) {
-		return args.length == 1 && 
-				(args[0].getClass().equals(Collection.class) 
-			 ||  args[0].getClass().equals(model));
-	}
-	
-	@Override
-	protected Class<?>[] supportedReturnTypes(Class<?> model) {
-		return new Class<?>[]{Boolean.class, boolean.class, void.class, Void.class};
-	}
-	
-	protected abstract void action(Object object, Query query);
+  @Override
+  public void on(Class<?> model, Object[] args, Query query) {
+    Object arg = args[0];
+    if (arg.getClass().equals(model)) {
+      action(arg, query);
+    } else {
+      Collection<?> collection = (Collection<?>) arg;
+      for (Object o : collection) {
+        action(o, query);
+      }
+    }
+  }
+
+  @Override
+  protected boolean validateArgs(Object[] args, Class<?> model) {
+    return args.length == 1 && (args[0].getClass().equals(Collection.class) || args[0].getClass().equals(model));
+  }
+
+  @Override
+  protected Class<?>[] supportedReturnTypes(Class<?> model) {
+    return new Class<?>[] { Boolean.class, boolean.class, void.class, Void.class };
+  }
+
+  protected abstract void action(Object object, Query query);
 }

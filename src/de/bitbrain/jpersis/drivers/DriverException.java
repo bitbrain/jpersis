@@ -23,13 +23,13 @@ package de.bitbrain.jpersis.drivers;
  */
 public class DriverException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DriverException(String m) {
-		super(m);
-	}
-	
-	public DriverException(Throwable t) {
-		super(t);
-	}
+  public DriverException(String m) {
+    super(m);
+  }
+
+  public DriverException(Throwable t) {
+    super(t);
+  }
 }

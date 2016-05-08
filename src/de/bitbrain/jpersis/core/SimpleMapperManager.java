@@ -35,7 +35,7 @@ public class SimpleMapperManager implements MapperManager {
   private final Map<Class<?>, ProxyFactory<?>> factories;
 
   private MethodFactory factory;
-  
+
   private NamingProvider naming;
 
   public SimpleMapperManager(Driver driver, MethodFactory factory, NamingProvider namingProvider) {
