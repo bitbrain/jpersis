@@ -57,7 +57,9 @@ public class ResultSetReader {
         }
         return coll;
       } else {
-        return readSingle(set, model, naming);
+        if (set.next()) {
+          return readSingle(set, model, naming);
+        }
       }
       // Integers
     } else if (returnType.isAssignableFrom(Integer.class) || returnType.isAssignableFrom(int.class)) {
