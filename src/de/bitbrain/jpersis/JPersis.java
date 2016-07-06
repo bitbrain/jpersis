@@ -35,6 +35,17 @@ import de.bitbrain.jpersis.core.methods.UpdateMethod;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.Naming;
 import de.bitbrain.jpersis.util.NamingProvider;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.DynamicType.Builder;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
+
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.returns;
 
 /**
  * JPersis main class which provides mapper creation and database interaction
@@ -51,6 +62,8 @@ public final class JPersis {
 
   private Naming naming = Naming.DEFAULT;
 
+  private ByteBuddy buddy;
+
   /**
    * Constructor for a new JPersis object
    * 
@@ -58,6 +71,7 @@ public final class JPersis {
    *          database driver
    */
   public JPersis(Driver driver) {
+    buddy = new ByteBuddy();
     pool = new MethodPool();
     manager = new SimpleMapperManager(driver, new MethodFactory(pool), new NamingProvider() {
       @Override
@@ -82,6 +96,27 @@ public final class JPersis {
       manager.add(mapper);
     }
     return manager.get(mapper);
+  }
+  
+  /**
+   * Provides data mapping for further usage. This returns a default implementation of a data mapper.
+   *
+   * @param modelClass the class of the model
+   * @param <T> class type
+   * @return default mapper
+   */
+  public <T> DefaultMapper<T> mapDefault(Class<T> modelClass) {
+    TypeDescription.Generic generic = TypeDescription.Generic.Builder
+            .parameterizedType(DefaultMapper.class, modelClass)
+            .build();
+    Builder<DefaultMapper<T> > builder = (Builder<DefaultMapper<T> >) buddy.makeInterface(generic);
+    builder = builder.annotateType(
+      AnnotationDescription.Builder.ofType(Mapper.class)
+        .define("value", modelClass.getName())
+        .build());
+    return map(builder.make()
+        .load(modelClass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+        .getLoaded());
   }
 
   public void setNaming(Naming naming) {
