@@ -48,13 +48,19 @@ public class ResultSetReader {
    *           is thrown when something goes wrong
    */
   public Object read(ResultSet set, Class<?> returnType, Class<?> model, Naming naming) throws SQLException {
-    // Collections
+    // Collections and Default values
     if (returnType.isAssignableFrom(Collection.class)) {
-      ArrayList<Object> coll = new ArrayList<Object>();
-      while (set.next()) {
-        coll.add(readSingle(set, model, naming));
+      if (!returnType.equals(Object.class)) {
+        ArrayList<Object> coll = new ArrayList<Object>();
+        while (set.next()) {
+          coll.add(readSingle(set, model, naming));
+        }
+        return coll;
+      } else {
+        if (set.next()) {
+          return readSingle(set, model, naming);
+        }
       }
-      return coll;
       // Integers
     } else if (returnType.isAssignableFrom(Integer.class) || returnType.isAssignableFrom(int.class)) {
       while (set.next()) {
@@ -64,7 +70,6 @@ public class ResultSetReader {
       while (set.next()) {
         return readSingle(set, returnType, naming);
       }
-      ;
     }
     return null;
   }

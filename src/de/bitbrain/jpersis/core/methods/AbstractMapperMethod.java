@@ -58,15 +58,6 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
     if (!validateArgs(args, model)) {
       throw new JPersisException("Arguments are not supported.");
     }
-    if (!validateReturnType(method.getReturnType(), model)) {
-      Class<?>[] supported = supportedReturnTypes(model);
-      String message = "Return type " + method.getReturnType() + " is not allowed. Supported are: ";
-      for (int i = 0; i < supported.length; ++i) {
-        Class<?> c = supported[i];
-        message += i < supported.length - 1 ? c.getName() + ", " : c.getName();
-      }
-      throw new JPersisException(message);
-    }
     if (driver == null) {
       throw new JPersisException("No driver has been set.");
     }

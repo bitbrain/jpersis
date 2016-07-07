@@ -340,6 +340,20 @@ public class JPersisTest {
     assertEquals(enumMocks.size(), TestEnum.values().length);
   }
 
+  @Test
+  public void testDefaultMapping() {
+    DefaultMapper<ModelMock> defaultMapper = manager.mapDefault(ModelMock.class);
+    ModelMock m = new ModelMock();
+    m.setName("Sebastian");
+    m.setLastName("Walter");
+    defaultMapper.insert(m);
+    assertTrue("There needs to be a model for default insertion", defaultMapper.count() == 1);
+    ModelMock retrieved = defaultMapper.getById(m.getId());
+    assertTrue("There needs to be a model for default insertion", retrieved.equals(m));
+    defaultMapper.delete(m);
+    assertTrue("There should not be any model anymore", defaultMapper.count() == 0);
+  }
+
   private void dropData() {
     Collection<ModelMock> mocks = mapper.findAll();
     mapper.delete(mocks);
