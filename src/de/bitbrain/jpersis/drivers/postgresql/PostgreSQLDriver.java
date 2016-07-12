@@ -24,6 +24,7 @@ public class PostgreSQLDriver extends JDBCDriver {
 
   public PostgreSQLDriver(String host, String port, String database, String user, String password) {
     super(host, port, database, user, password);
+    System.out.println(getURL(host, port, database));
   }
 
   @Override

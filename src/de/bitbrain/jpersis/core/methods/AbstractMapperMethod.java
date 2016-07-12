@@ -14,15 +14,15 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Collection;
-
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.util.Naming;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Collection;
 
 public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 

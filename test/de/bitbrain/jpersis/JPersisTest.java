@@ -15,46 +15,32 @@
 
 package de.bitbrain.jpersis;
 
-import static de.bitbrain.jpersis.Connections.MYSQL_DATABASE;
-import static de.bitbrain.jpersis.Connections.MYSQL_HOST;
-import static de.bitbrain.jpersis.Connections.MYSQL_PASSWORD;
-import static de.bitbrain.jpersis.Connections.MYSQL_PORT;
-import static de.bitbrain.jpersis.Connections.MYSQL_USERNAME;
-import static de.bitbrain.jpersis.Connections.POSTGRES_DATABASE;
-import static de.bitbrain.jpersis.Connections.POSTGRES_HOST;
-import static de.bitbrain.jpersis.Connections.POSTGRES_PASSWORD;
-import static de.bitbrain.jpersis.Connections.POSTGRES_PORT;
-import static de.bitbrain.jpersis.Connections.POSTGRES_USERNAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import de.bitbrain.jpersis.drivers.Driver;
+import de.bitbrain.jpersis.drivers.DriverException;
+import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
+import de.bitbrain.jpersis.drivers.postgresql.PostgreSQLDriver;
+import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
+import de.bitbrain.jpersis.mocks.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-
-import de.bitbrain.jpersis.drivers.Driver;
-import de.bitbrain.jpersis.drivers.DriverException;
-import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
-import de.bitbrain.jpersis.drivers.postgresql.PostgreSQLDriver;
-import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
-import de.bitbrain.jpersis.mocks.EnumIdMapperMock;
-import de.bitbrain.jpersis.mocks.EnumIdMock;
-import de.bitbrain.jpersis.mocks.MapperMock;
-import de.bitbrain.jpersis.mocks.MinimalMapperMock;
-import de.bitbrain.jpersis.mocks.MinimalMock;
-import de.bitbrain.jpersis.mocks.ModelMock;
-import de.bitbrain.jpersis.mocks.StringIdMapperMock;
-import de.bitbrain.jpersis.mocks.StringIdMock;
-import de.bitbrain.jpersis.mocks.TestEnum;
+import static de.bitbrain.jpersis.Connections.MYSQL;
+import static de.bitbrain.jpersis.Connections.POSTGRESQL;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(value = Parameterized.class)
 public class JPersisTest {
@@ -74,17 +60,26 @@ public class JPersisTest {
   @Parameter
   public Driver driver;
 
+  @ClassRule
+  public static final MySQLContainer mysqlContainer = new MySQLContainer();
+
+  @ClassRule
+  public static final PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer();
+
   @Parameters
   public static Collection<Driver[]> getParams() {
+    mysqlContainer.start();
+    postgresqlContainer.start();
+    Connections.init(mysqlContainer, postgresqlContainer);
     Features features = new Features();
     List<Driver[]> infos = new ArrayList<Driver[]>();
     infos.add(new Driver[] { new SQLiteDriver(DB) });
     if (features.isEnabled(Features.Feature.MYSQL)) {
-        infos.add(new Driver[] { new MySQLDriver(MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USERNAME, MYSQL_PASSWORD) });
+        infos.add(new Driver[] { new MySQLDriver(MYSQL.host, MYSQL.port, MYSQL.db, MYSQL.username, MYSQL.password) });
     }
     if (features.isEnabled(Features.Feature.POSTGRESQL)) {
-    infos.add(new Driver[] { new PostgreSQLDriver(POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DATABASE, POSTGRES_USERNAME,
-        POSTGRES_PASSWORD) });
+    infos.add(new Driver[] { new PostgreSQLDriver(POSTGRESQL.host, POSTGRESQL.port, POSTGRESQL.db, POSTGRESQL.username,
+        POSTGRESQL.password) });
     }
     return infos;
   }

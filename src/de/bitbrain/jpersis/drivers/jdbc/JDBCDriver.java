@@ -14,9 +14,6 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
-import java.lang.reflect.Field;
-import java.sql.*;
-
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.PrimaryKey;
 import de.bitbrain.jpersis.drivers.AbstractDriver;
@@ -26,6 +23,9 @@ import de.bitbrain.jpersis.util.FieldExtractor;
 import de.bitbrain.jpersis.util.FieldInvoker;
 import de.bitbrain.jpersis.util.FieldInvoker.InvokeException;
 import de.bitbrain.jpersis.util.Naming;
+
+import java.lang.reflect.Field;
+import java.sql.*;
 
 /**
  * Abstract implementation for JDBC

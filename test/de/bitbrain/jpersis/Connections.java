@@ -15,7 +15,8 @@
 
 package de.bitbrain.jpersis;
 
-import de.bitbrain.jpersis.util.PropertiesCache;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
  * Contains configuration for Connections tests
@@ -26,19 +27,29 @@ import de.bitbrain.jpersis.util.PropertiesCache;
  */
 public final class Connections {
 
-  private static final PropertiesCache cache = new PropertiesCache("connections");
+  public static final class Data {
+    private Data() { }
+    public String username;
+    public String password;
+    public String db;
+    public String host;
+    public String port;
+  }
 
-  // MySQL
-  public static final String MYSQL_USERNAME = cache.getProperty("MYSQL_USERNAME");
-  public static final String MYSQL_PASSWORD = cache.getProperty("MYSQL_PASSWORD");
-  public static final String MYSQL_PORT = cache.getProperty("MYSQL_PORT");
-  public static final String MYSQL_DATABASE = cache.getProperty("MYSQL_DATABASE");
-  public static final String MYSQL_HOST = cache.getProperty("MYSQL_HOST");
+  public static Data MYSQL = new Data();
+  public static Data POSTGRESQL = new Data();
 
-  // PostgreSQL
-  public static final String POSTGRES_USERNAME = cache.getProperty("POSTGRES_USERNAME");
-  public static final String POSTGRES_PASSWORD = cache.getProperty("POSTGRES_PASSWORD");
-  public static final String POSTGRES_PORT = cache.getProperty("POSTGRES_PORT");
-  public static final String POSTGRES_DATABASE = cache.getProperty("POSTGRES_DATABASE");
-  public static final String POSTGRES_HOST = cache.getProperty("POSTGRES_HOST");
+  public static void init(MySQLContainer mysql, PostgreSQLContainer postgres) {
+    MYSQL.db = "test";
+    MYSQL.username = mysql.getUsername();
+    MYSQL.password = mysql.getPassword();
+    MYSQL.host = mysql.getContainerIpAddress();
+    MYSQL.port = String.valueOf(mysql.getMappedPort((Integer)mysql.getExposedPorts().get(0)));
+
+    POSTGRESQL.db = "postgres";
+    POSTGRESQL.username = postgres.getUsername();
+    POSTGRESQL.password = postgres.getPassword();
+    POSTGRESQL.host = postgres.getContainerIpAddress();
+    POSTGRESQL.port = String.valueOf(postgres.getMappedPort((Integer)postgres.getExposedPorts().get(0)));
+  }
 }
