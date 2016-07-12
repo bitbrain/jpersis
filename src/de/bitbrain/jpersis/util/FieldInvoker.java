@@ -24,7 +24,7 @@ import java.util.Date;
 /**
  * This invoker takes care of objects and invokes their fields
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

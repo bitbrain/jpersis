@@ -20,7 +20,7 @@ import de.bitbrain.jpersis.drivers.Query;
 /**
  * Insert implementation of {@see MapperMethod}
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

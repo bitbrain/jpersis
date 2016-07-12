@@ -14,43 +14,25 @@
  */
 package de.bitbrain.jpersis;
 
-import java.lang.annotation.Annotation;
-
-import de.bitbrain.jpersis.annotations.Count;
-import de.bitbrain.jpersis.annotations.Delete;
-import de.bitbrain.jpersis.annotations.Insert;
-import de.bitbrain.jpersis.annotations.Mapper;
-import de.bitbrain.jpersis.annotations.Select;
-import de.bitbrain.jpersis.annotations.Update;
+import de.bitbrain.jpersis.annotations.*;
 import de.bitbrain.jpersis.core.MapperManager;
 import de.bitbrain.jpersis.core.SimpleMapperManager;
-import de.bitbrain.jpersis.core.methods.CountMethod;
-import de.bitbrain.jpersis.core.methods.DeleteMethod;
-import de.bitbrain.jpersis.core.methods.InsertMethod;
-import de.bitbrain.jpersis.core.methods.MapperMethod;
-import de.bitbrain.jpersis.core.methods.MethodFactory;
-import de.bitbrain.jpersis.core.methods.MethodPool;
-import de.bitbrain.jpersis.core.methods.SelectMethod;
-import de.bitbrain.jpersis.core.methods.UpdateMethod;
+import de.bitbrain.jpersis.core.methods.*;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.Naming;
 import de.bitbrain.jpersis.util.NamingProvider;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.bytebuddy.matcher.ElementMatchers.returns;
+import java.lang.annotation.Annotation;
 
 /**
  * JPersis main class which provides mapper creation and database interaction
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

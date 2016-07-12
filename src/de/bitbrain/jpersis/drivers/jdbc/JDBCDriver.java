@@ -30,7 +30,7 @@ import java.sql.*;
 /**
  * Abstract implementation for JDBC
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

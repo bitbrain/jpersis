@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 /**
  * Marks a field, a method or a class as ignored so it will not be taken into account.
  * 
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

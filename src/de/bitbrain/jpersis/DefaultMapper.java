@@ -25,7 +25,7 @@ import java.util.Collection;
 /**
  * Default mapper interface
  * 
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @param <T> class of the model to map
  */
 public interface DefaultMapper<T> {

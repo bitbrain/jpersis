@@ -14,24 +14,22 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
-import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateConditionString;
-import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generatePreparedConditionString;
-import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.generateTableString;
+import de.bitbrain.jpersis.drivers.DriverException;
+import de.bitbrain.jpersis.drivers.Query;
+import de.bitbrain.jpersis.util.FieldExtractor;
+import de.bitbrain.jpersis.util.Naming;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import de.bitbrain.jpersis.drivers.DriverException;
-import de.bitbrain.jpersis.drivers.Query;
-import de.bitbrain.jpersis.util.FieldExtractor;
-import de.bitbrain.jpersis.util.Naming;
+import static de.bitbrain.jpersis.drivers.jdbc.SQLUtils.*;
 
 /**
  * SQL language implementation for a query
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

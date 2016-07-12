@@ -24,6 +24,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+/**
+ * Abstract implementation of a mapper method
+ */
 public abstract class AbstractMapperMethod<T extends Annotation> implements MapperMethod<T> {
 
   private T annotation;

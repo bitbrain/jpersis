@@ -19,7 +19,7 @@ import de.bitbrain.jpersis.util.Naming;
 /**
  * Driver for database communication
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

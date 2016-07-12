@@ -33,7 +33,7 @@ import de.bitbrain.jpersis.util.Naming;
 /**
  * Utility class for SQL operations
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

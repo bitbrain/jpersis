@@ -14,17 +14,17 @@
  */
 package de.bitbrain.jpersis.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.NamingProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Simple implementation of {@see MapperManager}
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

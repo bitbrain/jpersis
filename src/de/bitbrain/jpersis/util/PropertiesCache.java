@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * Caches properties and considers developer properties accordingly.
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @version 1.0
  */
 public class PropertiesCache {

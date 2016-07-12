@@ -17,7 +17,7 @@ package de.bitbrain.jpersis.drivers;
 /**
  * Exception which is triggered in drivers
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

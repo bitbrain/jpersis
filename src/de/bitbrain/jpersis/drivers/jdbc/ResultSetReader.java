@@ -14,6 +14,11 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
+import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.util.FieldInvoker;
+import de.bitbrain.jpersis.util.FieldInvoker.InvokeException;
+import de.bitbrain.jpersis.util.Naming;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -22,15 +27,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.bitbrain.jpersis.JPersisException;
-import de.bitbrain.jpersis.util.FieldInvoker;
-import de.bitbrain.jpersis.util.FieldInvoker.InvokeException;
-import de.bitbrain.jpersis.util.Naming;
-
 /**
  * SQL language implementation for a query
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

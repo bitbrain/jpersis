@@ -16,15 +16,10 @@ package de.bitbrain.jpersis;
 
 import de.bitbrain.jpersis.util.PropertiesCache;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map.Entry;
-import java.util.Properties;
-
 /**
  * Manages features for jpersis internally. This class is marked as package private for internal usage only.
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

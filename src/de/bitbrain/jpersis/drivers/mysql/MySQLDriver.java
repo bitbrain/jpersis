@@ -20,7 +20,7 @@ import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
 /**
  * Implementation for MySQL
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

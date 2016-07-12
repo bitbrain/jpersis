@@ -14,18 +14,18 @@
  */
 package de.bitbrain.jpersis.util;
 
+import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.PrimaryKey;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bitbrain.jpersis.JPersisException;
-import de.bitbrain.jpersis.annotations.PrimaryKey;
-
 /**
  * This extractor takes care of objects and extracts their fields
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

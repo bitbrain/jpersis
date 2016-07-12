@@ -20,6 +20,13 @@ import de.bitbrain.jpersis.drivers.Query;
 import de.bitbrain.jpersis.drivers.jdbc.JDBCDriver;
 import de.bitbrain.jpersis.util.Naming;
 
+/**
+ * Implementation for PostgreSQL
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @since 1.0
+ * @version 1.0
+ */
 public class PostgreSQLDriver extends JDBCDriver {
 
   public PostgreSQLDriver(String host, String port, String database, String user, String password) {

@@ -14,15 +14,15 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
+import de.bitbrain.jpersis.drivers.Query;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-
-import de.bitbrain.jpersis.drivers.Query;
 
 /**
  * Basic implementation of {@see MapperMethod}
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

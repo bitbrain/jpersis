@@ -14,17 +14,17 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
+import de.bitbrain.jpersis.JPersisException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import de.bitbrain.jpersis.JPersisException;
-
 /**
  * Creates methods for queries
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

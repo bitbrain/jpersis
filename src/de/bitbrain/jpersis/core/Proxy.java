@@ -14,21 +14,21 @@
  */
 package de.bitbrain.jpersis.core;
 
+import de.bitbrain.jpersis.core.methods.MapperMethod;
+import de.bitbrain.jpersis.core.methods.MethodFactory;
+import de.bitbrain.jpersis.drivers.DriverProvider;
+import de.bitbrain.jpersis.util.Naming;
+
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.bitbrain.jpersis.core.methods.MapperMethod;
-import de.bitbrain.jpersis.core.methods.MethodFactory;
-import de.bitbrain.jpersis.drivers.DriverProvider;
-import de.bitbrain.jpersis.util.Naming;
-
 /**
  * Proxy for mapper interfaces
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

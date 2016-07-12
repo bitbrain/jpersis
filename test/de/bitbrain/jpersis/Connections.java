@@ -21,7 +21,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 /**
  * Contains configuration for Connections tests
  * 
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

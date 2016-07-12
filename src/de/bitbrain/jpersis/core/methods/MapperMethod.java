@@ -23,7 +23,7 @@ import de.bitbrain.jpersis.util.Naming;
 /**
  * Method of a mapper
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

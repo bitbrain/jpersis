@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 /**
  * Annotates a class or interface as a mapper. You need to pass the complete model class path as an argument.
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

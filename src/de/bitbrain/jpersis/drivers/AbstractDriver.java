@@ -19,7 +19,7 @@ import de.bitbrain.jpersis.util.Naming;
 /**
  * Abstract implementation of {@link Driver}
  * 
- * @author Miguel Gonzalez
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

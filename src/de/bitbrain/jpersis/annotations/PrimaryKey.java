@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * Set the value to "true" in order to enable auto incrementing. Auto incrementing is is ignored when primary key is NOT
  * type of <code>java.lang.Integer</code>
  * 
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */

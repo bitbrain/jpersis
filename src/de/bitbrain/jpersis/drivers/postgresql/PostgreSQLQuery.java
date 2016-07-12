@@ -15,11 +15,18 @@
 
 package de.bitbrain.jpersis.drivers.postgresql;
 
-import java.sql.Statement;
-
 import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery;
 import de.bitbrain.jpersis.util.Naming;
 
+import java.sql.Statement;
+
+/**
+ * SQL language implementation for a postgres query
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @since 1.0
+ * @version 1.0
+ */
 public class PostgreSQLQuery extends JDBCQuery {
 
   public PostgreSQLQuery(Class<?> model, Naming naming, Statement statement) {

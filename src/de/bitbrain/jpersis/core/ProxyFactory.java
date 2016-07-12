@@ -14,18 +14,18 @@
  */
 package de.bitbrain.jpersis.core;
 
-import java.lang.annotation.Annotation;
-
 import de.bitbrain.jpersis.JPersisException;
 import de.bitbrain.jpersis.annotations.Mapper;
 import de.bitbrain.jpersis.core.methods.MethodFactory;
 import de.bitbrain.jpersis.drivers.DriverProvider;
 import de.bitbrain.jpersis.util.NamingProvider;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Factory which creates mapper proxies
  *
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  * @since 1.0
  * @version 1.0
  */
