@@ -87,7 +87,7 @@ public final class JPersis {
    * @param <T> class type
    * @return default mapper
    */
-  public <T> DefaultMapper<T> mapDefault(Class<T> modelClass) {
+  public <T extends IdProvider> DefaultMapper<T> mapDefault(Class<T> modelClass) {
     TypeDescription.Generic generic = TypeDescription.Generic.Builder
             .parameterizedType(DefaultMapper.class, modelClass)
             .build();
@@ -99,6 +99,14 @@ public final class JPersis {
     return map(builder.make()
         .load(modelClass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
         .getLoaded());
+  }
+
+  public <T extends IdProvider> CachedDefaultMapper<T> mapDefaultCached(Class<T> modelClass) {
+    return cached(mapDefault(modelClass));
+  }
+
+  public <T extends IdProvider> CachedDefaultMapper<T> cached(DefaultMapper<T> mapper) {
+    return new CachedDefaultMapper<T>(mapper);
   }
 
   public void setNaming(Naming naming) {

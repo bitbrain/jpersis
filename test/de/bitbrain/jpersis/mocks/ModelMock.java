@@ -15,6 +15,7 @@
 
 package de.bitbrain.jpersis.mocks;
 
+import de.bitbrain.jpersis.IdProvider;
 import de.bitbrain.jpersis.annotations.PrimaryKey;
 
 /**
@@ -24,7 +25,7 @@ import de.bitbrain.jpersis.annotations.PrimaryKey;
  * @since 1.1
  * @version 1.1
  */
-public class ModelMock {
+public class ModelMock implements IdProvider {
 
   static String TEST = "TEST1";
 
@@ -41,6 +42,7 @@ public class ModelMock {
 
   private Class<?> cl = ModelMock.class;
 
+  @Override
   public int getId() {
     return id;
   }

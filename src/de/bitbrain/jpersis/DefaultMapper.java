@@ -47,7 +47,7 @@ public interface DefaultMapper<T> {
     
     @Select
     Collection<T> getAll();
-    
+
     @Select(condition = "id = $1")
     T getById(int id);
     
