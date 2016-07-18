@@ -6,7 +6,7 @@
 Light weighted persistence framework for Java.
 
 **[Installation](#installation) |**
-**[Getting started](#getting-started) |**
+**[Getting started](getting-started.md) |**
 **[Credits](#credits) |**
 
 ---
@@ -21,11 +21,6 @@ To use the latest snapshot ```jpersis-1.0-SNAPSHOT``` add the following dependen
    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
-
-Getting started
-===
-
-TODO
 
 Credits
 ===
