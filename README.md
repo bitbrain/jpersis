@@ -5,9 +5,9 @@
 
 Light weighted persistence framework for Java.
 
-**[Installation](#Installation) |**
-**[Getting started](#Getting started) |**
-**[Credits](#Credits) |**
+**[Installation](#installation) |**
+**[Getting started](#getting-started) |**
+**[Credits](#credits) |**
 
 ---
 
