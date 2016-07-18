@@ -215,4 +215,4 @@ public class CarPark {
    private Collection<Car> cars;
 }
 ```
-This will give you all cars which are referenced to this object. For more information refer to [the actual WIP ticket](#35).
+This will give you all cars which are referenced to this object. For more information refer to [the actual WIP ticket](https://github.com/MyRealityCoding/jpersis/issues/35).
