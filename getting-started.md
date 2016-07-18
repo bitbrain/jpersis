@@ -14,9 +14,7 @@
 <a href="#" name="1-why-jpersis"></a>
 # I. Why JPersis?
 
-When using an object oriented language like Java it is time consuming to map data manually from a database to models and vise versa. You have to remember data types, validate input and output and you have to change your code for each use case.
-
-JPersis is an easy to use interface which doesn't need much configuration or has many dependencies. You write your model, create a mapper and just insert and get data from your database.
+When using an object oriented language like Java it is time consuming to map data manually from a database to models and vise versa. You have to remember data types, validate input and output and you have to change your code for each use case. JPersis is a light-weighted library which does not require much configuration. You define a datastore, bind a model to it and use so called mappers to interact with the datastore.
 
 <a href="#" name="2-models"></a>
 # II. Models
@@ -46,7 +44,7 @@ public class User {
     }
 }
 ```
-That's it. You have created a valid JPersis model, because all requirements are fullfilled.
+You have created a valid JPersis model, because all requirements are fullfilled.
 
 <a href="#" name="3-mappers"></a>
 # III. Mappers
@@ -88,7 +86,7 @@ Now our application is ready to use. Let's create a user first:
 User user = new User();
 user.setName("Max");
 ```
-Next we need our mapper. JPersis will create the mapper for you by using reflection magic:
+Next we need our mapper. JPersis will provide a mapper for you:
 ```java
 UserMapper mapper = jpersis.map(UserMapper.class);
 ```
@@ -103,6 +101,12 @@ Nothing more to do. JPersis created a user table internally and inserted the use
 ```java
 DefaultMapper<User> mapper = jpersis.mapDefault(User.class);
 Collection<User> allUsers = mapper.find();
+
+// We do not want to query always the datastore.
+// Instead we are using caching
+// Equivalent to:
+// CachedDefaultMapper<User> cachedMapper = jpersis.mapDefaultCached(User.class);
+CachedDefaultMapper<User> cachedMapper = jpersis.cached(mapper);
 ```
 
 <a href="#" name="5-drivers"></a>
@@ -120,6 +124,46 @@ By default, the following drivers will be supported:
 <a href="#" name="6-annotations"></a>
 # VI. Annotations
 
+The annotations provided by Jpersis are predefined but it is possible to register custom annotations to Jpersis. Given the following annotation:
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ReturnOne { }
+```
+Annotating a method with this annotation should always return for example the value `1`. To do so we need to define a so called `MapperMethod`:
+```java
+public class ReturnOneMethod extends AbstractMapperMethod<ReturnOne> {
+
+  public ReturnOneMethod(ReturnOne one) {
+    super(one);
+  }
+
+  @Override
+  public void on(Class<?> model, Object[] params, Query query) {
+    // we build our query internally to count one element
+    // note that this would return 0 if no data is available
+    query.limit(1).count();
+  }
+
+  @Override
+  protected Class<?>[] supportedReturnTypes(Class<?> model) {
+    return new Class<?>[] { Integer.class, int.class };
+  }
+}
+```
+Finally we need to register our mapper method:
+```java
+jpersis.register(ReturnOne.class, ReturnOneMethod.class);
+```
+We are now able to annotate mappers with the `@ReturnOne` annotation:
+```java
+public interface MyMapper {
+    /* ... */
+    @ReturnOne
+    int returnOneOrZero();
+    /* ... */
+}
+```
 <a href="#" name="7-name-converters"></a>
 # VII. Naming
 It is also possible to customize conversion between Java and database names. To do so, you have to define a ```Naming```. By default, the ```CamelCaseNaming``` is used:
