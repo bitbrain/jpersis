@@ -204,7 +204,7 @@ jpersis.setNaming(new CustomNaming());
 ```
 # References
 <a href="#" name="8-references"></a>
-Later on, jpersis will support model references:
+As of Version 1.1.0 JPersis does support references:
 ```java
 public class CarPark {
 
@@ -215,4 +215,4 @@ public class CarPark {
    private Collection<Car> cars;
 }
 ```
-This will give you all cars which are referenced to this object.
+This will give you all cars which are referenced to this object. For more information refer to [the actual WIP ticket](#35).
