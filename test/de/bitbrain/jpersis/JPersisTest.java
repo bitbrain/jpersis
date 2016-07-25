@@ -17,31 +17,25 @@ package de.bitbrain.jpersis;
 
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
-import de.bitbrain.jpersis.drivers.mysql.MySQLDriver;
-import de.bitbrain.jpersis.drivers.postgresql.PostgreSQLDriver;
-import de.bitbrain.jpersis.drivers.sqllite.SQLiteDriver;
 import de.bitbrain.jpersis.mocks.*;
+import de.bitbrain.jpersis.util.DriverFactory;
+import de.bitbrain.jpersis.util.MySQLDriverFactory;
+import de.bitbrain.jpersis.util.PosgreSQLDriverFactory;
+import de.bitbrain.jpersis.util.SQLiteDriverFactory;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static de.bitbrain.jpersis.Connections.MYSQL;
-import static de.bitbrain.jpersis.Connections.POSTGRESQL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)
 public class JPersisTest {
@@ -59,34 +53,27 @@ public class JPersisTest {
   EnumIdMapperMock enumMapper;
 
   @Parameter
-  public Driver driver;
+  public DriverFactory factory;
 
-  @ClassRule
-  public static final MySQLContainer mysqlContainer = new MySQLContainer();
-
-  @ClassRule
-  public static final PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer();
+  private Driver driver;
 
   @Parameters
-  public static Collection<Driver[]> getParams() {
-    mysqlContainer.start();
-    postgresqlContainer.start();
-    Connections.init(mysqlContainer, postgresqlContainer);
+  public static Collection<DriverFactory[]> getParams() {
     Features features = new Features();
-    List<Driver[]> infos = new ArrayList<Driver[]>();
-    infos.add(new Driver[] { new SQLiteDriver(DB) });
+    List<DriverFactory[]> infos = new ArrayList<>();
+    infos.add(new DriverFactory[] { new SQLiteDriverFactory(DB) });
     if (features.isEnabled(Features.Feature.MYSQL)) {
-        infos.add(new Driver[] { new MySQLDriver(MYSQL.host, MYSQL.port, MYSQL.db, MYSQL.username, MYSQL.password) });
+        infos.add(new DriverFactory[] { new MySQLDriverFactory() });
     }
     if (features.isEnabled(Features.Feature.POSTGRESQL)) {
-    infos.add(new Driver[] { new PostgreSQLDriver(POSTGRESQL.host, POSTGRESQL.port, POSTGRESQL.db, POSTGRESQL.username,
-        POSTGRESQL.password) });
+    infos.add(new DriverFactory[] { new PosgreSQLDriverFactory()});
     }
     return infos;
   }
 
   @Before
   public void beforeTest() throws IOException {
+    driver = factory.create();
     manager = new JPersis(driver);
     mapper = manager.map(MapperMock.class);
     minimalMapper = manager.map(MinimalMapperMock.class);

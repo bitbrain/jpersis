@@ -23,7 +23,7 @@ import de.bitbrain.jpersis.util.PropertiesCache;
  * @since 1.0
  * @version 1.0
  */
-class Features {
+public class Features {
 
   static final String FILE = "features";
 
