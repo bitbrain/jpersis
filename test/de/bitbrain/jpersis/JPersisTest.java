@@ -40,6 +40,7 @@ import java.util.List;
 import static de.bitbrain.jpersis.Connections.MYSQL;
 import static de.bitbrain.jpersis.Connections.POSTGRESQL;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(value = Parameterized.class)
@@ -351,16 +352,27 @@ public class JPersisTest {
 
   @Test
   public void testCachedDefaultMapping() {
-    DefaultMapper<ModelMock> defaultMapper = manager.mapDefaultCached(ModelMock.class);
+    DefaultMapper<ModelMock> cachedMapper = manager.mapDefaultCached(ModelMock.class);
+    DefaultMapper<ModelMock> directMapper = manager.mapDefault(ModelMock.class);
     ModelMock m = new ModelMock();
     m.setName("Sebastian");
     m.setLastName("Walter");
-    defaultMapper.insert(m);
-    assertTrue("There needs to be a model for default insertion", defaultMapper.count() == 1);
-    ModelMock retrieved = defaultMapper.getById(m.getId());
+    cachedMapper.insert(m);
+    assertTrue("There needs to be a model for default insertion", cachedMapper.count() == 1);
+    ModelMock retrieved = cachedMapper.getById(m.getId());
     assertTrue("There needs to be a model for default insertion", retrieved.equals(m));
-    defaultMapper.delete(m);
-    assertTrue("There should not be any model anymore", defaultMapper.count() == 0);
+    cachedMapper.delete(m);
+    assertTrue("There should not be any model anymore", cachedMapper.count() == 0);
+
+    // Remove the model from the database
+    cachedMapper.insert(m);
+    directMapper.delete(m);
+    // Model should still be in the cache
+    ModelMock result = cachedMapper.getById(m.getId());
+    assertTrue("The model should persist in the cache", result.equals(m));
+    // ..but not in the database
+    result = directMapper.getById(m.getId());
+    assertNull(result);
   }
 
   private void dropData() {
