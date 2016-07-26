@@ -84,7 +84,9 @@ public class ResultSetReader {
           continue;
         }
         String value = set.getString(naming.javaToField(f.getName()));
-        FieldInvoker.invoke(o, f, value);
+        if (value != null) {
+          FieldInvoker.invoke(o, f, value);
+        }
       }
       return o;
     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

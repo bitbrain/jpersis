@@ -72,8 +72,10 @@ public class JPersisTest {
   }
 
   @Before
-  public void beforeTest() throws IOException {
+  public void beforeTest() throws IOException, DriverException {
     driver = factory.create();
+    driver.setMode(Driver.DriverMode.CUSTOM);
+    driver.connect();
     manager = new JPersis(driver);
     mapper = manager.map(MapperMock.class);
     minimalMapper = manager.map(MinimalMapperMock.class);
@@ -85,6 +87,23 @@ public class JPersisTest {
   @After
   public void afterTest() throws DriverException {
     dropData();
+    driver.close();
+  }
+
+  @Test
+  public void testDriverModes() throws DriverException {
+    driver.close();
+    DefaultMapper<ModelMock> m = manager.mapDefault(ModelMock.class);
+    try {
+      m.insert(new ModelMock());
+      fail("Should throw an exception!");
+    } catch (Exception e) { }
+    driver.connect();
+    try {
+      m.insert(new ModelMock());
+    } catch (Exception e) {
+      fail("Should not throw any exception!");
+    }
   }
 
   @Test

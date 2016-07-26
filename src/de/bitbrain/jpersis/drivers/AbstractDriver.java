@@ -25,8 +25,10 @@ import de.bitbrain.jpersis.util.Naming;
  */
 public abstract class AbstractDriver implements Driver {
 
-  public AbstractDriver() {
+  private DriverMode mode;
 
+  public AbstractDriver() {
+    mode = DriverMode.AUTO;
   }
 
   @Override
@@ -42,4 +44,14 @@ public abstract class AbstractDriver implements Driver {
    * @return newly created query
    */
   protected abstract Query createQuery(Class<?> model, Naming naming);
+
+  @Override
+  public DriverMode getMode() {
+    return mode;
+  }
+
+  @Override
+  public void setMode(DriverMode mode) {
+    this.mode = mode;
+  }
 }

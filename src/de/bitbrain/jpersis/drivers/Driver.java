@@ -45,7 +45,32 @@ public interface Driver {
   void close() throws DriverException;
 
   /**
+   * Sets the internal driver mode
+   *
+   * @param mode mode to set
+   */
+  void setMode(DriverMode mode);
+
+  /**
+   * Provides the current driver mode
+   *
+   * @return currently in use mode
+   */
+  DriverMode getMode();
+
+  /**
    * Commits the given query
    */
   Object commit(Query query, Class<?> returnType, Object[] args, Class<?> model, Naming naming) throws DriverException;
+
+  enum DriverMode {
+    /**
+     * This mode requires custom connect and disconnects of the driver
+     */
+    CUSTOM,
+    /**
+     * This mode automatically starts and stops the connection on each call
+     */
+    AUTO
+  }
 }

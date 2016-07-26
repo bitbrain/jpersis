@@ -34,9 +34,9 @@ public class ModelMock implements IdProvider {
   @PrimaryKey(true)
   private int id;
 
-  private String name;
+  private String name = "";
 
-  private String lastName;
+  private String lastName = "";
 
   private TestEnum enumTest = TestEnum.TEST1;
 

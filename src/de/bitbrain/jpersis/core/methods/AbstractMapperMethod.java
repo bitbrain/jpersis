@@ -70,11 +70,15 @@ public abstract class AbstractMapperMethod<T extends Annotation> implements Mapp
       throw new JPersisException("No driver has been set.");
     }
     try {
-      driver.connect();
+      if (driver.getMode().equals(Driver.DriverMode.AUTO)) {
+        driver.connect();
+      }
       Query query = driver.query(model, naming);
       on(model, args, query);
       Object result = driver.commit(query, method.getReturnType(), args, model, naming);
-      driver.close();
+      if (driver.getMode().equals(Driver.DriverMode.AUTO)) {
+        driver.close();
+      }
       return result;
     } catch (DriverException e) {
       if (hasException(method)) {

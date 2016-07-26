@@ -45,12 +45,8 @@ public final class FieldInvoker {
     if (Modifier.isStatic(field.getModifiers())) {
       return;
     }
-    boolean accessable = field.isAccessible();
+    final boolean accessable = field.isAccessible();
     field.setAccessible(true);
-    if (value == null || value.isEmpty()) {
-      throw new InvokeException(field.getName() + " is null");
-    }
-
     try {
       field.set(object, convertToObject(field.getType(), value));
     } catch (IllegalArgumentException | IllegalAccessException e) {
