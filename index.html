@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Jpersis by MyRealityCoding</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Jpersis</h1>
+      <h2 class="project-tagline">Light weighted persistence framework for Java</h2>
+      <a href="https://github.com/MyRealityCoding/jpersis" class="btn">View on GitHub</a>
+      <a href="https://github.com/MyRealityCoding/jpersis/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/MyRealityCoding/jpersis/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h1>
+
+<p>To use the latest snapshot jpersis-{version} add the following dependency to your project:</p>
+
+<pre><code>&lt;dependency&gt;
+   &lt;artifactId&gt;jpersis&lt;/artifactId&gt;
+   &lt;groupId&gt;com.github.myrealitycoding&lt;/groupId&gt;
+   &lt;version&gt;{version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h1>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of contents</h2>
+
+<p><a href="#1-why-jpersis">I. Why JPersis?</a><br>
+<a href="#2-models">II. Models</a><br>
+<a href="#3-mappers">III. Mappers</a><br>
+<a href="#4-example">IV. Example</a><br>
+<a href="#5-drivers">V. Drivers</a><br>
+<a href="#6-annotations">VI. Annotations</a><br>
+<a href="#7-name-converters">VII. Naming</a><br>
+<a href="#8-references">VIII. References</a><br></p>
+
+<p><a href="#" name="1-why-jpersis"></a></p>
+
+<h1>
+<a id="i-why-jpersis" class="anchor" href="#i-why-jpersis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>I. Why JPersis?</h1>
+
+<p>When using an object oriented language like Java it is time consuming to map data manually from a database to models and vise versa. You have to remember data types, validate input and output and you have to change your code for each use case. JPersis is a light-weighted library which does not require much configuration. You define a datastore, bind a model to it and use so called mappers to interact with the datastore.</p>
+
+<p><a href="#" name="2-models"></a></p>
+
+<h1>
+<a id="ii-models" class="anchor" href="#ii-models" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>II. Models</h1>
+
+<p>A model is a simple Java class with attributes. There are some restrictions to fullfill the role:</p>
+
+<ul>
+<li>each model has to annotate one and only one field by a <code>@PrimaryKey</code> annotation</li>
+<li>except <code>Date</code> no other classes are allowed as field data types</li>
+<li>if a model has a custom field data type, it has to be annotated by <code>@Ignored</code>
+</li>
+<li>a model needs a public constructor without arguments</li>
+</ul>
+
+<p>Imagine we have a model, called <code>User</code>, it could look something like this:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">User</span> {
+
+    <span class="pl-k">@PrimaryKey</span> 
+    <span class="pl-k">private</span> <span class="pl-k">int</span> id;
+
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
+
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getName</span>() {
+        <span class="pl-k">return</span> name;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">setName</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+        <span class="pl-v">this</span><span class="pl-k">.</span>name <span class="pl-k">=</span> name;
+    }
+}</pre></div>
+
+<p>You have created a valid JPersis model, because all requirements are fullfilled.</p>
+
+<p><a href="#" name="3-mappers"></a></p>
+
+<h1>
+<a id="iii-mappers" class="anchor" href="#iii-mappers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>III. Mappers</h1>
+
+<p>Now we need to do something with our model. We want to store, read and manipulate data. Each model needs a mapper which is responsible. To implement a mapper you have the following restrictions:</p>
+
+<ul>
+<li>each mapper has to be annotated by a <code>@Mapper</code> annotation which also provides a correct class path to the model</li>
+<li>each mapper has to be an interface</li>
+<li>each method of the mapper needs to be annotated by a supported annotation (See <a href="#6-annotations">VI. Annotations</a>).</li>
+</ul>
+
+<p>A sample mapper for our previously created model could look something like this:</p>
+
+<div class="highlight highlight-source-java"><pre>@Mapper(<span class="pl-s"><span class="pl-pds">"</span>my.package.to.the.model.User<span class="pl-pds">"</span></span>)
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">UserMapper</span> {
+
+   <span class="pl-k">@Insert</span>
+   <span class="pl-k">boolean</span> <span class="pl-en">insert</span>(<span class="pl-smi">User</span> <span class="pl-v">user</span>);
+
+   <span class="pl-k">@Delete</span>
+   <span class="pl-k">boolean</span> <span class="pl-en">delete</span>(<span class="pl-smi">User</span> <span class="pl-v">user</span>);
+
+   <span class="pl-k">@Count</span>
+   <span class="pl-k">int</span> <span class="pl-en">count</span>();
+
+   <span class="pl-k">@Select</span>(<span class="pl-c1">condition</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>userName = $1<span class="pl-pds">"</span></span>)
+   <span class="pl-smi">User</span> <span class="pl-en">findByUserName</span>(<span class="pl-smi">String</span> <span class="pl-v">userName</span>);
+}</pre></div>
+
+<p>That's it! You have created your first mapper.
+<a href="#" name="4-example"></a></p>
+
+<h1>
+<a id="iv-example" class="anchor" href="#iv-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IV. Example</h1>
+
+<p>Now we want some action. We want to use a SQLite datasource. We create a driver first (provided by JPersis) and create an <code>JPersis</code> object:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Driver</span> driver <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">SQLiteDriver</span>(<span class="pl-s"><span class="pl-pds">"</span>database.sql<span class="pl-pds">"</span></span>);
+<span class="pl-smi">JPersis</span> jpersis <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">JPersis</span>(driver);</pre></div>
+
+<p>Now our application is ready to use. Let's create a user first:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">User</span> user <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">User</span>();
+user<span class="pl-k">.</span>setName(<span class="pl-s"><span class="pl-pds">"</span>Max<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Next we need our mapper. JPersis will provide a mapper for you:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">UserMapper</span> mapper <span class="pl-k">=</span> jpersis<span class="pl-k">.</span>map(<span class="pl-smi">UserMapper</span><span class="pl-k">.</span>class);</pre></div>
+
+<p>Let's insert our user and check if it worked:</p>
+
+<div class="highlight highlight-source-java"><pre>mapper<span class="pl-k">.</span>insert(user); <span class="pl-c">// returns true, seems to be okay!</span>
+mapper<span class="pl-k">.</span>count(); <span class="pl-c">// returns 1, there is a user in the database</span>
+mapper<span class="pl-k">.</span>findByName(<span class="pl-s"><span class="pl-pds">"</span>Max<span class="pl-pds">"</span></span>); <span class="pl-c">// Hey Max, how are you doing?</span></pre></div>
+
+<p>Nothing more to do. JPersis created a user table internally and inserted the user into it. If we want to avoid custom mappers, we can fall back to default mapping:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">DefaultMapper&lt;<span class="pl-smi">User</span>&gt;</span> mapper <span class="pl-k">=</span> jpersis<span class="pl-k">.</span>mapDefault(<span class="pl-smi">User</span><span class="pl-k">.</span>class);
+<span class="pl-k">Collection&lt;<span class="pl-smi">User</span>&gt;</span> allUsers <span class="pl-k">=</span> mapper<span class="pl-k">.</span>find();
+
+<span class="pl-c">// We do not want to query always the datastore.</span>
+<span class="pl-c">// Instead we are using caching</span>
+<span class="pl-c">// Equivalent to:</span>
+<span class="pl-c">// CachedDefaultMapper&lt;User&gt; cachedMapper = jpersis.mapDefaultCached(User.class);</span>
+<span class="pl-k">CachedDefaultMapper&lt;<span class="pl-smi">User</span>&gt;</span> cachedMapper <span class="pl-k">=</span> jpersis<span class="pl-k">.</span>cached(mapper);</pre></div>
+
+<p><a href="#" name="5-drivers"></a></p>
+
+<h1>
+<a id="v-drivers" class="anchor" href="#v-drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>V. Drivers</h1>
+
+<p>To interact with the database, a so called <strong>Driver</strong> is required. A driver maps a general functionality to a technology based functionality (like a general insert command to an MongoDB insert). Furthermore a driver is used by annotation methods.</p>
+
+<p>By default, the following drivers will be supported:</p>
+
+<ul>
+<li>SQLiteDriver</li>
+<li>MySQLDriver</li>
+<li>PostgreSQLDriver</li>
+<li>CassandraDriver (not implemented yet)</li>
+<li>Neo4jDriver (not implemented yet)</li>
+<li>MongoDriver (not implemented yet)</li>
+</ul>
+
+<p><a href="#" name="6-annotations"></a></p>
+
+<h1>
+<a id="vi-annotations" class="anchor" href="#vi-annotations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VI. Annotations</h1>
+
+<p>The annotations provided by Jpersis are predefined but it is possible to register custom annotations to Jpersis. Given the following annotation:</p>
+
+<div class="highlight highlight-source-java"><pre>@Target(<span class="pl-smi">ElementType</span><span class="pl-c1"><span class="pl-k">.</span>METHOD</span>)
+@Retention(<span class="pl-smi">RetentionPolicy</span><span class="pl-c1"><span class="pl-k">.</span>RUNTIME</span>)
+<span class="pl-k">public</span> <span class="pl-k">@interface</span> <span class="pl-en">ReturnOne</span> { }</pre></div>
+
+<p>Annotating a method with this annotation should always return for example the value <code>1</code>. To do so we need to define a so called <code>MapperMethod</code>:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">ReturnOneMethod</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractMapperMethod&lt;<span class="pl-smi">ReturnOne</span>&gt;</span> {
+
+  <span class="pl-k">public</span> <span class="pl-en">ReturnOneMethod</span>(<span class="pl-smi">ReturnOne</span> <span class="pl-v">one</span>) {
+    <span class="pl-v">super</span>(one);
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">on</span>(<span class="pl-k">Class&lt;?&gt;</span> <span class="pl-v">model</span>, <span class="pl-k">Object</span>[] <span class="pl-v">params</span>, <span class="pl-smi">Query</span> <span class="pl-v">query</span>) {
+    <span class="pl-c">// we build our query internally to count one element</span>
+    <span class="pl-c">// note that this would return 0 if no data is available</span>
+    query<span class="pl-k">.</span>limit(<span class="pl-c1">1</span>)<span class="pl-k">.</span>count();
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">protected</span> <span class="pl-k">Class&lt;?&gt;</span>[] <span class="pl-en">supportedReturnTypes</span>(<span class="pl-k">Class&lt;?&gt;</span> <span class="pl-v">model</span>) {
+    <span class="pl-k">return</span> <span class="pl-k">new</span> Class&lt;?&gt;[] { <span class="pl-smi">Integer</span><span class="pl-k">.</span>class, <span class="pl-k">int</span><span class="pl-k">.</span>class };
+  }
+}</pre></div>
+
+<p>Finally we need to register our mapper method:</p>
+
+<div class="highlight highlight-source-java"><pre>jpersis<span class="pl-k">.</span>register(<span class="pl-smi">ReturnOne</span><span class="pl-k">.</span>class, <span class="pl-smi">ReturnOneMethod</span><span class="pl-k">.</span>class);</pre></div>
+
+<p>We are now able to annotate mappers with the <code>@ReturnOne</code> annotation:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">MyMapper</span> {
+    <span class="pl-c">/* ... */</span>
+    <span class="pl-k">@ReturnOne</span>
+    <span class="pl-k">int</span> <span class="pl-en">returnOneOrZero</span>();
+    <span class="pl-c">/* ... */</span>
+}</pre></div>
+
+<p><a href="#" name="7-name-converters"></a></p>
+
+<h1>
+<a id="vii-naming" class="anchor" href="#vii-naming" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VII. Naming</h1>
+
+<p>It is also possible to customize conversion between Java and database names. To do so, you have to define a <code>Naming</code>. By default, the <code>CamelCaseNaming</code> is used:</p>
+
+<pre><code>myField -&gt; my_field
+my_field -&gt; myField
+MyClass -&gt; my_collection
+my_collection -&gt; MyCollection
+</code></pre>
+
+<p>To do so, implement your own converter:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CustomNaming</span> <span class="pl-k">implements</span> <span class="pl-e">Naming</span> {
+
+   <span class="pl-k">@Override</span>
+   <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">collectionToJava</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+      <span class="pl-k">return</span> name;
+   }
+
+   <span class="pl-k">@Override</span>
+   <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">javaToCollection</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+      <span class="pl-k">return</span> name;
+   }
+
+   <span class="pl-k">@Override</span>
+   <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">fieldToJava</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+      <span class="pl-k">return</span> name;
+   }
+
+   <span class="pl-k">@Override</span>
+   <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">javaToField</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+      <span class="pl-k">return</span> name;
+   }
+}</pre></div>
+
+<p>Afterwards you can set your converter:</p>
+
+<div class="highlight highlight-source-java"><pre>jpersis<span class="pl-k">.</span>setNaming(<span class="pl-k">new</span> <span class="pl-smi">CustomNaming</span>());</pre></div>
+
+<h1>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h1>
+
+<p><a href="#" name="8-references"></a>
+As of Version 1.1.0 JPersis does support references:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CarPark</span> {
+
+   <span class="pl-k">@PrimaryKey</span>
+   <span class="pl-k">private</span> <span class="pl-smi">String</span> id;
+
+   <span class="pl-k">@Reference</span>(<span class="pl-s"><span class="pl-pds">"</span>de.test.Car<span class="pl-pds">"</span></span>)
+   <span class="pl-k">private</span> <span class="pl-k">Collection&lt;<span class="pl-smi">Car</span>&gt;</span> cars;
+}</pre></div>
+
+<p>This will give you all cars which are referenced to this object. For more information refer to <a href="https://github.com/MyRealityCoding/jpersis/issues/35">the actual WIP ticket</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/MyRealityCoding/jpersis">Jpersis</a> is maintained by <a href="https://github.com/MyRealityCoding">MyRealityCoding</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
