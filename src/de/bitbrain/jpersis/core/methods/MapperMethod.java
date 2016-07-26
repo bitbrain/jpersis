@@ -17,6 +17,7 @@ package de.bitbrain.jpersis.core.methods;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import de.bitbrain.jpersis.MapperException;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.Naming;
 
@@ -48,5 +49,5 @@ public interface MapperMethod<T extends Annotation> {
    * @param driverProvider
    * @return resulting object
    */
-  Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming);
+  Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) throws MapperException;
 }

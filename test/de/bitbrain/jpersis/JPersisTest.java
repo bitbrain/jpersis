@@ -88,6 +88,16 @@ public class JPersisTest {
   }
 
   @Test
+  public void testCheckedExceptions() {
+    MinimalExceptionMapperMock m = manager.map(MinimalExceptionMapperMock.class);
+    MinimalMock mock = new MinimalMock();
+    try {
+      m.insert(new ArrayList<MinimalMock>());
+      fail("Should throw an exception!");
+    } catch (MapperException e) { }
+  }
+
+  @Test
   public void testInsert() {
     final int RUNS = 5;
     boolean firstKey = true;
