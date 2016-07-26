@@ -6,7 +6,7 @@
 Light weighted persistence framework for Java.
 
 **[Installation](#installation) |**
-**[Getting started](getting-started.md) |**
+**[Getting started](http://myrealitycoding.github.io/jpersis) |**
 **[Report Bug](https://github.com/MyRealityCoding/jpersis/issues/new) |**
 **[Credits](#credits) |**
 
