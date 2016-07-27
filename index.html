@@ -44,7 +44,8 @@
 <a href="#5-drivers">V. Drivers</a><br>
 <a href="#6-annotations">VI. Annotations</a><br>
 <a href="#7-name-converters">VII. Naming</a><br>
-<a href="#8-references">VIII. References</a><br></p>
+<a href="#8-modes">VIII. Modes</a><br>
+<a href="#9-references">IX. References</a><br></p>
 
 <p><a href="#" name="1-why-jpersis"></a></p>
 
@@ -262,9 +263,27 @@ my_collection -&gt; MyCollection
 <div class="highlight highlight-source-java"><pre>jpersis<span class="pl-k">.</span>setNaming(<span class="pl-k">new</span> <span class="pl-smi">CustomNaming</span>());</pre></div>
 
 <h1>
+<a id="modes" class="anchor" href="#modes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Modes</h1>
+
+<p><a href="#" name="8-modes"></a>
+JPersis currently supports two modes:</p>
+
+<ul>
+<li>
+<strong>CUSTOM</strong> This mode allows custom connections which need to be established manually in the driver.</li>
+<li>
+<strong>AUTO</strong> By default, JPersis automatically establishes communication with the datastore when required.</li>
+</ul>
+
+<p>The mode itself can be changed in the driver:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Driver</span> driver <span class="pl-k">=</span> retrieveDriver();
+driver<span class="pl-k">.</span>setMode(<span class="pl-smi">DriverMode</span><span class="pl-c1"><span class="pl-k">.</span>CUSTOM</span>);</pre></div>
+
+<h1>
 <a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h1>
 
-<p><a href="#" name="8-references"></a>
+<p><a href="#" name="9-references"></a>
 As of Version 1.1.0 JPersis does support references:</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CarPark</span> {
