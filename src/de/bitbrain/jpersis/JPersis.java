@@ -81,11 +81,11 @@ public final class JPersis {
   }
   
   /**
-   * Provides data mapping for further usage. This returns a default implementation of a data mapper.
+   * Provides a default data mapper with general read and write functionality.
    *
    * @param modelClass the class of the model
    * @param <T> class type
-   * @return default mapper
+   * @return new default mapper instance
    */
   public <T extends IdProvider> DefaultMapper<T> mapDefault(Class<T> modelClass) {
     TypeDescription.Generic generic = TypeDescription.Generic.Builder
@@ -101,14 +101,33 @@ public final class JPersis {
         .getLoaded());
   }
 
+  /**
+   * Provides a default cached data mapper with general read and write functionality.
+   *
+   * @param modelClass the class of the model
+   * @param <T> class type
+   * @return new cached default mapper instance
+     */
   public <T extends IdProvider> CachedDefaultMapper<T> mapDefaultCached(Class<T> modelClass) {
     return cached(mapDefault(modelClass));
   }
 
+  /**
+   * Takes an existing default mapper and wraps it into a cached default mapper.
+   *
+   * @param mapper the mapper to wrap
+   * @param <T> class type
+   * @return new cached default mapper instance
+     */
   public <T extends IdProvider> CachedDefaultMapper<T> cached(DefaultMapper<T> mapper) {
     return new CachedDefaultMapper<T>(mapper);
   }
 
+  /**
+   * Sets the naming convention for database IO
+   *
+   * @param naming new naming convention
+   */
   public void setNaming(Naming naming) {
     this.naming = naming;
   }
