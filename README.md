@@ -16,7 +16,7 @@ Light weighted persistence framework for Java.
 Installation
 ===
 To use the latest version add the following dependency to your project:
-```maven
+```xml
 <dependency>
    <artifactId>jpersis</artifactId>
    <groupId>com.github.myrealitycoding</groupId>
