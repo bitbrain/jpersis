@@ -30,17 +30,22 @@ public interface Driver {
    * 
    * @param model
    *          model to create a query for
+   * @param naming naming convention
    * @return
    */
   Query query(Class<?> model, Naming naming);
 
   /**
    * Connects this driver with the data source
+   *
+   * @throws DriverException when connection could not be established
    */
   void connect() throws DriverException;
 
   /**
    * Closes this driver from the data source
+   *
+   * @throws DriverException when connection could not be closed
    */
   void close() throws DriverException;
 
@@ -60,6 +65,14 @@ public interface Driver {
 
   /**
    * Commits the given query
+   *
+   * @param query the query object
+   * @param returnType type of the return type
+   * @param args arguments
+   * @param model model class
+   * @param naming naming convention
+   * @throws DriverException when commit went wrong
+   * @return object result of the commit
    */
   Object commit(Query query, Class<?> returnType, Object[] args, Class<?> model, Naming naming) throws DriverException;
 

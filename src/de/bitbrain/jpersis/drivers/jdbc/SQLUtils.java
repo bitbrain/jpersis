@@ -42,8 +42,9 @@ public final class SQLUtils {
   /**
    * Generates an SQL string including braces.
    * 
-   * @param model
-   * @param naming
+   * @param model the model
+   * @param naming naming convention
+   * @param slang language slang
    * @return
    */
   public static String generateTableString(Class<?> model, Naming naming, Slang slang) {

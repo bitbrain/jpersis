@@ -97,6 +97,8 @@ public interface Query {
 
   /**
    * Creates a new table of the given model
+   *
+   * @param connection the connection
    * 
    * @throws DriverException if table could not be created
    */

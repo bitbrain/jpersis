@@ -43,6 +43,8 @@ public class ResultSetReader {
    *          data to read
    * @param returnType
    *          type to assign to
+   * @param model the model to read to
+   * @param naming naming convention
    * @return new object of the return type
    * @throws SQLException
    *           is thrown when something goes wrong
