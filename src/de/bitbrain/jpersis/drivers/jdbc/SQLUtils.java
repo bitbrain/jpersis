@@ -14,6 +14,12 @@
  */
 package de.bitbrain.jpersis.drivers.jdbc;
 
+import de.bitbrain.jpersis.JPersisException;
+import de.bitbrain.jpersis.annotations.Ignored;
+import de.bitbrain.jpersis.annotations.PrimaryKey;
+import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery.Slang;
+import de.bitbrain.jpersis.util.Naming;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.Connection;
@@ -23,12 +29,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import de.bitbrain.jpersis.JPersisException;
-import de.bitbrain.jpersis.annotations.Ignored;
-import de.bitbrain.jpersis.annotations.PrimaryKey;
-import de.bitbrain.jpersis.drivers.jdbc.JDBCQuery.Slang;
-import de.bitbrain.jpersis.util.Naming;
 
 /**
  * Utility class for SQL operations
@@ -182,12 +182,11 @@ public final class SQLUtils {
   }
 
   /**
+   * Generates a condition string with valid SQL syntax
    * 
-   * 
-   * @param condition
-   * @param args
-   * @param naming
-   * @return
+   * @param condition the condition string
+   * @param values values stored in an array
+   * @return the generated condition string
    */
   public static String generateConditionString(String condition, Object[] values) {
     for (int i = 0; values != null && i < values.length; ++i) {

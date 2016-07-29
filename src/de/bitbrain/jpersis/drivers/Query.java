@@ -98,7 +98,7 @@ public interface Query {
   /**
    * Creates a new table of the given model
    * 
-   * @return true if successful
+   * @throws DriverException if table could not be created
    */
   void createTable(Connection connection) throws DriverException;
 
