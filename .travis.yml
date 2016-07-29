@@ -12,5 +12,5 @@ cache:
 
 
 after_success:
-- ./before-deploy.sh
-- ./deploy.sh
+- ./deployment/before-deploy.sh
+- ./deployment/deploy.sh

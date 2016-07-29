@@ -4,5 +4,5 @@ if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; the
 mvn deploy \
     -P sign,build-extras \
     -DskipTests \
-    --settings settings.xml
+    --settings deployment/settings.xml
 fi
