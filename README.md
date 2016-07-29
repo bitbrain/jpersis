@@ -1,7 +1,7 @@
 ![jpersis](logo.png)
 =======
 
-[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MyRealityCoding/jpersis/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MyRealityCoding/jpersis/blob/master/LICENSE) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis)
 
 Light weighted persistence framework for Java.
 
@@ -20,7 +20,7 @@ To use the latest snapshot ```jpersis-1.0-SNAPSHOT``` add the following dependen
 <dependency>
    <artifactId>jpersis</artifactId>
    <groupId>com.github.myrealitycoding</groupId>
-   <version>1.0-SNAPSHOT</version>
+   <version>{version}</version>
 </dependency>
 ```
 
