@@ -45,7 +45,7 @@ public final class SQLUtils {
    * @param model the model
    * @param naming naming convention
    * @param slang language slang
-   * @return
+   * @return table string which generates a new table or collection
    */
   public static String generateTableString(Class<?> model, Naming naming, Slang slang) {
     String r = "(";

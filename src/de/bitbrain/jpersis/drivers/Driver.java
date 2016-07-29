@@ -31,7 +31,7 @@ public interface Driver {
    * @param model
    *          model to create a query for
    * @param naming naming convention
-   * @return
+   * @return the compatible query for this driver
    */
   Query query(Class<?> model, Naming naming);
 
