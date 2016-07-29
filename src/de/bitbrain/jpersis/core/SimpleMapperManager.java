@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Simple implementation of {@see MapperManager}
+ * Simple implementation of {@link MapperManager}
  *
  * @author Miguel Gonzalez Sanchez
  * @since 1.0

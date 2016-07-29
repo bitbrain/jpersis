@@ -32,5 +32,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrimaryKey {
+
+  /**
+   * Primary key type. Determines if primary key is auto incremental or not.
+   *
+   * @return true if auto incremental
+   */
   boolean value() default false;
 }

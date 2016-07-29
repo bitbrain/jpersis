@@ -36,5 +36,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Select {
+
+  /**
+   * Condition string
+   *
+   * @return condition value
+   */
   String condition() default "";
 }

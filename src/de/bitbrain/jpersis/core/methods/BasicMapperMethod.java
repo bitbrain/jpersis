@@ -20,7 +20,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
- * Basic implementation of {@see MapperMethod}
+ * Basic implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0

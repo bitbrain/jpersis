@@ -37,7 +37,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Update {
 
+  /**
+   * Provides the fields to update
+   *
+   * @return string array of field names
+   */
   String[] fields() default {};
 
+  /**
+   * Condition string
+   *
+   * @return condition value
+   */
   String condition() default "";
 }

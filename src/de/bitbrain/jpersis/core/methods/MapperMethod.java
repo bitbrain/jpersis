@@ -14,12 +14,12 @@
  */
 package de.bitbrain.jpersis.core.methods;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import de.bitbrain.jpersis.MapperException;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.util.Naming;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Method of a mapper
@@ -40,14 +40,13 @@ public interface MapperMethod<T extends Annotation> {
   /**
    * Executes the method internally
    * 
-   * @param method
-   *          original method
-   * @param model
-   *          class of the model
-   * @param params
-   *          given parameters
-   * @param driverProvider
+   * @param method original method
+   * @param model class of the model
+   * @param args method arguments
+   * @param driver the currently in use driver
+   * @param naming current naming convention
    * @return resulting object
+   * @throws MapperException when mapper is badly configured
    */
   Object execute(Method method, Class<?> model, Object[] args, Driver driver, Naming naming) throws MapperException;
 }

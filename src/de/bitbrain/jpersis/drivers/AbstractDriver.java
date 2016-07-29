@@ -39,8 +39,8 @@ public abstract class AbstractDriver implements Driver {
   /**
    * Let the child decide which query to create
    * 
-   * @param model
-   *          model of the query
+   * @param model model of the query
+   * @param naming current naming convention
    * @return newly created query
    */
   protected abstract Query createQuery(Class<?> model, Naming naming);

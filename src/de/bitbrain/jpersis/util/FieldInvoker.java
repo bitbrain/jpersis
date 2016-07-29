@@ -40,6 +40,7 @@ public final class FieldInvoker {
    *          field to set
    * @param value
    *          data for the field
+   * @throws InvokeException when invocation went wrong
    */
   public static void invoke(Object object, Field field, String value) throws InvokeException {
     if (Modifier.isStatic(field.getModifiers())) {

@@ -20,7 +20,7 @@ import de.bitbrain.jpersis.drivers.Query;
 import java.util.Collection;
 
 /**
- * Select implementation of {@see MapperMethod}
+ * Select implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Sanchez
  * @since 1.0

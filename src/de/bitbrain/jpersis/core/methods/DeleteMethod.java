@@ -18,7 +18,7 @@ import de.bitbrain.jpersis.annotations.Delete;
 import de.bitbrain.jpersis.drivers.Query;
 
 /**
- * Delete implementation of {@see MapperMethod}
+ * Delete implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0

@@ -28,8 +28,8 @@ public interface MapperManager extends DriverProvider {
   /**
    * Provides access to an existing mapper
    * 
-   * @param mapper
-   *          existing mapper class
+   * @param mapper existing mapper class
+   * @param <T> class type
    * @return Mapper instance or null of not found.
    */
   <T> T get(Class<T> mapper);
@@ -37,8 +37,8 @@ public interface MapperManager extends DriverProvider {
   /**
    * Adds the mapper to this manager. If already there, do nothing.
    * 
-   * @param mapper
-   *          new mapper class
+   * @param mapper new mapper class
+   * @param <T> class type
    */
   <T> void add(Class<T> mapper);
 

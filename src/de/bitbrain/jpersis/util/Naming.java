@@ -27,34 +27,34 @@ public interface Naming {
   static Naming DEFAULT = new CamelCaseNaming();
 
   /**
+   * Convention for collections in Java
    * 
-   * 
-   * @param name
-   * @return
+   * @param name original name
+   * @return java name
    */
   public String collectionToJava(String name);
 
   /**
-   * 
-   * 
-   * @param name
-   * @return
+   * Convention for collections in data stores
+   *
+   * @param name original name
+   * @return data store name
    */
   public String javaToCollection(String name);
 
   /**
-   * 
-   * 
-   * @param name
-   * @return
+   * Convention for fields in Java
+   *
+   * @param name original name
+   * @return java name
    */
   public String fieldToJava(String name);
 
   /**
-   * 
-   * 
-   * @param name
-   * @return
+   * Convention for fields in data stores
+   *
+   * @param name original name
+   * @return java name
    */
   public String javaToField(String name);
 }

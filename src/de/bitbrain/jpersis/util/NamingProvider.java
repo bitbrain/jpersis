@@ -7,6 +7,8 @@ public interface NamingProvider {
 
   /**
    * Provides the current naming.
+   *
+   * @return returns the naming
    */
   Naming getNaming();
 }

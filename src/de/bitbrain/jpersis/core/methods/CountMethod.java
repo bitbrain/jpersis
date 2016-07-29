@@ -18,7 +18,7 @@ import de.bitbrain.jpersis.annotations.Count;
 import de.bitbrain.jpersis.drivers.Query;
 
 /**
- * Count implementation of {@see MapperMethod}
+ * Count implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0

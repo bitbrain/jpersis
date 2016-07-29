@@ -65,11 +65,11 @@ public final class JPersis {
   }
 
   /**
-   * Provides data mappers for further usage. If the given class is not annotated with {@see Mapper} or the model of the
-   * mapper can not be found, an {@see JPersisException} is thrown.
+   * Provides data mappers for further usage. If the given class is not annotated with {@link Mapper} or the model of the
+   * mapper can not be found, an {@link JPersisException} is thrown.
    * 
-   * @param mapper
-   *          given class or interface of a mapper
+   * @param mapper given class or interface of a mapper
+   * @param <T> class type
    * @return mapper instance of the given class or interface
    */
   public <T> T map(Class<T> mapper) {
@@ -147,7 +147,7 @@ public final class JPersis {
    * 
    * @param annotation
    *          target expected annotation
-   * @param method
+   * @param method the mapper method which shall get registered by jpersis
    */
   public void register(Class<? extends Annotation> annotation, Class<? extends MapperMethod<?>> method) {
     pool.register(annotation, method);

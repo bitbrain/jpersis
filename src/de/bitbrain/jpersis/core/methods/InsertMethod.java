@@ -18,7 +18,7 @@ import de.bitbrain.jpersis.annotations.Insert;
 import de.bitbrain.jpersis.drivers.Query;
 
 /**
- * Insert implementation of {@see MapperMethod}
+ * Insert implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Miguel Gonzalez Sanchez
  * @since 1.0

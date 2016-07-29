@@ -18,7 +18,7 @@ import de.bitbrain.jpersis.annotations.Update;
 import de.bitbrain.jpersis.drivers.Query;
 
 /**
- * Update implementation of {@see MapperMethod}
+ * Update implementation of {@link MapperMethod}
  *
  * @author Miguel Gonzalez Sanchez
  * @since 1.0

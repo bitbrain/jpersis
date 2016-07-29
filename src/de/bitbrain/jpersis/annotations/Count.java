@@ -36,5 +36,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Count {
 
+  /**
+   * Condition string
+   *
+   * @return condition value
+   */
   String condition() default "";
 }

@@ -32,6 +32,8 @@ public @interface Mapper {
 
   /**
    * Path to the model class. That class needs to be a java bean.
+   *
+   * @return default annotation value
    */
   String value();
 }
