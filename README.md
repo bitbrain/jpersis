@@ -15,7 +15,7 @@ Light weighted persistence framework for Java.
 
 Installation
 ===
-To use the latest snapshot ```jpersis-1.0-SNAPSHOT``` add the following dependency to your project:
+To use the latest version add the following dependency to your project:
 ```maven
 <dependency>
    <artifactId>jpersis</artifactId>
