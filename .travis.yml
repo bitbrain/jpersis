@@ -2,13 +2,17 @@ language: java
 
 sudo: required
 
+branches:
+  only:
+  - master
+
 services:
 - docker
 
 cache:
   directories:
-    - docker
-    - ~/.m2/repository
+  - docker
+  - ~/.m2/repository
 
 
 after_success:
