@@ -10,10 +10,10 @@ mkdir docs
 cd jpersis
 mvn javadoc:javadoc
 cd ..
-mv -Rf jpersis/target/site/apidocs/* docs
+mv -f jpersis/target/site/apidocs docs
 cd jpersis
 git checkout gh-pages
-mv -Rf ../docs .
+mv -f ../docs .
 git add -f .
 git commit -m "Travis build $TRAVIS_BUILD_NUMBER - update Javadocs"
 git push -fq origin gh-pages > /dev/null
