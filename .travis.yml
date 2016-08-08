@@ -14,8 +14,7 @@ cache:
   - docker
   - ~/.m2/repository
 
-
 after_success:
-#- ./deployment/before-deploy.sh
-#- ./deployment/deploy.sh
+- ./deployment/before-deploy.sh
+- ./deployment/deploy.sh
 - ./deployment/deploy-javadoc.sh
