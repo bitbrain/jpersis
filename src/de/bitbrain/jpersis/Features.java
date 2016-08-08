@@ -40,6 +40,7 @@ public class Features {
 
   public enum Feature {
     MYSQL,
-    POSTGRESQL;
+    POSTGRESQL,
+    MARIADB
   }
 }

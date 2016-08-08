@@ -18,10 +18,7 @@ package de.bitbrain.jpersis;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.DriverException;
 import de.bitbrain.jpersis.mocks.*;
-import de.bitbrain.jpersis.util.DriverFactory;
-import de.bitbrain.jpersis.util.MySQLDriverFactory;
-import de.bitbrain.jpersis.util.PosgreSQLDriverFactory;
-import de.bitbrain.jpersis.util.SQLiteDriverFactory;
+import de.bitbrain.jpersis.util.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,10 +60,13 @@ public class JPersisTest {
     List<DriverFactory[]> infos = new ArrayList<>();
     infos.add(new DriverFactory[] { new SQLiteDriverFactory(DB) });
     if (features.isEnabled(Features.Feature.MYSQL)) {
-        infos.add(new DriverFactory[] { new MySQLDriverFactory() });
+      infos.add(new DriverFactory[] { new MySQLDriverFactory() });
     }
     if (features.isEnabled(Features.Feature.POSTGRESQL)) {
-    infos.add(new DriverFactory[] { new PosgreSQLDriverFactory()});
+      infos.add(new DriverFactory[] { new PosgreSQLDriverFactory()});
+    }
+    if (features.isEnabled(Features.Feature.MARIADB)) {
+      infos.add(new DriverFactory[] { new MariaDBDriverFactory()});
     }
     return infos;
   }
