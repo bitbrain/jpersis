@@ -1,7 +1,7 @@
 ![jpersis](logo.png)
 =======
 
-[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MyRealityCoding/jpersis/blob/master/LICENSE) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis)
+[![Build Status](https://travis-ci.org/MyRealityCoding/jpersis.svg?branch=master)](https://travis-ci.org/MyRealityCoding/jpersis) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.myrealitycoding/jpersis) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MyRealityCoding/jpersis/blob/master/LICENSE)  [![Javadocs](https://img.shields.io/badge/java-docs-orange.svg)](http://myrealitycoding.github.io/jpersis/docs)
 
 Light weighted persistence framework for Java.
 
