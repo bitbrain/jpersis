@@ -10,7 +10,7 @@ mkdir docs
 cd jpersis
 mvn javadoc:javadoc
 cd ..
-mv -f jpersis/target/site/apidocs docs
+mv -f jpersis/target/site/apidocs/* docs
 cd jpersis
 git checkout gh-pages
 mv -f ../docs .
