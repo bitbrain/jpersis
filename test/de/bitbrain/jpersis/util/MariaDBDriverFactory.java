@@ -1,30 +1,11 @@
 package de.bitbrain.jpersis.util;
 
+import de.bitbrain.jpersis.container.MariaDBContainer;
 import de.bitbrain.jpersis.drivers.Driver;
 import de.bitbrain.jpersis.drivers.mariadb.MariaDBDriver;
 import org.testcontainers.containers.GenericContainer;
 
 public class MariaDBDriverFactory extends DriverFactory {
-
-    private class MariaDBContainer extends GenericContainer {
-
-        private static final String USER = "root";
-        private static final String PASSWORD = "password";
-
-        public MariaDBContainer() {
-            super("mariadb:latest");
-            addEnv("MYSQL_ROOT_PASSWORD", PASSWORD);
-            addExposedPort(3306);
-        }
-
-        public String getPassword() {
-            return PASSWORD;
-        }
-
-        public String getUsername() {
-            return USER;
-        }
-    }
 
     @Override
     protected Driver createInternally(ConnectionData data) {
